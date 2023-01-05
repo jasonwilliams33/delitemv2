@@ -1,20 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[api.controller=function() {
+        <client_script><![CDATA[api.controller=function($scope,spUtil) {
 	/* widget controller */
 	var c = this;
-
+console.log(c);
 	c.data.singleItem = false;
-	c.data.multipleItems = false;
+	c.data.multipleItems = true;
 	c.data.showItemForm = false;
-	
+
+	if(c.data.newDeliveryCount > 0) {
+
+		c.data.disabled = false;
+
+	} else {
+
+		c.data.disabled = true;
+
+	}
+
+	spUtil.recordWatch($scope, c.data.delieveryItemTable, c.data.newDeliveryFilter, function(name,data) {
+		if(name.data.operation == "insert"){
+			c.data.disabled = false;							
+		}else if(name.data.action == "exit"){
+			c.data.disabled = true;
+		}
+	});
 
 	c.addDeliveryItem = function() {
 
 		c.data.showItemForm = true;
 		c.data.singleItem = true;
 		c.data.multipleItems = false;
+		alert(c.data.multipleItems);
 
 	}
 
@@ -23,13 +41,13 @@
 		c.data.showItemForm = true;
 		c.data.multipleItems = true;
 		c.data.singleItem = false;
-
+alert(c.data.multipleItems);
 	}
-	
+
 	c.cancelForm = function() {
-		
+
 		c.data.showItemForm = false;
-		
+
 	}
 
 };]]></client_script>
@@ -101,11 +119,32 @@ textarea {
         <public>false</public>
         <roles/>
         <script><![CDATA[(function() {
-  /* populate the 'data' object */
-  /* e.g., data.table = $sp.getValue('table'); */
+	/* populate the 'data' object */
+	/* e.g., data.table = $sp.getValue('table'); */
 
-	data.tableOptions = {"table": "x_187394_delitem_delivery_item", "filter": "sender=testing"};
+	data.newDeliveryFilter = "state=1";
+	data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
 	
+	data.tableOptions = {
+		"table": "x_187394_delitem_delivery_item",
+		"table_plural":"Test",
+		"useInstanceTitle":false,
+		"filter": data.newDeliveryFilter,
+		"fields": "date_received,recipient,sender,collection_location,notes"
+	};
+	
+	var newDeliveries = new GlideAggregate(data.delieveryItemTable);
+	newDeliveries.addEncodedQuery(data.newDeliveryFilter);
+	newDeliveries.addAggregate('COUNT');
+	newDeliveries.query();
+	while(newDeliveries.next()) {
+		
+		data.newDeliveryCount = newDeliveries.getAggregate('COUNT');
+		gs.error("JW Debug: " + newDeliveries.number);
+		
+	}
+	
+
 })();]]></script>
         <servicenow>false</servicenow>
         <sys_class_name>sp_widget</sys_class_name>
@@ -121,7 +160,7 @@ textarea {
 <widget id="widget-data-table" options='data.tableOptions'></widget>
   <div class="btn-group btn-group-justified">
   <div class="btn-group">
-    <button type="button" class="btn btn-default" ng-click="c.addDeliveryItem()">Add Delivery Item  <i class="fa fa-shopping-basket fa-lg" aria-hidden="true"></i>
+    <button type="button" class="btn btn-default" ng-click="c.addDeliveryItem()">{{c.data.multipleItems}} Add Delivery Item  <i class="fa fa-shopping-basket fa-lg" aria-hidden="true"></i>
 </button>
   </div>
   <div class="btn-group">
@@ -155,7 +194,7 @@ textarea {
                   search-fields="'name'" 
                   page-size="100"
                   id="recordPicker"
-                  multiple=c.data.multipleItems
+                  multiple="c.data.multipleItems"
                   autofocus>
 </sn-record-picker>
     
