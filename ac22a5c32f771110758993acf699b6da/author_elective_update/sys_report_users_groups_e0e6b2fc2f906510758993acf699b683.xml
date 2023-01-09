@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_report_users_groups">
+    <sys_report_users_groups action="DELETE">
+        <group_id/>
+        <report_id display_value="">6ce6b2fc2f906510758993acf699b682</report_id>
+        <sys_class_name>sys_report_users_groups</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-01-07 19:35:33</sys_created_on>
+        <sys_id>e0e6b2fc2f906510758993acf699b683</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>6ce6b2fc2f906510758993acf699b682</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_report_users_groups_e0e6b2fc2f906510758993acf699b683</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-01-07 19:35:33</sys_updated_on>
+        <user_id display_value="Jason Williams">6816f79cc0a8016401c5a33be04be441</user_id>
+    </sys_report_users_groups>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Delitem">ac22a5c32f771110758993acf699b6da</application>
+        <file_path/>
+        <instance_id>6e731e18db8da38889535d00cf96198d</instance_id>
+        <instance_name>dev72343</instance_name>
+        <name>sys_report_users_groups_e0e6b2fc2f906510758993acf699b683</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_report_users_groups"><sys_report_users_groups action="INSERT_OR_UPDATE"><group_id/><report_id display_value="">6ce6b2fc2f906510758993acf699b682</report_id><sys_class_name>sys_report_users_groups</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2023-01-07 19:35:33</sys_created_on><sys_id>e0e6b2fc2f906510758993acf699b683</sys_id><sys_mod_count>0</sys_mod_count><sys_name>6ce6b2fc2f906510758993acf699b682</sys_name><sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package><sys_policy/><sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope><sys_update_name>sys_report_users_groups_e0e6b2fc2f906510758993acf699b683</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2023-01-07 19:35:33</sys_updated_on><user_id display_value="Jason Williams">6816f79cc0a8016401c5a33be04be441</user_id></sys_report_users_groups></record_update>]]></payload>
+        <payload_hash>1240269365</payload_hash>
+        <record_name>6ce6b2fc2f906510758993acf699b682</record_name>
+        <reverted_from/>
+        <source>d580cd4c2f4ce110758993acf699b646</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-01-07 19:35:33</sys_created_on>
+        <sys_id>68e6b2fc2f906510758993acf699b685</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>1858dbb31090000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-01-07 19:35:33</sys_updated_on>
+        <type>Report Users and Groups</type>
+        <update_guid>60e6b2fc0b906510c0d1f1f086faf385</update_guid>
+        <update_guid_history>60e6b2fc0b906510c0d1f1f086faf385:1240269365</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-01-09 09:26:22</sys_created_on>
+        <sys_db_object display_value="" name="sys_report_users_groups">sys_report_users_groups</sys_db_object>
+        <sys_id>0a08d7c60a8640f0b9fd6e7f3632d1c4</sys_id>
+        <sys_metadata>e0e6b2fc2f906510758993acf699b683</sys_metadata>
+        <sys_name>6ce6b2fc2f906510758993acf699b682</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_scope_delete display_value="">21fda69da1294409862944902732aaa1</sys_scope_delete>
+        <sys_update_name>sys_report_users_groups_e0e6b2fc2f906510758993acf699b683</sys_update_name>
+        <sys_update_version display_value="sys_report_users_groups_e0e6b2fc2f906510758993acf699b683">68e6b2fc2f906510758993acf699b685</sys_update_version>
+    </sys_metadata_delete>
+</record_update>

@@ -4,7 +4,7 @@
         <client_script><![CDATA[api.controller=function($scope,spUtil) {
 	/* widget controller */
 	var c = this;
-console.log(c);
+
 	c.data.singleItem = false;
 	c.data.multipleItems = true;
 	c.data.showItemForm = false;
@@ -28,20 +28,21 @@ console.log(c);
 	});
 
 	c.addDeliveryItem = function() {
-
+		c.data.recipient = {displayValue: '',value: ''};
+		c.data.collectionLocation = '';
 		c.data.showItemForm = true;
 		c.data.singleItem = true;
 		c.data.multipleItems = false;
-		alert(c.data.multipleItems);
-
+		
 	}
 
 	c.addMultipleItems = function() {
-
+		c.data.recipient = {displayValue: '',value: ''};
+		c.data.collectionLocation = '';
 		c.data.showItemForm = true;
 		c.data.multipleItems = true;
 		c.data.singleItem = false;
-alert(c.data.multipleItems);
+
 	}
 
 	c.cancelForm = function() {
@@ -124,26 +125,49 @@ textarea {
 
 	data.newDeliveryFilter = "state=1";
 	data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
-	
+	data.collectionLocations = gs.getProperty("x_187394_delitem.collection.locations");
+	data.collectionLocationsArr = data.collectionLocations.split(",");
+
 	data.tableOptions = {
+
 		"table": "x_187394_delitem_delivery_item",
 		"table_plural":"Test",
 		"useInstanceTitle":false,
 		"filter": data.newDeliveryFilter,
 		"fields": "date_received,recipient,sender,collection_location,notes"
+
 	};
-	
+
 	var newDeliveries = new GlideAggregate(data.delieveryItemTable);
 	newDeliveries.addEncodedQuery(data.newDeliveryFilter);
 	newDeliveries.addAggregate('COUNT');
 	newDeliveries.query();
 	while(newDeliveries.next()) {
-		
+
 		data.newDeliveryCount = newDeliveries.getAggregate('COUNT');
-		gs.error("JW Debug: " + newDeliveries.number);
-		
+
 	}
-	
+
+	data.sendersArr = [];
+
+	var senders = new GlideRecordSecure(data.delieveryItemTable);
+	senders.query();
+	while (senders.next()) {
+
+		data.sendersArr.push(senders.sender.toString());
+
+	}
+
+	var arrayUtil = new global.ArrayUtil();
+	data.sendersUniqueArr = arrayUtil.unique(data.sendersArr);	
+
+	data.autoCompleteOptions = {
+
+		"field_label": "Sender (if applicable)",
+		"placeholder": "i.e. ASOS",
+		"auto_complete_array": data.sendersUniqueArr
+
+	};
 
 })();]]></script>
         <servicenow>false</servicenow>
@@ -157,78 +181,95 @@ textarea {
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_e32d3c882f4ce110758993acf699b695</sys_update_name>
         <template><![CDATA[<div>
-<widget id="widget-data-table" options='data.tableOptions'></widget>
+  <widget id="widget-data-table" options='data.tableOptions'></widget>
   <div class="btn-group btn-group-justified">
-  <div class="btn-group">
-    <button type="button" class="btn btn-default" ng-click="c.addDeliveryItem()">{{c.data.multipleItems}} Add Delivery Item  <i class="fa fa-shopping-basket fa-lg" aria-hidden="true"></i>
-</button>
+    <div class="btn-group">
+      <button type="button" class="btn btn-default" ng-click="c.addDeliveryItem()">Add Delivery Item  <i class="fa fa-shopping-basket fa-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="btn-group">
+      <button type="button" class="btn btn-default" ng-click="c.addMultipleItems()">Add Multiple Delivery Items  <i class="fa fa-shopping-cart fa-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="btn-group">
+      <button type="button" class="btn btn-primary" ng-disabled="c.data.disabled" ng-click="sendNotifications()">Send Notifications  <i class="fa fa-send-o fa-lg fa-fw"></i></button>
+    </div>
   </div>
-  <div class="btn-group">
-    <button type="button" class="btn btn-default" ng-click="c.addMultipleItems()">Add Multiple Delivery Items  <i class="fa fa-shopping-cart fa-lg" aria-hidden="true"></i>
-</button>
-  </div>
-  <div class="btn-group">
-    <button type="button" class="btn btn-primary" ng-disabled="c.data.disabled" ng-click="sendNotifications()">Send Notifications  <i class="fa fa-send-o fa-lg fa-fw"></i></button>
-  </div>
-</div>
-  
+
 </div>
 
 <div class="panel panel-default"
      ng-show="c.data.showItemForm">
   <div class="panel-body">
-<div class="alert alert-danger alert-dismissible"
+    <div class="alert alert-danger alert-dismissible"
          ng-show="c.data.showError">
       <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
       <i class="fa fa-exclamation-triangle"></i> Some fields are missing: Recipient
     </div>
-<form autocomplete="off"> 
+    <form autocomplete="off"> 
 
-  <div class="form-group"> <span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory" ng-class="{'mandatory-filled': recipient.displayValue != undefined}"></span>
-   <label for="formGroupExampleInput">Recipient</label>
-    
-<sn-record-picker field="c.data.recipient"
-                  table="'sys_user'" 
-                  display-field="'name'" 
-                  value-field="'sys_id'" 
-                  search-fields="'name'" 
-                  page-size="100"
-                  id="recordPicker"
-                  multiple="c.data.multipleItems"
-                  autofocus>
-</sn-record-picker>
-    
-  </div>
-  <div class="autocomplete form-group" ng-show="!c.data.multipleItems">
-    <label for="formGroupExampleInput">Sender (if applicable)</label> 
-    <input id="myInput" type="text" ng-model="c.data.sender" class="form-control" name="myCountry" placeholder="i.e. Amazon">
-  </div>
-  <div class="form-group"> 
-    <label for="formGroupExampleInput">Collection Location</label> 
-    <select class="form-control" ng-model="c.data.collectionLocation" ng-options="item for item in c.data.collectionLocationsArr"></select>
+      <div class="form-group"> <span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory" ng-class="{'mandatory-filled': recipient.displayValue != undefined}"></span>
+        <label for="formGroupExampleInput">Recipient</label>
 
-  </div>
-   <div class="form-group" ng-if="!c.data.multipleItems">
-    <label for="formGroupExampleInput">Notes</label> 
-     <textarea class="form-control"
-               ng-model="c.data.notes"
-               placeholder="Add any additional information about Delivery Item"
-               rows="2"
-               required="true"
-               type="text"></textarea>
-  </div>
-  
-</form>
-<button class="btn btn-default" ng-click="c.cancelForm()">
-  Cancel
-</button>
+        <sn-record-picker field="c.data.recipient"
+                          table="'sys_user'" 
+                          display-field="'name'" 
+                          value-field="'sys_id'" 
+                          search-fields="'name'" 
+                          page-size="100"
+                          id="recordPickerSingle"
+                          multiple=false
+                          autofocus
+                          ng-show="c.data.multipleItems==false">
+        </sn-record-picker>
+
+        <sn-record-picker field="c.data.recipient"
+                          table="'sys_user'" 
+                          display-field="'name'" 
+                          value-field="'sys_id'" 
+                          search-fields="'name'" 
+                          page-size="100"
+                          id="recordPickerMultiple"
+                          multiple=true
+                          autofocus
+                          ng-show="c.data.multipleItems==true">
+        </sn-record-picker>
+
+      </div>
+     <!-- <div class="autocomplete form-group" ng-show="!c.data.multipleItems">
+        <label for="formGroupExampleInput">Sender (if applicable)</label>
+        <input id="myInput" type="text" ng-model="c.data.sender" class="form-control" name="myCountry" placeholder="i.e. Amazon">
+      </div>-->
+      <div ng-show="!c.data.multipleItems"
+           ng-model="c.data.sender">
+        <widget id="delitem_autocomplete_input" options='data.autoCompleteOptions'></widget>
+      </div>
+      <div class="form-group"> 
+        <label for="formGroupExampleInput">Collection Location</label> 
+        <select class="form-control" ng-model="c.data.collectionLocation" ng-options="item for item in c.data.collectionLocationsArr"></select>
+
+      </div>
+      <div class="form-group" ng-if="!c.data.multipleItems">
+        <label for="formGroupExampleInput">Notes</label> 
+        <textarea class="form-control"
+                  ng-model="c.data.notes"
+                  placeholder="Add any additional information about Delivery Item"
+                  rows="2"
+                  required="true"
+                  type="text"></textarea>
+      </div>
+
+    </form>
+    <button class="btn btn-default" ng-click="c.cancelForm()">
+      Cancel
+    </button>
     <button class="btn btn-primary pull-right" ng-click="c.addItemAndClose()">
-  Save &amp Close
-</button>
+      Save &amp Close
+    </button>
     <button class="btn btn-primary pull-right" ng-click="addItem()">
-  Save &amp Add Item
-</button>
+      Save &amp Add Item
+    </button>
   </div>
-  </div>]]></template>
+</div>]]></template>
     </sp_widget>
 </record_update>

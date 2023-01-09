@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[api.controller=function($uibModal,spUtil) {
-  /* widget controller */
-  var c = this;
-	
-		c.openModal = function(widget,title,modalObj) {
+        <client_script><![CDATA[api.controller=function($scope,$uibModal,spUtil) {
+	/* widget controller */
+	var c = this;
+
+	spUtil.recordWatch($scope, c.data.delieveryItemTable, "", function(name,data) {
+
+		c.server.get({
+
+			action: "refreshDeliveryCounts"
+
+		}).then(function(rsp) {
+
+			c.data.todaysDeliveryCount = rsp.data.todaysDeliveryCount;
+			c.data.outstandingDeliveryCount = rsp.data.outstandingDeliveryCount;
+
+		})			
+
+	});
+
+	c.openModal = function(widget,title,modalObj) {
 
 		/***
 	 	* Open Modal using supplied parameters
@@ -33,7 +48,7 @@
 		})
 
 	}
-	
+
 };]]></client_script>
         <controller_as>c</controller_as>
         <css>.wrap {
@@ -89,7 +104,62 @@ textarea {
         <option_schema/>
         <public>false</public>
         <roles/>
-        <script><![CDATA[(function() {  /* populate the 'data' object */  /* e.g., data.table = $sp.getValue('table'); */})();]]></script>
+        <script><![CDATA[(function() {
+	/* populate the 'data' object */
+	/* e.g., data.table = $sp.getValue('table'); */
+
+	data.todaysDeliveriesFilter = "date_receivedONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()";
+	data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
+
+	queryTodaysDeliveries = function() {
+
+		var todaysDeliveries = new GlideAggregate(data.delieveryItemTable);
+		todaysDeliveries.addEncodedQuery(data.todaysDeliveriesFilter);
+		todaysDeliveries.addAggregate('COUNT');
+		todaysDeliveries.query();
+		while(todaysDeliveries.next()) {
+
+			return todaysDeliveries.getAggregate('COUNT');
+
+		}
+
+	}
+
+	data.todaysDeliveryCount = queryTodaysDeliveries();
+
+	/*if(input && input.action == "refreshTodaysDeliveryCount") {
+
+		data.todaysDeliveryCount = queryTodaysDeliveries();
+
+	}*/
+
+	data.outstandingDeliveriesFilter = "state!=2";
+	data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
+
+	queryOutstandingDeliveries = function() {
+
+		var outstandingDeliveries = new GlideAggregate(data.delieveryItemTable);
+		outstandingDeliveries.addEncodedQuery(data.outstandingDeliveriesFilter);
+		outstandingDeliveries.addAggregate('COUNT');
+		outstandingDeliveries.query();
+		while(outstandingDeliveries.next()) {
+
+			return outstandingDeliveries.getAggregate('COUNT');
+
+		}
+		
+	}
+
+	data.outstandingDeliveryCount = queryOutstandingDeliveries();
+	
+	if(input && input.action == "refreshDeliveryCounts") {
+
+		data.todaysDeliveryCount = queryTodaysDeliveries();
+		data.outstandingDeliveryCount = queryOutstandingDeliveries();
+
+	}
+
+})();]]></script>
         <servicenow>false</servicenow>
         <sys_class_name>sp_widget</sys_class_name>
         <sys_created_by>admin</sys_created_by>
@@ -108,15 +178,15 @@ textarea {
     <div class="wrap row">
       <div class="cardCount"
            ng-click="c.goToDocs(link)">
-        <h5 class="docTitle">
+       <h5 class="docTitle">
           Today's Deliveries
         </h5>
         <div>
           <h4 class="content">
-            6
+            {{data.todaysDeliveryCount}}
           </h4>
-        </div>
-      </div> 
+        </div>       
+      </div>
        <div class="cardCount"
            ng-click="c.goToDocs(link)">
         <h5 class="docTitle">
@@ -124,7 +194,7 @@ textarea {
         </h5>
          <div>
            <h4 class="content">
-             10
+             {{data.outstandingDeliveryCount}}
            </h4>           
          </div>
       </div> 
