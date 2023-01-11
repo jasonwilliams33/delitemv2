@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_187394_delitem.DelitemUtils</api_name>
+        <caller_access/>
+        <client_callable>true</client_callable>
+        <description/>
+        <name>DelitemUtils</name>
+        <script><![CDATA[var DelitemUtils = Class.create();
+DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
+
+	addDeliveryItem : function(itemObj) {
+
+		try {
+			//gs.error("JW Debug: " + itemObj.recipient.value.length);
+			var grX_187394DDI = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
+			grX_187394DDI.initialize();
+			grX_187394DDI.setValue('recipient',itemObj.recipient.value);
+
+			if(itemObj.collection_location != undefined) {
+
+				grX_187394DDI.setValue('collection_location',itemObj.collection_location);
+
+			}
+
+			if(itemObj.notes != undefined) {
+
+				grX_187394DDI.setValue('notes',itemObj.notes);
+
+			}
+
+			if(itemObj.sender != undefined) {
+
+				grX_187394DDI.setValue('sender',itemObj.sender);
+
+			}
+
+			newDeliveryItem = grX_187394DDI.insert();
+
+			return newDeliveryItem;
+
+		} catch(err) {
+
+			gs.error('['+gs.getCurrentScopeName()+']' + ': DelitemUtils: addDeliveryItem - Caught error: \n'+err);
+
+		}
+
+	},
+
+	addMultipleDeliveryItem : function(itemObj) {
+
+		try {
+
+			var multipleDeliveryItemArr = itemObj.recipient.value.split(",");
+
+			for (var i=0; i< multipleDeliveryItemArr.length; i++) {
+
+				var multipleItemObj = {
+					"recipient": {"value": multipleDeliveryItemArr[i]},
+					"collection_location": itemObj.collection_location
+				};
+
+				var newDeliveryITem = this.addDeliveryItem(multipleItemObj);
+
+			}
+
+		} catch(err) {
+
+			gs.error('['+gs.getCurrentScopeName()+']' + ': DelitemUtils: addMultipleDeliveryItem - Caught error: \n'+err);
+
+		}
+
+	},
+
+	sendNotifications : function() {
+
+		try {
+
+			var newDeliveryItemArr = [];
+			var	newDeliveryItemObj = {};
+
+			var newDeliveryItems = new GlideAggregate(DelItemConstants.DELIVERY_ITEM_TABLE);
+			newDeliveryItems.addEncodedQuery('deliveryISEMPTY^state=1');
+			newDeliveryItems.groupBy('recipient');
+			newDeliveryItems.addAggregate('COUNT');
+			newDeliveryItems.query();
+			while(newDeliveryItems.next()){
+
+				newDeliveryItemObj = {};
+				newDeliveryItemObj.recipient = newDeliveryItems.recipient.getDisplayValue().toString();
+				newDeliveryItemObj.recipientSysId = newDeliveryItems.recipient.toString();
+				newDeliveryItemObj.recipientFirsName = newDeliveryItems.recipient.first_name.toString();
+				newDeliveryItemObj.date = new GlideDateTime();
+				newDeliveryItemObj.count = newDeliveryItems.getAggregate('COUNT');
+				newDeliveryItemArr.push(newDeliveryItemObj);
+			}
+
+			var existingDeliveryArr = this.checkExistingDelivery(newDeliveryItemArr);
+
+			for (var i=0; i< existingDeliveryArr.length; i++) {
+
+				if(existingDeliveryArr[i].existingDelivery) {
+
+					this.updateExistingDelivery(existingDeliveryArr[i]);
+					
+				} else {
+
+					this.createNewDelivery(existingDeliveryArr[i]);
+
+				}
+
+			}
+
+
+
+		} catch(err) {
+
+			gs.error('['+gs.getCurrentScopeName()+']' + ': DelitemUtils: sendNotifications - Caught error: \n'+err);
+
+		}
+
+	},
+
+	checkExistingDelivery : function(deliveryItemArr) {
+
+		try {
+
+			for (var i=0; i< deliveryItemArr.length; i++) {
+
+				var exisitingDelivery = new GlideRecordSecure(DelItemConstants.DELIVERY_TABLE);
+				exisitingDelivery.addEncodedQuery('state!=collected^recipient=' + deliveryItemArr[i].recipientSysId);
+				exisitingDelivery.query();
+				if(exisitingDelivery.next()){
+
+					deliveryItemArr[i].existingDelivery = true;
+					deliveryItemArr[i].exisitingDeliverySysId = exisitingDelivery.getUniqueValue();
+
+				} else {
+
+					deliveryItemArr[i].existingDelivery = false;
+
+				}
+
+
+
+			}
+
+			return deliveryItemArr;
+
+		} catch(err) {
+
+			gs.error('['+gs.getCurrentScopeName()+']' + ': DelitemUtils: checkExistingDelivery - Caught error: \n'+err);
+
+		}
+
+	},
+
+	updateExistingDelivery : function(existingDelivery) {
+
+		var updateExistingDeliveryGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_TABLE);
+		updateExistingDeliveryGRS.addEncodedQuery('sys_id=' + existingDelivery.exisitingDeliverySysId);
+		updateExistingDeliveryGRS.query();
+		if(updateExistingDeliveryGRS.next()) {
+
+			updateExistingDeliveryGRS.delivery_items = updateExistingDeliveryGRS.delivery_items + parseInt(existingDelivery.count);
+			updateExistingDeliveryGRS.update();
+
+		}
+
+	},
+
+	type: 'DelitemUtils'
+});]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-01-10 15:13:14</sys_created_on>
+        <sys_id>2b7615312f182910758993acf699b6c4</sys_id>
+        <sys_name>DelitemUtils</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_script_include_2b7615312f182910758993acf699b6c4</sys_update_name>
+    </sys_script_include>
+</record_update>

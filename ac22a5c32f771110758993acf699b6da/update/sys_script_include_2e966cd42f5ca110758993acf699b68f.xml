@@ -10,6 +10,7 @@
         <script><![CDATA[var DelItemConstants = Class.create();
 
 DelItemConstants.DELIVERY_ITEM_TABLE = "x_187394_delitem_delivery_item";
+DelItemConstants.DELIVERY_TABLE = "x_187394_delitem_delivery";
 
 DelItemConstants.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 

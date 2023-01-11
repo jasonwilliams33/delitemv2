@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[api.controller=function($scope,spUtil) {
+        <client_script><![CDATA[api.controller=function($scope,spUtil,$timeout) {
 	/* widget controller */
 	var c = this;
 
@@ -19,6 +19,78 @@
 
 	}
 
+	c.insertItems = function(saveAction) {
+		console.log(c.data.recipient.value.split(','));
+		c.data.itemCount = c.data.recipient.value.split(',').length;
+		
+		if(c.data.itemCount > 1) {
+			
+			c.data.action = "insertMultipleDeliveryItems"
+			
+		} else {
+			
+			c.data.action = "insertDeliveryItem"
+			
+		}
+		
+		c.server.get({
+
+			action: c.data.action,
+			recipient: c.data.recipient,
+			sender: c.data.senderAutoComplete,
+			collection_location: c.data.collectionLocation,
+			notes: c.data.notes			
+
+		}).then(function(rsp) {
+
+			c.data.recipient = {displayValue: '',value: ''};
+			c.data.senderAutoComplete = '';
+			c.data.collectionLocation = '';
+			c.data.notes = '';
+
+			if(saveAction == 'saveAndClose') {
+
+				c.data.showItemForm = false
+
+			}
+
+		})
+
+	}
+
+	c.saveItem = function(saveAction) {
+
+		if(c.data.recipient.value == undefined || c.data.recipient.value == '') {
+
+			c.data.showError = true;
+
+			$timeout(function() {
+
+				c.data.showError = false;
+
+			},3000);
+
+			return;
+
+		} else {
+
+			c.insertItems(saveAction);
+
+		}		
+
+	}
+
+	c.sendNotifications = function(){
+		
+		c.server.get({
+
+			action: sendNotifications
+			
+		}).then(function(rsp) {
+
+		})
+	}
+	
 	spUtil.recordWatch($scope, c.data.delieveryItemTable, c.data.newDeliveryFilter, function(name,data) {
 		if(name.data.operation == "insert"){
 			c.data.disabled = false;							
@@ -33,7 +105,7 @@
 		c.data.showItemForm = true;
 		c.data.singleItem = true;
 		c.data.multipleItems = false;
-		
+
 	}
 
 	c.addMultipleItems = function() {
@@ -105,6 +177,35 @@ textarea {
 
 .glyphicon-menu-hamburger{
 	display: none;
+}
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  z-index: 99;
+  top: 100%;
+  left: 0;
+  right: 0;
+  
+}
+
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;	
+  background-color: #fff;
+}
+
+.autocomplete-items div:hover {
+  background-color: #e9e9e9;
+}
+
+.autocomplete-active {
+  background-color: $brand-primary !important; 
+  color: #ffffff; 
+}
+
+.autocomplete {
+  position: relative;  
 }</css>
         <data_table>sp_instance</data_table>
         <demo_data/>
@@ -114,7 +215,157 @@ textarea {
         <has_preview>true</has_preview>
         <id>new_delivery</id>
         <internal>false</internal>
-        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <link><![CDATA[function link(scope, element, attrs, controller) {
+  
+	autocomplete = function(inp, arr) {
+		
+		var currentFocus;
+		
+		inp.addEventListener("input", function(e) {
+	
+			var a, b, i, val = this.value;
+		
+			closeAllLists();
+			if (!val) {
+			
+				return false;
+			
+			}
+			
+			currentFocus = -1;
+			
+			a = document.createElement("DIV");
+			a.setAttribute("id", this.id + "autocomplete-list");
+			a.setAttribute("class", "autocomplete-items");
+			
+			this.parentNode.appendChild(a);
+			
+			for (i = 0; i < arr.length; i++) {
+			
+				if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+				
+					b = document.createElement("DIV");
+					
+					b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+					b.innerHTML += arr[i].substr(val.length);
+					
+					b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+					b.addEventListener("click", function(e) {
+						
+						inp.value = this.getElementsByTagName("input")[0].value;
+						closeAllLists();
+						
+					});
+					
+					a.appendChild(b);
+				
+				}
+			
+			}
+		
+		});
+
+		inp.addEventListener("keydown", function(e) {
+			
+			var x = document.getElementById(this.id + "autocomplete-list");
+			
+			if (x) {
+				
+				x = x.getElementsByTagName("div");
+				
+			}
+			
+			if (e.keyCode == 40) {
+			
+				currentFocus++;
+				addActive(x);
+				
+			} else if (e.keyCode == 38) {
+				
+				currentFocus--;
+				addActive(x);
+				
+			} else if (e.keyCode == 13) {
+				
+				e.preventDefault();
+				
+				if (currentFocus > -1) {
+					
+					if (x) {
+						
+						x[currentFocus].click();
+						
+					}
+					
+				}
+				
+			}
+			
+		});
+		
+		function addActive(x) {
+			
+			if (!x) {
+				
+				return false;
+				
+			}
+			
+			removeActive(x);
+			
+			if (currentFocus >= x.length) {
+				
+				currentFocus = 0;
+				
+			}
+			
+			if (currentFocus < 0) {
+				
+				currentFocus = (x.length - 1);
+				
+			}
+			
+			x[currentFocus].classList.add("autocomplete-active");
+			
+		}
+		
+		function removeActive(x) {
+		
+			for (var i = 0; i < x.length; i++) {
+			
+				x[i].classList.remove("autocomplete-active");
+			
+			}
+		
+		}
+		
+		function closeAllLists(elmnt) {
+		
+			var x = document.getElementsByClassName("autocomplete-items");
+			
+			for (var i = 0; i < x.length; i++) {
+			
+				if (elmnt != x[i] && elmnt != inp) {
+				
+					x[i].parentNode.removeChild(x[i]);
+			
+				}
+			
+			}
+			
+		}
+		
+		document.addEventListener("click", function (e) {
+		
+			closeAllLists(e.target);
+		
+		});
+	
+	}
+
+	autocomplete(document.getElementById("autoCompleteInput"), scope.data.autoCompleteArr);
+	
+}]]></link>
         <name>New Delivery</name>
         <option_schema/>
         <public>false</public>
@@ -127,6 +378,7 @@ textarea {
 	data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
 	data.collectionLocations = gs.getProperty("x_187394_delitem.collection.locations");
 	data.collectionLocationsArr = data.collectionLocations.split(",");
+	data.sender = 'test shared var';
 
 	data.tableOptions = {
 
@@ -134,7 +386,8 @@ textarea {
 		"table_plural":"Test",
 		"useInstanceTitle":false,
 		"filter": data.newDeliveryFilter,
-		"fields": "date_received,recipient,sender,collection_location,notes"
+		"fields": "date_received,recipient,sender,collection_location,notes,state",
+		"window_size": 5
 
 	};
 
@@ -161,13 +414,28 @@ textarea {
 	var arrayUtil = new global.ArrayUtil();
 	data.sendersUniqueArr = arrayUtil.unique(data.sendersArr);	
 
-	data.autoCompleteOptions = {
+	data.autoCompleteArr = data.sendersUniqueArr;
+	data.field_label = "Sender (if applicable)";
+	data.placeholder = "i.e. ASOS"
 
-		"field_label": "Sender (if applicable)",
-		"placeholder": "i.e. ASOS",
-		"auto_complete_array": data.sendersUniqueArr
+	if(input && input.action == "insertDeliveryItem") {
 
-	};
+		var newDeliveryItem = new x_187394_delitem.DelitemUtils().addDeliveryItem(input);
+
+	}
+
+	if(input && input.action == "insertMultipleDeliveryItems") {
+
+		var newDeliveryItems = new x_187394_delitem.DelitemUtils().addMultipleDeliveryItem(input);
+
+	}
+	
+	if(input && input.action == "sendNotifications") {
+
+		var sendNotifications = new x_187394_delitem.DelitemUtils().sendNotifications();
+
+	}
+
 
 })();]]></script>
         <servicenow>false</servicenow>
@@ -192,7 +460,7 @@ textarea {
       </button>
     </div>
     <div class="btn-group">
-      <button type="button" class="btn btn-primary" ng-disabled="c.data.disabled" ng-click="sendNotifications()">Send Notifications  <i class="fa fa-send-o fa-lg fa-fw"></i></button>
+      <button type="button" class="btn btn-primary" ng-disabled="c.data.disabled" ng-click="c.sendNotifications()">Send Notifications  <i class="fa fa-send-o fa-lg fa-fw"></i></button>
     </div>
   </div>
 
@@ -236,18 +504,31 @@ textarea {
         </sn-record-picker>
 
       </div>
-     <!-- <div class="autocomplete form-group" ng-show="!c.data.multipleItems">
+      <!-- <div class="autocomplete form-group" ng-show="!c.data.multipleItems">
         <label for="formGroupExampleInput">Sender (if applicable)</label>
         <input id="myInput" type="text" ng-model="c.data.sender" class="form-control" name="myCountry" placeholder="i.e. Amazon">
-      </div>-->
+      </div>
       <div ng-show="!c.data.multipleItems"
            ng-model="c.data.sender">
         <widget id="delitem_autocomplete_input" options='data.autoCompleteOptions'></widget>
+      </div>-->
+      <div class="autocomplete form-group"
+           ng-show="!c.data.multipleItems">
+        <label for="autoCompleteInput"
+               id="autoCompleteInputLabel"
+               name="autoCompleteInputLabel">
+          {{c.data.field_label}}
+        </label> 
+        <input id="autoCompleteInput"
+               name="autoCompleteInput"
+               type="text"
+               ng-model="c.data.senderAutoComplete"
+               class="form-control"
+               placeholder="{{c.data.placeholder}}">
       </div>
       <div class="form-group"> 
         <label for="formGroupExampleInput">Collection Location</label> 
         <select class="form-control" ng-model="c.data.collectionLocation" ng-options="item for item in c.data.collectionLocationsArr"></select>
-
       </div>
       <div class="form-group" ng-if="!c.data.multipleItems">
         <label for="formGroupExampleInput">Notes</label> 
@@ -258,15 +539,14 @@ textarea {
                   required="true"
                   type="text"></textarea>
       </div>
-
     </form>
     <button class="btn btn-default" ng-click="c.cancelForm()">
       Cancel
     </button>
-    <button class="btn btn-primary pull-right" ng-click="c.addItemAndClose()">
+    <button class="btn btn-primary pull-right" ng-click="c.saveItem('saveAndClose')">
       Save &amp Close
     </button>
-    <button class="btn btn-primary pull-right" ng-click="addItem()">
+    <button class="btn btn-primary pull-right" ng-click="c.saveItem('saveAndAdd')">
       Save &amp Add Item
     </button>
   </div>
