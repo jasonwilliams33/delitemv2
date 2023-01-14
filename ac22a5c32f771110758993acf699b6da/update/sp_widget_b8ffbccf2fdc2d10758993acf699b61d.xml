@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[api.controller=function() {
+  /* widget controller */
+  var c = this;
+	
+	console.log(c);
+	
+};]]></client_script>
+        <controller_as>c</controller_as>
+        <css/>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id>delivery_table_modal</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Delivery Table Modal</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+
+	data.newDeliveryFilter = "date_receivedONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()";
+	data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
+	
+		data.tableOptions = {
+
+		"table": data.delieveryItemTable,
+		"table_plural":"Test",
+		"useInstanceTitle":false,
+		"filter": data.newDeliveryFilter,
+		"fields": "date_received,recipient,sender,collection_location,notes,state",
+		"window_size": 5,
+			"hide_header": true
+
+	};
+	
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-01-14 10:42:15</sys_created_on>
+        <sys_id>b8ffbccf2fdc2d10758993acf699b61d</sys_id>
+        <sys_name>Delivery Table Modal</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sp_widget_b8ffbccf2fdc2d10758993acf699b61d</sys_update_name>
+        <template><![CDATA[<div>
+ <widget id="widget-data-table" options='data.tableOptions'></widget>
+</div>]]></template>
+    </sp_widget>
+</record_update>

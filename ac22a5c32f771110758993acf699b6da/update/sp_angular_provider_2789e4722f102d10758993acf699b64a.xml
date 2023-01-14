@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_angular_provider">
+    <sp_angular_provider action="INSERT_OR_UPDATE">
+        <name>delitemModalPubSub</name>
+        <script><![CDATA[function delitemModalPubSub($rootScope) {
+	
+	var delitemModalEvent = 'modalCompleted';
+	
+	return {
+		
+		subscribe: function(scope, callback) {
+			
+			var deregister = $rootScope.$on(delitemModalEvent, callback);
+			scope.$on('$destroy', deregister);
+			
+		},
+		
+		publish: function(data) {
+			$rootScope.$emit(delitemModalEvent, data);
+			
+		}
+		
+	};
+	
+}]]></script>
+        <sys_class_name>sp_angular_provider</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-01-13 14:27:00</sys_created_on>
+        <sys_id>2789e4722f102d10758993acf699b64a</sys_id>
+        <sys_name>delitemModalPubSub</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sp_angular_provider_2789e4722f102d10758993acf699b64a</sys_update_name>
+        <type>service</type>
+    </sp_angular_provider>
+</record_update>

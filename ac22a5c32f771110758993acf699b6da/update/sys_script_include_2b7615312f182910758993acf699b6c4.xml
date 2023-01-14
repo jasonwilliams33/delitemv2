@@ -81,8 +81,9 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 			var	newDeliveryItemObj = {};
 
 			var newDeliveryItems = new GlideAggregate(DelItemConstants.DELIVERY_ITEM_TABLE);
-			newDeliveryItems.addEncodedQuery('deliveryISEMPTY^state=1');
+			newDeliveryItems.addEncodedQuery('state=1^delivery=NULL^ORdelivery=undefined');
 			newDeliveryItems.groupBy('recipient');
+			newDeliveryItems.groupBy('sys_id');
 			newDeliveryItems.addAggregate('COUNT');
 			newDeliveryItems.query();
 			while(newDeliveryItems.next()){
@@ -91,28 +92,30 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 				newDeliveryItemObj.recipient = newDeliveryItems.recipient.getDisplayValue().toString();
 				newDeliveryItemObj.recipientSysId = newDeliveryItems.recipient.toString();
 				newDeliveryItemObj.recipientFirsName = newDeliveryItems.recipient.first_name.toString();
+				newDeliveryItemObj.deliveryItemSysId = newDeliveryItems.sys_id.toString();
 				newDeliveryItemObj.date = new GlideDateTime();
 				newDeliveryItemObj.count = newDeliveryItems.getAggregate('COUNT');
 				newDeliveryItemArr.push(newDeliveryItemObj);
 			}
 
-			var existingDeliveryArr = this.checkExistingDelivery(newDeliveryItemArr);
+			var existingDeliveryArr = this.checkAndUpdateExistingDelivery(newDeliveryItemArr);
 
 			for (var i=0; i< existingDeliveryArr.length; i++) {
 
-				if(existingDeliveryArr[i].existingDelivery) {
+				if(!existingDeliveryArr[i].existingDelivery) {
 
-					this.updateExistingDelivery(existingDeliveryArr[i]);
-					
-				} else {
+					//existingDeliveryArr[i].deliveryRecord = this.createNewDelivery(existingDeliveryArr[i]);
 
-					this.createNewDelivery(existingDeliveryArr[i]);
+					//this.updateExistingDelivery(existingDeliveryArr[i]);
 
 				}
 
+				//global.JSUtil.logObject(existingDeliveryArr,"JW Debug existingDeliveryArr");
+
 			}
-
-
+//gs.error("JW Debug existingDeliveryArr: " + typeof(existingDeliveryArr));
+				//global.JSUtil.logObject(existingDeliveryArr,"JW Debug");
+			var updatedDeliveryItems = this.updateDeliveryItems(existingDeliveryArr);
 
 		} catch(err) {
 
@@ -122,27 +125,28 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 
 	},
 
-	checkExistingDelivery : function(deliveryItemArr) {
-
+	checkAndUpdateExistingDelivery : function(deliveryItemArr) {
+//gs.error("JW Debug deliveryItemArr: " + typeof(deliveryItemArr));
+		//global.JSUtil.logObject(deliveryItemArr,"JW Debug");
 		try {
 
 			for (var i=0; i< deliveryItemArr.length; i++) {
 
-				var exisitingDelivery = new GlideRecordSecure(DelItemConstants.DELIVERY_TABLE);
-				exisitingDelivery.addEncodedQuery('state!=collected^recipient=' + deliveryItemArr[i].recipientSysId);
-				exisitingDelivery.query();
-				if(exisitingDelivery.next()){
+				var exisitingDeliveryGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_TABLE);
+				exisitingDeliveryGRS.addEncodedQuery('state!=collected^recipient=' + deliveryItemArr[i].recipientSysId);
+				exisitingDeliveryGRS.query();
+				if(exisitingDeliveryGRS.next()){
 
 					deliveryItemArr[i].existingDelivery = true;
-					deliveryItemArr[i].exisitingDeliverySysId = exisitingDelivery.getUniqueValue();
+					deliveryItemArr[i].deliveryRecord = exisitingDeliveryGRS.getUniqueValue();
+					exisitingDeliveryGRS.setValue('delivery_items',parseInt(exisitingDeliveryGRS.delivery_items) + parseInt(deliveryItemArr[i].count));
+					exisitingDeliveryGRS.update();
 
 				} else {
 
 					deliveryItemArr[i].existingDelivery = false;
 
 				}
-
-
 
 			}
 
@@ -156,15 +160,52 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 
 	},
 
-	updateExistingDelivery : function(existingDelivery) {
+	createNewDelivery : function(newDelivery) {
 
-		var updateExistingDeliveryGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_TABLE);
-		updateExistingDeliveryGRS.addEncodedQuery('sys_id=' + existingDelivery.exisitingDeliverySysId);
-		updateExistingDeliveryGRS.query();
-		if(updateExistingDeliveryGRS.next()) {
+		try {
 
-			updateExistingDeliveryGRS.delivery_items = updateExistingDeliveryGRS.delivery_items + parseInt(existingDelivery.count);
-			updateExistingDeliveryGRS.update();
+			var createNewDeliveryGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_TABLE);
+			createNewDeliveryGRS.initialize();
+			createNewDeliveryGRS.setValue('delivery_items',parseInt(newDelivery.count));
+			createNewDeliveryGRS.setValue('recipient',newDelivery.recipientSysId);
+
+			newDelivery.newDeliveryRecord = createNewDeliveryGRS.insert();
+
+			return newDelivery;
+
+		} catch(err) {
+
+			gs.error('['+gs.getCurrentScopeName()+']' + ': DelitemUtils: createNewDelivery - Caught error: \n'+err);
+
+		}
+
+	},
+
+	updateDeliveryItems : function(existingDeliveryArr) {
+//gs.error("JW Debug existingDeliveryArr 2: " + typeof(existingDeliveryArr));
+		//global.JSUtil.logObject(existingDeliveryArr,"JW Debug");
+		try {
+
+			for (var i=0; i< existingDeliveryArr.length; i++) {
+
+				var updatingDeliveryItemGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
+				updatingDeliveryItemGRS.addEncodedQuery("sys_id=" + existingDeliveryArr[i].deliveryItemSysId);
+				updatingDeliveryItemGRS.query();
+				if(updatingDeliveryItemGRS.next()) {
+					
+					updatingDeliveryItemGRS.setValue('delivery',existingDeliveryArr[i].deliveryRecord);
+					updatingDeliveryItemGRS.setValue('state',2);
+					updatingDeliveryItemGRS.update();
+					
+				}
+
+			}
+			
+			return "done";
+
+		} catch(err) {
+
+			gs.error('['+gs.getCurrentScopeName()+']' + ': DelitemUtils: updateDeliveryItems - Caught error: \n'+err);
 
 		}
 

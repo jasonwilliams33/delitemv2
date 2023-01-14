@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[api.controller=function($scope,$uibModal,spUtil) {
+        <client_script><![CDATA[api.controller=function($scope,$uibModal,spUtil,delitemModalPubSub) {
 	/* widget controller */
 	var c = this;
+
+
+	delitemModalPubSub.subscribe($scope, function($event, data) {//Subscription to Angular Provider to retrieve data from Modal and update relevant variables
+
+		c.modalInstance.close();
+		spUtil.addInfoMessage("Notifications Sent!");
+
+	})
 
 	spUtil.recordWatch($scope, c.data.delieveryItemTable, "", function(name,data) {
 
@@ -20,8 +28,23 @@
 
 	});
 
-	c.openModal = function(widget,title,modalObj) {
+	c.todaysDeliveries = function() {
 
+		var todaysDeliveryObj = {
+
+			"table": "x_187394_delitem_delivery_item",//c.data.delieveryItemTable,			
+			"filter": c.data.todaysDeliveriesFilter,
+			"fields": "date_received,recipient,sender,collection_location,notes,state",
+			"window_size": 5
+
+		}
+		console.log(todaysDeliveryObj);
+		c.openModal('delivery_table_modal','Delivery Items received today',todaysDeliveryObj);
+
+	}
+
+	c.openModal = function(widget,title,modalObj) {
+console.log(widget,title,modalObj);
 		/***
 	 	* Open Modal using supplied parameters
 	 	***/
@@ -37,7 +60,7 @@
 				var modalC = this;
 				modalC.modalInstance = c.modalInstance;
 				modalC.title = title;
-				spUtil.get("new_delivery").then(function(response) {
+				spUtil.get(widget,modalObj).then(function(response) {
 
 					modalC.form = response;
 
@@ -133,7 +156,7 @@ textarea {
 
 	}*/
 
-	data.outstandingDeliveriesFilter = "state!=2";
+	data.outstandingDeliveriesFilter = "state!=3";
 	data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
 
 	queryOutstandingDeliveries = function() {
@@ -177,9 +200,9 @@ textarea {
   <div class="panel-body">
     <div class="wrap row">
       <div class="cardCount"
-           ng-click="c.goToDocs(link)">
+           ng-click="c.todaysDeliveries()">
        <h5 class="docTitle">
-          Today's Deliveries
+          Delivery Items received today
         </h5>
         <div>
           <h4 class="content">
@@ -188,9 +211,9 @@ textarea {
         </div>       
       </div>
        <div class="cardCount"
-           ng-click="c.goToDocs(link)">
+           ng-click="c.openModal('new_delivery','Add New Delivery Item(s)')">
         <h5 class="docTitle">
-          Outstanding Deliveries
+          Delivery Items awaiting collection
         </h5>
          <div>
            <h4 class="content">
@@ -201,7 +224,7 @@ textarea {
     </div>
     <div class="wrap row">
       <button class="btn btn-primary newDelivery"
-              ng-click="c.openModal()">
+              ng-click="c.openModal('new_delivery','Add New Delivery Item(s)')">
         New Delivery <i class="fa fa-dropbox fa-lg" aria-hidden="true"></i>
       </button>
     </div>

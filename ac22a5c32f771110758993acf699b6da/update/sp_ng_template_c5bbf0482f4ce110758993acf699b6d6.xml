@@ -13,7 +13,6 @@
         <sys_update_name>sp_ng_template_c5bbf0482f4ce110758993acf699b6d6</sys_update_name>
         <template><![CDATA[<div class="modal-header">
   <h4 class="modal-title">
-    Add New Delivery Item(s)
     <button type="button" class="close" 
             ng-click="modalC.modalInstance.close()">
       <span aria-hidden="true">&times;</span>
