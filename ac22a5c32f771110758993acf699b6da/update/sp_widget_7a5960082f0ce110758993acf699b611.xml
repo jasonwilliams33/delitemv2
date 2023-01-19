@@ -28,23 +28,46 @@
 
 	});
 
-	c.todaysDeliveries = function() {
+	c.openDeliveryModal = function(action) {
 
+		if(action == "todays") {
+			
+			c.data.deliveryModalFilter = c.data.todaysDeliveriesFilter;
+			c.data.deliveryModalTitle = 'Delivery Items received today';
+			c.data.deliveryModalTable = c.data.delieveryItemTable;
+			c.data.deliveryModalFields = "date_received,recipient,sender,collection_location,notes,state";
+			
+		} else if(action == "outstanding") {
+			
+			c.data.deliveryModalFilter = c.data.outstandingDeliveryItemsFilter;
+			c.data.deliveryModalTitle = 'Outstanding Delivery Items';
+			c.data.deliveryModalTable = c.data.delieveryItemTable;
+			c.data.deliveryModalFields = "date_received,recipient,sender,collection_location,notes,state";
+				
+		} else if(action == "collect_delivery") {
+			
+			c.data.deliveryModalFilter = c.data.outstandingDeliveryFilter;
+			c.data.deliveryModalTitle = 'Outstanding Deliveries';
+			c.data.deliveryModalTable = c.data.delieveryTable;			
+			
+		}
+		
 		var todaysDeliveryObj = {
 
-			"table": "x_187394_delitem_delivery_item",//c.data.delieveryItemTable,			
-			"filter": c.data.todaysDeliveriesFilter,
-			"fields": "date_received,recipient,sender,collection_location,notes,state",
-			"window_size": 5
+			"table": c.data.deliveryModalTable,	
+			"filter": c.data.deliveryModalFilter,
+			"fields": c.data.deliveryModalFields,
+			"window_size": 5,
+			"action": action
 
 		}
-		console.log(todaysDeliveryObj);
-		c.openModal('delivery_table_modal','Delivery Items received today',todaysDeliveryObj);
+
+		c.openModal('delivery_table_modal',c.data.deliveryModalTitle,todaysDeliveryObj);
 
 	}
 
 	c.openModal = function(widget,title,modalObj) {
-console.log(widget,title,modalObj);
+
 		/***
 	 	* Open Modal using supplied parameters
 	 	***/
@@ -132,8 +155,11 @@ textarea {
 	/* e.g., data.table = $sp.getValue('table'); */
 
 	data.todaysDeliveriesFilter = "date_receivedONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()";
+	data.outstandingDeliveryItemsFilter = "state!=3";
+	data.outstandingDeliveryFilter = "state!=3";
 	data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
-
+	data.delieveryTable = DelItemConstants.DELIVERY_TABLE;
+	data.selfService = gs.getProperty("x_187394_delitem.self.service");
 	queryTodaysDeliveries = function() {
 
 		var todaysDeliveries = new GlideAggregate(data.delieveryItemTable);
@@ -156,13 +182,10 @@ textarea {
 
 	}*/
 
-	data.outstandingDeliveriesFilter = "state!=3";
-	data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
-
 	queryOutstandingDeliveries = function() {
 
 		var outstandingDeliveries = new GlideAggregate(data.delieveryItemTable);
-		outstandingDeliveries.addEncodedQuery(data.outstandingDeliveriesFilter);
+		outstandingDeliveries.addEncodedQuery(data.outstandingDeliveryItemsFilter);
 		outstandingDeliveries.addAggregate('COUNT');
 		outstandingDeliveries.query();
 		while(outstandingDeliveries.next()) {
@@ -170,11 +193,11 @@ textarea {
 			return outstandingDeliveries.getAggregate('COUNT');
 
 		}
-		
+
 	}
 
 	data.outstandingDeliveryCount = queryOutstandingDeliveries();
-	
+
 	if(input && input.action == "refreshDeliveryCounts") {
 
 		data.todaysDeliveryCount = queryTodaysDeliveries();
@@ -200,7 +223,7 @@ textarea {
   <div class="panel-body">
     <div class="wrap row">
       <div class="cardCount"
-           ng-click="c.todaysDeliveries()">
+           ng-click="c.openDeliveryModal('todays')">
        <h5 class="docTitle">
           Delivery Items received today
         </h5>
@@ -211,7 +234,7 @@ textarea {
         </div>       
       </div>
        <div class="cardCount"
-           ng-click="c.openModal('new_delivery','Add New Delivery Item(s)')">
+           ng-click="c.openDeliveryModal('outstanding')">
         <h5 class="docTitle">
           Delivery Items awaiting collection
         </h5>
@@ -226,6 +249,13 @@ textarea {
       <button class="btn btn-primary newDelivery"
               ng-click="c.openModal('new_delivery','Add New Delivery Item(s)')">
         New Delivery <i class="fa fa-dropbox fa-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="wrap row"
+                ng-show="c.data.selfService == 'true'">
+      <button class="btn btn-default newDelivery"
+              ng-click="c.openDeliveryModal('collect_delivery')">
+        Collect Delivery <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
       </button>
     </div>
   </div>

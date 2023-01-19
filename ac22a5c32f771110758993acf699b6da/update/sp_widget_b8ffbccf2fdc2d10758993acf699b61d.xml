@@ -4,12 +4,135 @@
         <client_script><![CDATA[api.controller=function() {
   /* widget controller */
   var c = this;
+			
+	c.deliverySelected = false;
 	
-	console.log(c);
+	c.collectDelivery = function() {
+				
+		c.server.get({
+
+			action: "retrieveDeliveryItems",
+			deliverySysId: c.data.selectedItem.sys_id
+
+		}).then(function(rsp) {
+console.log(rsp);
+			c.data.retrievedDeliveryItemArr = rsp.data.retrievedDeliveryItemArr;
+console.log(c.data.retrievedDeliveryItemArr);
+		})	
+		
+		c.deliverySelected = true;
+		
+	}
+	
+	c.selectedChange = function(e, data) {
+		
+
+		var selectedItem = _.find(c.data.deliveriesArr, {'selected': true});
+
+		if(selectedItem) {
+			
+			c.data.selectedItem = data;
+			
+			console.log(selectedItem);
+
+			if(selectedItem.sys_id == data.sys_id) {
+
+				//c.data.selectedExisingPush = data;
+
+				return;
+
+			}	else {
+
+				_.find(c.data.deliveriesArr, {'sys_id': selectedItem.sys_id}).selected = false;
+				_.find(c.data.deliveriesArr, {'sys_id': data.sys_id}).selected = true;			
+				//c.data.selectedExisingPush = _.find(c.data.pushArr, {'name': data.sys_id});
+				e.stopPropagation();
+				e.preventDefault();
+
+				//c.data.selectedExisingPush = data;
+				return false;
+
+			}
+
+		}
+
+	}
 	
 };]]></client_script>
         <controller_as>c</controller_as>
-        <css/>
+        <css>.panel-heading{
+  color: #fff;
+  background-color: $brand-primary;
+}
+
+.headingText{
+  text-align: center;
+}
+
+.btn span.glyphicon {    			
+	opacity: 0;
+}
+
+.btn.active span.glyphicon {				
+	opacity: 1;		
+  color: #ffffff;
+}
+
+.btn.active{
+  background: $brand-primary;
+  color: #ffffff;
+}
+
+.radioLabels{
+  margin: 10px;
+}
+
+.radioButtons{
+	width: 100%;
+}
+
+.typeSelectionPanel,.confirmBtn,.radioButtons{
+	margin-top: 20px !important;
+}
+
+.existingPush{
+	margin-top: 10px;
+}
+
+.btn span.glyphicon {    			
+	opacity: 0;
+}
+
+.btn.active span.glyphicon {				
+	opacity: 1;		
+  color: #ffffff;
+}
+
+.btn.active{
+  background: $brand-primary;
+  color: #ffffff;
+}
+
+
+.btn input{
+	display:none;
+}
+
+.collectDelivery{
+  margin-top: 10px;	
+}
+
+.outer{
+	background-color: #ffffff;
+  border: solid 1px;
+}
+
+.inner{
+	background-color: $brand-primary;
+  //background-image: linear-gradient(to right top, #1f8476, #22957f, #2ba686, #38b78c, #48c891);
+  border: solid 1px;
+
+}</css>
         <data_table>sp_instance</data_table>
         <demo_data/>
         <description/>
@@ -24,24 +147,70 @@
         <public>false</public>
         <roles/>
         <script><![CDATA[(function() {
-  /* populate the 'data' object */
-  /* e.g., data.table = $sp.getValue('table'); */
+	/* populate the 'data' object */
+	/* e.g., data.table = $sp.getValue('table'); */
 
-	data.newDeliveryFilter = "date_receivedONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()";
-	data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
-	
-		data.tableOptions = {
+	data.options = input;
+	data.deliveriesArr = [];
+	data.retrievedDeliveryItemArr = [];
 
-		"table": data.delieveryItemTable,
+	var deliveriesGR = new GlideRecordSecure(DelItemConstants.DELIVERY_TABLE);
+	deliveriesGR.addEncodedQuery("state!=3");
+	deliveriesGR.query();
+	while (deliveriesGR.next()) {
+
+		var deliveriesObj = {};
+		deliveriesObj.recipient = deliveriesGR.recipient.getDisplayValue();
+		deliveriesObj.delivery_items = deliveriesGR.delivery_items.toString();
+		deliveriesObj.created = deliveriesGR.sys_created_on.toString();
+		deliveriesObj.sys_id = deliveriesGR.getUniqueValue();
+		data.deliveriesArr.push(deliveriesObj);
+
+	}
+
+	///data.newDeliveryFilter = "date_receivedONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()";
+	//data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
+
+	if(data.options.action == "todays" || data.options.action == "outstanding") {
+
+		data.displayDataTable = true;
+
+	} else {
+
+		data.displayDataTable = false;		
+
+	}
+
+	data.tableOptions = {
+
+		"table": data.options.table,
 		"table_plural":"Test",
 		"useInstanceTitle":false,
-		"filter": data.newDeliveryFilter,
+		"filter": data.options.filter,
 		"fields": "date_received,recipient,sender,collection_location,notes,state",
-		"window_size": 5,
-			"hide_header": true
+		"window_size": data.options.window_size,
+		"hide_header": true
 
 	};
 	
+	if(input && input.action == "retrieveDeliveryItems") {
+
+		var deliveryItemGR = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
+		deliveryItemGR.addEncodedQuery("delivery=" + input.deliverySysId);
+		deliveryItemGR.query();
+		while(deliveryItemGR.next()) {
+			
+			data.retrievedDeliveryItemObj = {};
+			data.retrievedDeliveryItemObj.date_received = deliveryItemGR.date_received.toString();
+			data.retrievedDeliveryItemObj.sender = deliveryItemGR.sender.toString();
+			data.retrievedDeliveryItemObj.notes = deliveryItemGR.notes.toString();
+			data.retrievedDeliveryItemObj.collection_location = deliveryItemGR.collection_location.toString();
+			data.retrievedDeliveryItemArr.push(data.retrievedDeliveryItemObj);
+			
+		}					
+
+	}
+
 })();]]></script>
         <servicenow>false</servicenow>
         <sys_class_name>sp_widget</sys_class_name>
@@ -53,8 +222,79 @@
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_b8ffbccf2fdc2d10758993acf699b61d</sys_update_name>
-        <template><![CDATA[<div>
- <widget id="widget-data-table" options='data.tableOptions'></widget>
-</div>]]></template>
+        <template><![CDATA[<div ng-show="!c.deliverySelected">
+  <div ng-show="c.data.displayDataTable">
+    <widget id="widget-data-table" options='data.tableOptions'></widget>
+  </div>
+  <div class="panel panel-default"
+       ng-show="!c.data.displayDataTable">
+    <table class="table table-striped table-responsive">
+      <thead>
+        <tr>
+          <th>Recipient</th> 
+          <th>Delivery Items</th>
+          <th>Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="delivery in c.data.deliveriesArr">
+          <td>{{delivery.recipient}}</td>
+          <td>{{delivery.delivery_items}}</td>
+          <td>{{delivery.created}}</td>
+          <td>
+            <div class="btn-group">			
+              <label class="btn btn-default btn-sm" 
+                     ng-click="c.selectedChange($event, delivery)"
+                     ng-class="{'active': !!delivery.selected}">
+                <input type="checkbox" name="singleCheck"
+                       ng-model="delivery.selected"
+                       >
+                <span class="glyphicon glyphicon-ok"></span>
+              </label>
+            </div>
+          </td>
+        </tr>
+    </table>  
+  </div>
+  <div>
+    <button class="btn btn-primary btn-block collectDelivery"
+            ng-click="c.collectDelivery()">
+      Collect Delivery <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+    </button>
+  </div>
+</div>
+<div ng-show="c.deliverySelected"
+     class="jumbotron outer">
+  Hi Jason, you have 3 delivery items
+    <table class="table table-striped table-responsive">
+      <thead>
+        <tr>
+          <th>Date Received</th> 
+          <th>Sender</th>
+          <th>Notes</th>
+          <th>Collection Location</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="delivery in c.data.retrievedDeliveryItemArr">
+          <td>{{delivery.date_received}}</td>
+          <td>{{delivery.sender}}</td>
+          <td>{{delivery.notes}}</td>
+          <td>{{delivery.collection_location}}</td>
+          <td>
+            <div class="btn-group">			
+              <label class="btn btn-default btn-sm" 
+                     ng-click="c.selectedChange($event, delivery)"
+                     ng-class="{'active': !!delivery.selected}">
+                <input type="checkbox" name="singleCheck"
+                       ng-model="delivery.selected"
+                       >
+                <span class="glyphicon glyphicon-ok"></span>
+              </label>
+            </div>
+          </td>
+        </tr>
+    </table> 
+  </div>]]></template>
     </sp_widget>
 </record_update>
