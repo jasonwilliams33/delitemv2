@@ -5,35 +5,59 @@
   /* widget controller */
   var c = this;
 			
-	c.deliverySelected = false;
+	c.data.deliverySelected = false;
+	c.data.delveryItemsSelected = false;
+	c.data.selectedDeliveryItemArr = [];
+	c.data.selectedDeliveryItemObj = {};
 	
 	c.collectDelivery = function() {
-				
+				console.log(c.data);
 		c.server.get({
 
 			action: "retrieveDeliveryItems",
 			deliverySysId: c.data.selectedItem.sys_id
 
 		}).then(function(rsp) {
-console.log(rsp);
+//console.log(rsp);
 			c.data.retrievedDeliveryItemArr = rsp.data.retrievedDeliveryItemArr;
-console.log(c.data.retrievedDeliveryItemArr);
+//console.log(c.data.retrievedDeliveryItemArr);
 		})	
 		
-		c.deliverySelected = true;
+		c.data.deliverySelected = true;
 		
 	}
 	
-	c.selectedChange = function(e, data) {
+	c.collect = function() {
 		
+		c.data.delveryItemsSelected = true;
+		console.log(c.data.selectedDeliveryItemArr);
+		
+	}
+	
+	c.selectDeliveryItem = function(sys_id) {
+		
+		var selectedItemIndex = c.data.selectedDeliveryItemArr.indexOf(sys_id);
+		
+		if(selectedItemIndex == -1) {
+		
+			c.data.selectedDeliveryItemArr.push(sys_id);
+			
+			
+		} else {
+			
+			c.data.selectedDeliveryItemArr.splice(selectedItemIndex, 1);
+						
+		}
+
+	}
+	
+	c.selectedChange = function(e, data) {		
 
 		var selectedItem = _.find(c.data.deliveriesArr, {'selected': true});
 
 		if(selectedItem) {
 			
-			c.data.selectedItem = data;
-			
-			console.log(selectedItem);
+			c.data.selectedItem = data;			
 
 			if(selectedItem.sys_id == data.sys_id) {
 
@@ -132,6 +156,15 @@ console.log(c.data.retrievedDeliveryItemArr);
   //background-image: linear-gradient(to right top, #1f8476, #22957f, #2ba686, #38b78c, #48c891);
   border: solid 1px;
 
+}
+
+.collectBtns{
+	margin: 5px;
+}
+
+.headingText{
+	text-align: center;
+  //color: #ffffff;
 }</css>
         <data_table>sp_instance</data_table>
         <demo_data/>
@@ -150,7 +183,7 @@ console.log(c.data.retrievedDeliveryItemArr);
 	/* populate the 'data' object */
 	/* e.g., data.table = $sp.getValue('table'); */
 
-	data.options = input;
+	data.options = input || '';
 	data.deliveriesArr = [];
 	data.retrievedDeliveryItemArr = [];
 
@@ -161,7 +194,8 @@ console.log(c.data.retrievedDeliveryItemArr);
 
 		var deliveriesObj = {};
 		deliveriesObj.recipient = deliveriesGR.recipient.getDisplayValue();
-		deliveriesObj.delivery_items = deliveriesGR.delivery_items.toString();
+		deliveriesObj.recipientFirstName = deliveriesGR.recipient.first_name.toString();
+		deliveriesObj.deliveryItems = deliveriesGR.delivery_items.toString();
 		deliveriesObj.created = deliveriesGR.sys_created_on.toString();
 		deliveriesObj.sys_id = deliveriesGR.getUniqueValue();
 		data.deliveriesArr.push(deliveriesObj);
@@ -205,6 +239,7 @@ console.log(c.data.retrievedDeliveryItemArr);
 			data.retrievedDeliveryItemObj.sender = deliveryItemGR.sender.toString();
 			data.retrievedDeliveryItemObj.notes = deliveryItemGR.notes.toString();
 			data.retrievedDeliveryItemObj.collection_location = deliveryItemGR.collection_location.toString();
+			data.retrievedDeliveryItemObj.sys_id = deliveryItemGR.getUniqueValue();
 			data.retrievedDeliveryItemArr.push(data.retrievedDeliveryItemObj);
 			
 		}					
@@ -222,24 +257,25 @@ console.log(c.data.retrievedDeliveryItemArr);
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_b8ffbccf2fdc2d10758993acf699b61d</sys_update_name>
-        <template><![CDATA[<div ng-show="!c.deliverySelected">
+        <template><![CDATA[<div ng-show="!c.data.deliverySelected">
   <div ng-show="c.data.displayDataTable">
     <widget id="widget-data-table" options='data.tableOptions'></widget>
   </div>
   <div class="panel panel-default"
        ng-show="!c.data.displayDataTable">
-    <table class="table table-striped table-responsive">
+    <table class="table table-striped table-primary table-responsive">
       <thead>
         <tr>
           <th>Recipient</th> 
           <th>Delivery Items</th>
           <th>Created</th>
+          <th>Select</th>
         </tr>
       </thead>
       <tbody>
         <tr ng-repeat="delivery in c.data.deliveriesArr">
           <td>{{delivery.recipient}}</td>
-          <td>{{delivery.delivery_items}}</td>
+          <td>{{delivery.deliveryItems}}</td>
           <td>{{delivery.created}}</td>
           <td>
             <div class="btn-group">			
@@ -263,38 +299,57 @@ console.log(c.data.retrievedDeliveryItemArr);
     </button>
   </div>
 </div>
-<div ng-show="c.deliverySelected"
-     class="jumbotron outer">
-  Hi Jason, you have 3 delivery items
+<div class="jumbotron outer"
+     ng-show="c.data.deliverySelected && !c.data.delveryItemsSelected">
+  <h3 class="headingText">
+    Hi {{c.data.selectedItem.recipientFirstName}},<br><br>You have {{c.data.selectedItem.deliveryItems}} Delivery Item(s) awaiting collection:<br>
+  </h3>
+<div class="panel panel-default">
     <table class="table table-striped table-responsive">
-      <thead>
-        <tr>
-          <th>Date Received</th> 
-          <th>Sender</th>
-          <th>Notes</th>
-          <th>Collection Location</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="delivery in c.data.retrievedDeliveryItemArr">
-          <td>{{delivery.date_received}}</td>
-          <td>{{delivery.sender}}</td>
-          <td>{{delivery.notes}}</td>
-          <td>{{delivery.collection_location}}</td>
-          <td>
-            <div class="btn-group">			
-              <label class="btn btn-default btn-sm" 
-                     ng-click="c.selectedChange($event, delivery)"
-                     ng-class="{'active': !!delivery.selected}">
-                <input type="checkbox" name="singleCheck"
-                       ng-model="delivery.selected"
-                       >
-                <span class="glyphicon glyphicon-ok"></span>
-              </label>
-            </div>
-          </td>
-        </tr>
-    </table> 
-  </div>]]></template>
+    <thead>
+      <tr>
+        <th>Date Received</th> 
+        <th>Sender</th>
+        <th>Notes</th>
+        <th>Collection Location</th>
+        <th ng-show="c.data.selectedItem.deliveryItems > 1">Select</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="delivery in c.data.retrievedDeliveryItemArr">
+        <td>{{delivery.date_received}}</td>
+        <td>{{delivery.sender}}</td>
+        <td>{{delivery.notes}}</td>
+        <td>{{delivery.collection_location}}</td>
+        <td ng-show="c.data.selectedItem.deliveryItems > 1">
+          <div class="btn-group" data-toggle="buttons">	
+            <label class="btn btn-default btn-sm" 
+                   ng-click="c.selectDeliveryItem(delivery.sys_id)"
+                   ng-class="{'active': !!delivery.selected}">
+              <input type="checkbox" name="singleCheck">
+              <span class="glyphicon glyphicon-ok"></span>
+            </label>
+          </div>          
+        </td>
+      </tr>
+  </table>  
+  </div>
+    <button class=" btn btn-default pull-right collectBtns"
+            ng-disabled="c.data.disabled"
+            ng-click="c.collect()">
+      Collect <span ng-show="c.data.selectedItem.deliveryItems > 1">All</span>
+    </button>
+    <button class=" btn btn-default pull-right collectBtns"
+            ng-show="c.data.selectedItem.deliveryItems > 1"
+            ng-disabled="c.data.disabled"
+            ng-click="c.collect()">
+      Collect Selected
+    </button>  
+  </div>
+
+<div class="panel panel-default"
+     ng-show="c.data.delveryItemsSelected">
+  <widget id="delitem_scratch_pad"></widget>
+</div>]]></template>
     </sp_widget>
 </record_update>
