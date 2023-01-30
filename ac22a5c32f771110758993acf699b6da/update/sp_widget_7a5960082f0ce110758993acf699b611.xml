@@ -154,23 +154,32 @@ textarea {
 	/* populate the 'data' object */
 	/* e.g., data.table = $sp.getValue('table'); */
 
-	data.todaysDeliveriesFilter = "date_receivedONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()";
-	data.outstandingDeliveryItemsFilter = "state!=3";
-	data.outstandingDeliveryFilter = "state!=3";
-	data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
-	data.delieveryTable = DelItemConstants.DELIVERY_TABLE;
-	data.selfService = gs.getProperty("x_187394_delitem.self.service");
-	queryTodaysDeliveries = function() {
+	try {
 
-		var todaysDeliveries = new GlideAggregate(data.delieveryItemTable);
-		todaysDeliveries.addEncodedQuery(data.todaysDeliveriesFilter);
-		todaysDeliveries.addAggregate('COUNT');
-		todaysDeliveries.query();
-		while(todaysDeliveries.next()) {
+		data.todaysDeliveriesFilter = "date_receivedONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()";
+		data.outstandingDeliveryItemsFilter = "state!=3";
+		data.outstandingDeliveryFilter = "state!=3";
+		data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
+		data.delieveryTable = DelItemConstants.DELIVERY_TABLE;
+		data.selfService = gs.getProperty("x_187394_delitem.self.service");
 
-			return todaysDeliveries.getAggregate('COUNT');
+		queryTodaysDeliveries = function() {
+
+			var todaysDeliveries = new GlideAggregate(data.delieveryItemTable);
+			todaysDeliveries.addEncodedQuery(data.todaysDeliveriesFilter);
+			todaysDeliveries.addAggregate('COUNT');
+			todaysDeliveries.query();
+			while(todaysDeliveries.next()) {
+
+				return todaysDeliveries.getAggregate('COUNT');
+
+			}
 
 		}
+
+	} catch(err) {
+
+		gs.error('['+gs.getCurrentScopeName()+']' + ': Delitem Widget - Caught error: \n'+err);
 
 	}
 
@@ -253,7 +262,7 @@ textarea {
     </div>
     <div class="wrap row"
                 ng-show="c.data.selfService == 'true'">
-      <button class="btn btn-default newDelivery"
+      <button class="btn newDelivery"
               ng-click="c.openDeliveryModal('collect_delivery')">
         Collect Delivery <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
       </button>

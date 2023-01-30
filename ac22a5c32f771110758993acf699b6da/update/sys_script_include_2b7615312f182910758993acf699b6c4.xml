@@ -61,7 +61,7 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 					"collection_location": itemObj.collection_location
 				};
 
-				var newDeliveryITem = this.addDeliveryItem(multipleItemObj);
+				var newDeliveryItem = this.addDeliveryItem(multipleItemObj);
 
 			}
 
@@ -104,7 +104,7 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 
 				if(!existingDeliveryArr[i].existingDelivery) {
 
-					//existingDeliveryArr[i].deliveryRecord = this.createNewDelivery(existingDeliveryArr[i]);
+					existingDeliveryArr[i].deliveryRecord = this.createNewDelivery(existingDeliveryArr[i]);
 
 					//this.updateExistingDelivery(existingDeliveryArr[i]);
 
@@ -140,6 +140,7 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 					deliveryItemArr[i].existingDelivery = true;
 					deliveryItemArr[i].deliveryRecord = exisitingDeliveryGRS.getUniqueValue();
 					exisitingDeliveryGRS.setValue('delivery_items',parseInt(exisitingDeliveryGRS.delivery_items) + parseInt(deliveryItemArr[i].count));
+					exisitingDeliveryGRS.setValue('delivery_items_awaiting_collection',parseInt(exisitingDeliveryGRS.delivery_items) + parseInt(deliveryItemArr[i].count));
 					exisitingDeliveryGRS.update();
 
 				} else {
@@ -192,7 +193,7 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 				updatingDeliveryItemGRS.addEncodedQuery("sys_id=" + existingDeliveryArr[i].deliveryItemSysId);
 				updatingDeliveryItemGRS.query();
 				if(updatingDeliveryItemGRS.next()) {
-					
+				
 					updatingDeliveryItemGRS.setValue('delivery',existingDeliveryArr[i].deliveryRecord);
 					updatingDeliveryItemGRS.setValue('state',2);
 					updatingDeliveryItemGRS.update();

@@ -7,6 +7,7 @@
         <element attributes="edge_encryption_enabled=true" label="Notes" max_length="1000" name="notes" type="string"/>
         <element attributes="edge_encryption_enabled=true" default="javascript:global.getNextObjNumberPadded();" label="Number" max_length="40" name="number" type="string"/>
         <element label="Recipient" mandatory="true" max_length="32" name="recipient" reference="sys_user" reference_qual="active=true^EQ" reference_qual_condition="active=true^EQ" type="reference"/>
+        <element label="Recipient Signature" max_length="40" name="recipient_signature" type="user_image"/>
         <element attributes="edge_encryption_enabled=true" label="Sender" max_length="120" name="sender" type="string"/>
         <element attributes="edge_encryption_enabled=true" choice="3" default="1" label="State" max_length="40" name="state" type="choice">
             <choice>
