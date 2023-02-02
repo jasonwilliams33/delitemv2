@@ -5,6 +5,13 @@
 	/* widget controller */
 	var c = this;
 
+	c.data.collectDeliveryDisabled = true;
+
+	if(c.data.outstandingDeliveryCount > 0) {
+
+		c.data.collectDeliveryDisabled = false;
+
+	}
 
 	delitemModalPubSub.subscribe($scope, function($event, data) {//Subscription to Angular Provider to retrieve data from Modal and update relevant variables
 
@@ -24,6 +31,12 @@
 			c.data.todaysDeliveryCount = rsp.data.todaysDeliveryCount;
 			c.data.outstandingDeliveryCount = rsp.data.outstandingDeliveryCount;
 
+			if(c.data.outstandingDeliveryCount > 0) {
+
+				c.data.collectDeliveryDisabled = false;
+
+			}
+
 		})			
 
 	});
@@ -31,27 +44,27 @@
 	c.openDeliveryModal = function(action) {
 
 		if(action == "todays") {
-			
+
 			c.data.deliveryModalFilter = c.data.todaysDeliveriesFilter;
 			c.data.deliveryModalTitle = 'Delivery Items received today';
 			c.data.deliveryModalTable = c.data.delieveryItemTable;
 			c.data.deliveryModalFields = "date_received,recipient,sender,collection_location,notes,state";
-			
+
 		} else if(action == "outstanding") {
-			
+
 			c.data.deliveryModalFilter = c.data.outstandingDeliveryItemsFilter;
 			c.data.deliveryModalTitle = 'Outstanding Delivery Items';
 			c.data.deliveryModalTable = c.data.delieveryItemTable;
 			c.data.deliveryModalFields = "date_received,recipient,sender,collection_location,notes,state";
-				
+
 		} else if(action == "collect_delivery") {
-			
+
 			c.data.deliveryModalFilter = c.data.outstandingDeliveryFilter;
 			c.data.deliveryModalTitle = 'Outstanding Deliveries';
 			c.data.deliveryModalTable = c.data.delieveryTable;			
-			
+
 		}
-		
+
 		var todaysDeliveryObj = {
 
 			"table": c.data.deliveryModalTable,	
@@ -199,7 +212,7 @@ textarea {
 		outstandingDeliveries.query();
 		while(outstandingDeliveries.next()) {
 
-			return outstandingDeliveries.getAggregate('COUNT');
+			return parseInt(outstandingDeliveries.getAggregate('COUNT'));
 
 		}
 
@@ -263,7 +276,8 @@ textarea {
     <div class="wrap row"
                 ng-show="c.data.selfService == 'true'">
       <button class="btn newDelivery"
-              ng-click="c.openDeliveryModal('collect_delivery')">
+              ng-click="c.openDeliveryModal('collect_delivery')"
+              ng-disabled="c.data.collectDeliveryDisabled">
         Collect Delivery <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
       </button>
     </div>

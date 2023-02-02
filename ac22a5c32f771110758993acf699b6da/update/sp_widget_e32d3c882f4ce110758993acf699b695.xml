@@ -8,6 +8,8 @@
 	c.data.singleItem = false;
 	c.data.multipleItems = true;
 	c.data.showItemForm = false;
+	c.data.missingFields = '';
+	c.missingFieldsError = '';
 
 	if(c.data.newDeliveryCount > 0) {
 
@@ -22,17 +24,17 @@
 	c.insertItems = function(saveAction) {
 		console.log(c.data.recipient.value.split(','));
 		c.data.itemCount = c.data.recipient.value.split(',').length;
-		
+
 		if(c.data.itemCount > 1) {
-			
+
 			c.data.action = "insertMultipleDeliveryItems"
-			
+
 		} else {
-			
+
 			c.data.action = "insertDeliveryItem"
-			
+
 		}
-		
+
 		c.server.get({
 
 			action: c.data.action,
@@ -58,9 +60,29 @@
 
 	}
 
+	c.generateErrorString = function(fullString) {
+
+		var string = fullString.replace(/,\s*$/, "");
+		var return_string = '';
+		var split_string = string.split(',');
+
+		if (split_string.length == 1) {
+
+			return_string = string;
+
+		} else {
+
+			return_string = string.replace(/,/g, " & ");
+
+		}
+
+		return return_string;
+
+	}
+
 	c.saveItem = function(saveAction) {
 
-		if(c.data.recipient.value == undefined || c.data.recipient.value == '') {
+		/*if(c.data.recipient.value == undefined || c.data.recipient.value == '') {
 
 			c.data.showError = true;
 
@@ -76,23 +98,59 @@
 
 			c.insertItems(saveAction);
 
-		}		
+		}*/		
+
+		if(c.data.recipient.value == undefined || c.data.recipient.value == '') {
+
+			c.data.missingFields += 'Recipient,';
+
+		}
+
+		if(c.data.collectionLocation == undefined || c.data.collectionLocation == '') {
+
+			c.data.missingFields += 'Collection Location,';
+
+		}
+
+		if(c.data.missingFields != '') {
+
+			c.data.missingFieldsError = c.generateErrorString(c.data.missingFields);
+			c.data.missingFields = '';
+			c.data.showError = true;
+
+			$timeout(function() {
+
+				c.data.showError = false;
+				c.data.missingFields = '';
+				c.data.missingFieldsError = '';
+
+			},3000);
+
+			return;
+
+		}
+		
+		else {
+
+			c.insertItems(saveAction);
+
+		}
 
 	}
 
 	c.sendNotifications = function(){
-		
+
 		c.server.get({
 
 			action: "sendNotifications"
-			
+
 		}).then(function(rsp) {
 
 			delitemModalPubSub.publish();
-			
+
 		})
 	}
-	
+
 	spUtil.recordWatch($scope, c.data.delieveryItemTable, c.data.newDeliveryFilter, function(name,data) {
 		if(name.data.operation == "insert"){
 			c.data.disabled = false;							
@@ -465,22 +523,19 @@ textarea {
       <button type="button" class="btn btn-primary" ng-disabled="c.data.disabled" ng-click="c.sendNotifications()">Send Notifications  <i class="fa fa-send-o fa-lg fa-fw"></i></button>
     </div>
   </div>
-
 </div>
-
 <div class="panel panel-default"
      ng-show="c.data.showItemForm">
   <div class="panel-body">
     <div class="alert alert-danger alert-dismissible"
          ng-show="c.data.showError">
       <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-      <i class="fa fa-exclamation-triangle"></i> Some fields are missing: Recipient
+      <i class="fa fa-exclamation-triangle"></i> Some fields are missing: {{c.data.missingFieldsError}}
     </div>
     <form autocomplete="off"> 
-
-      <div class="form-group"> <span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory" ng-class="{'mandatory-filled': recipient.displayValue != undefined}"></span>
+      <div class="form-group">
+        <span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory" ng-class="{'mandatory-filled': recipient.displayValue != undefined}"></span>
         <label for="formGroupExampleInput">Recipient</label>
-
         <sn-record-picker field="c.data.recipient"
                           table="'sys_user'" 
                           display-field="'name'" 
@@ -492,7 +547,6 @@ textarea {
                           autofocus
                           ng-show="c.data.multipleItems==false">
         </sn-record-picker>
-
         <sn-record-picker field="c.data.recipient"
                           table="'sys_user'" 
                           display-field="'name'" 
@@ -504,7 +558,6 @@ textarea {
                           autofocus
                           ng-show="c.data.multipleItems==true">
         </sn-record-picker>
-
       </div>
       <!-- <div class="autocomplete form-group" ng-show="!c.data.multipleItems">
         <label for="formGroupExampleInput">Sender (if applicable)</label>
@@ -528,7 +581,8 @@ textarea {
                class="form-control"
                placeholder="{{c.data.placeholder}}">
       </div>
-      <div class="form-group"> 
+      <div class="form-group">
+        <span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory" ng-class="{'mandatory-filled': collectionLocation.displayValue != undefined}"></span>
         <label for="formGroupExampleInput">Collection Location</label> 
         <select class="form-control" ng-model="c.data.collectionLocation" ng-options="item for item in c.data.collectionLocationsArr"></select>
       </div>

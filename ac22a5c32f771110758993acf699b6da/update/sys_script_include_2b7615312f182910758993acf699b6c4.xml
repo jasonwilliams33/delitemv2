@@ -13,30 +13,30 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 	addDeliveryItem : function(itemObj) {
 
 		try {
-			//gs.error("JW Debug: " + itemObj.recipient.value.length);
-			var grX_187394DDI = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
-			grX_187394DDI.initialize();
-			grX_187394DDI.setValue('recipient',itemObj.recipient.value);
+			
+			var newDeliveryItemGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
+			newDeliveryItemGRS.initialize();
+			newDeliveryItemGRS.setValue('recipient',itemObj.recipient.value);
 
 			if(itemObj.collection_location != undefined) {
 
-				grX_187394DDI.setValue('collection_location',itemObj.collection_location);
+				newDeliveryItemGRS.setValue('collection_location',itemObj.collection_location);
 
 			}
 
 			if(itemObj.notes != undefined) {
 
-				grX_187394DDI.setValue('notes',itemObj.notes);
+				newDeliveryItemGRS.setValue('notes',itemObj.notes);
 
 			}
 
 			if(itemObj.sender != undefined) {
 
-				grX_187394DDI.setValue('sender',itemObj.sender);
+				newDeliveryItemGRS.setValue('sender',itemObj.sender);
 
 			}
 
-			newDeliveryItem = grX_187394DDI.insert();
+			newDeliveryItem = newDeliveryItemGRS.insert();
 
 			return newDeliveryItem;
 
@@ -57,8 +57,10 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 			for (var i=0; i< multipleDeliveryItemArr.length; i++) {
 
 				var multipleItemObj = {
+					
 					"recipient": {"value": multipleDeliveryItemArr[i]},
 					"collection_location": itemObj.collection_location
+					
 				};
 
 				var newDeliveryItem = this.addDeliveryItem(multipleItemObj);
@@ -83,19 +85,20 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 			var newDeliveryItems = new GlideAggregate(DelItemConstants.DELIVERY_ITEM_TABLE);
 			newDeliveryItems.addEncodedQuery('state=1^delivery=NULL^ORdelivery=undefined');
 			newDeliveryItems.groupBy('recipient');
-			newDeliveryItems.groupBy('sys_id');
+// 			newDeliveryItems.groupBy('sys_id');
 			newDeliveryItems.addAggregate('COUNT');
 			newDeliveryItems.query();
-			while(newDeliveryItems.next()){
+			while(newDeliveryItems.next()) {
 
 				newDeliveryItemObj = {};
 				newDeliveryItemObj.recipient = newDeliveryItems.recipient.getDisplayValue().toString();
 				newDeliveryItemObj.recipientSysId = newDeliveryItems.recipient.toString();
 				newDeliveryItemObj.recipientFirsName = newDeliveryItems.recipient.first_name.toString();
-				newDeliveryItemObj.deliveryItemSysId = newDeliveryItems.sys_id.toString();
+// 				newDeliveryItemObj.deliveryItemSysId = newDeliveryItems.sys_id.toString();
 				newDeliveryItemObj.date = new GlideDateTime();
 				newDeliveryItemObj.count = newDeliveryItems.getAggregate('COUNT');
 				newDeliveryItemArr.push(newDeliveryItemObj);
+				
 			}
 
 			var existingDeliveryArr = this.checkAndUpdateExistingDelivery(newDeliveryItemArr);
@@ -133,14 +136,14 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 			for (var i=0; i< deliveryItemArr.length; i++) {
 
 				var exisitingDeliveryGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_TABLE);
-				exisitingDeliveryGRS.addEncodedQuery('state!=collected^recipient=' + deliveryItemArr[i].recipientSysId);
+				exisitingDeliveryGRS.addEncodedQuery('state!=3^recipient=' + deliveryItemArr[i].recipientSysId);
 				exisitingDeliveryGRS.query();
 				if(exisitingDeliveryGRS.next()){
 
 					deliveryItemArr[i].existingDelivery = true;
 					deliveryItemArr[i].deliveryRecord = exisitingDeliveryGRS.getUniqueValue();
 					exisitingDeliveryGRS.setValue('delivery_items',parseInt(exisitingDeliveryGRS.delivery_items) + parseInt(deliveryItemArr[i].count));
-					exisitingDeliveryGRS.setValue('delivery_items_awaiting_collection',parseInt(exisitingDeliveryGRS.delivery_items) + parseInt(deliveryItemArr[i].count));
+					exisitingDeliveryGRS.setValue('delivery_items_awaiting_collection',parseInt(exisitingDeliveryGRS.delivery_items_awaiting_collection) + parseInt(deliveryItemArr[i].count));
 					exisitingDeliveryGRS.update();
 
 				} else {
@@ -168,6 +171,7 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 			var createNewDeliveryGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_TABLE);
 			createNewDeliveryGRS.initialize();
 			createNewDeliveryGRS.setValue('delivery_items',parseInt(newDelivery.count));
+			createNewDeliveryGRS.setValue('delivery_items_awaiting_collection',parseInt(newDelivery.count));
 			createNewDeliveryGRS.setValue('recipient',newDelivery.recipientSysId);
 
 			newDelivery.newDeliveryRecord = createNewDeliveryGRS.insert();
@@ -188,13 +192,21 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 		try {
 
 			for (var i=0; i< existingDeliveryArr.length; i++) {
+				
+				var deliverySysId = existingDeliveryArr[i].deliveryRecord;
+				
+				if(!existingDeliveryArr[i].existingDelivery) {
+					
+					deliverySysId = existingDeliveryArr[i].deliveryRecord.newDeliveryRecord;
+					
+				}
 
 				var updatingDeliveryItemGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
-				updatingDeliveryItemGRS.addEncodedQuery("sys_id=" + existingDeliveryArr[i].deliveryItemSysId);
+				updatingDeliveryItemGRS.addEncodedQuery("recipient=" + existingDeliveryArr[i].recipientSysId + "^delivery=NULL^ORdelivery=undefined");
 				updatingDeliveryItemGRS.query();
-				if(updatingDeliveryItemGRS.next()) {
+				while(updatingDeliveryItemGRS.next()) {
 				
-					updatingDeliveryItemGRS.setValue('delivery',existingDeliveryArr[i].deliveryRecord);
+					updatingDeliveryItemGRS.setValue('delivery',deliverySysId);
 					updatingDeliveryItemGRS.setValue('state',2);
 					updatingDeliveryItemGRS.update();
 					

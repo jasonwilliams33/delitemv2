@@ -16,7 +16,7 @@
         <column_label>Delivery Items Awaiting Collection</column_label>
         <comments/>
         <create_roles/>
-        <default_value/>
+        <default_value>0</default_value>
         <defaultsort/>
         <delete_roles/>
         <dependent/>

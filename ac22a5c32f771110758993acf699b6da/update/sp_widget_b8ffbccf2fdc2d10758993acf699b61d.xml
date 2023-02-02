@@ -200,7 +200,7 @@
 		var deliveriesObj = {};
 		deliveriesObj.recipient = deliveriesGR.recipient.getDisplayValue();
 		deliveriesObj.recipientFirstName = deliveriesGR.recipient.first_name.toString();
-		deliveriesObj.deliveryItems = deliveriesGR.delivery_items.toString();
+		deliveriesObj.deliveryItems = deliveriesGR.delivery_items_awaiting_collection.toString();
 		deliveriesObj.created = deliveriesGR.sys_created_on.toString();
 		deliveriesObj.sys_id = deliveriesGR.getUniqueValue();
 		data.deliveriesArr.push(deliveriesObj);
@@ -309,7 +309,8 @@
   </div>
   <div>
     <button class="btn btn-primary btn-block collectDelivery"
-            ng-click="c.collectDelivery()">
+            ng-click="c.collectDelivery()"
+            ng-show="!c.data.displayDataTable">
       Collect Delivery <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
     </button>
   </div>
