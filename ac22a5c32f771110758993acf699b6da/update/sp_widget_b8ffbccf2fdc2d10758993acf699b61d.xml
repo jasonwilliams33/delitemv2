@@ -11,7 +11,7 @@
 	c.data.selectedDeliveryItemObj = {};
 	
 	c.collectDelivery = function() {
-					console.log(c);	
+					//console.log(c);	
 		c.server.get({
 
 			action: "retrieveDeliveryItems",

@@ -16,7 +16,12 @@
 	delitemModalPubSub.subscribe($scope, function($event, data) {//Subscription to Angular Provider to retrieve data from Modal and update relevant variables
 
 		c.modalInstance.close();
-		spUtil.addInfoMessage("Notifications Sent!");
+
+		if(data.modalAction == "sendNotifications") {
+
+			spUtil.addInfoMessage("Notifications Sent!");
+
+		}
 
 	})
 
@@ -98,7 +103,7 @@
 				modalC.title = title;
 				spUtil.get(widget,modalObj).then(function(response) {
 
-					modalC.form = response;
+					modalC.widget = response;
 
 				})
 
@@ -274,7 +279,7 @@ textarea {
       </button>
     </div>
     <div class="wrap row"
-                ng-show="c.data.selfService == 'true'">
+                ng-show="c.data.selfService == 'false'">
       <button class="btn newDelivery"
               ng-click="c.openDeliveryModal('collect_delivery')"
               ng-disabled="c.data.collectDeliveryDisabled">

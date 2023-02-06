@@ -17,7 +17,7 @@
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sys_properties_f81c6e342f906510758993acf699b6ff</sys_update_name>
         <type>boolean</type>
-        <value>true</value>
+        <value>false</value>
         <write_roles/>
     </sys_properties>
     <sys_translated_text action="delete_multiple" query="documentkey=f81c6e342f906510758993acf699b6ff"/>

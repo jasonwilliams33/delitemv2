@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[api.controller=function($scope,$uibModal,spUtil,delitemModalPubSub) {
+	/* widget controller */
+	var c = this;
+
+	c.data.collectDeliveryDisabled = true;
+	c.data.manualSearch = false;
+
+	if(c.data.outstandingDeliveryCount > 0) {
+
+		c.data.collectDeliveryDisabled = false;
+
+	}
+
+	delitemModalPubSub.subscribe($scope, function($event, data) {//Subscription to Angular Provider to retrieve data from Modal and update relevant variables
+
+		c.modalInstance.close();
+		
+			data.deliverySummaryOptions = {
+
+			"deliverySysId": "fbd68d252f302910758993acf699b665",
+			"deliveryItems": 2,
+			"recipientFirstName": "Abel"
+
+		};
+
+		c.openModal("delitem_delivery_summary","Outstanding Deliveries",data.deliverySummaryOptions);
+		
+	})
+
+	c.manualSearch = function() {
+		
+		c.data.manualSearch = true;
+		
+	}
+	
+	c.manualSearchResult = function() {
+		
+			c.server.get({
+
+			action: "lookupDelivery",
+			recipient: c.data.recipient		
+
+		}).then(function(rsp) {
+console.log(rsp.data);
+			//c.data.recipient = {displayValue: '',value: ''};
+			c.openModal("delitem_delivery_summary","Outstanding Deliveries",rsp.data.deliverySummaryOptions);
+		})
+		
+		//console.log(c.data.recipient);
+		
+	}
+	
+	c.scanQRCode = function() {
+		
+		c.data.manualSearch = false;
+		
+		c.openModal('delitem_qr_code_live','Scan your QR Code below');
+		
+	}
+	
+	c.openModal = function(widget,title,modalObj) {
+
+		/***
+	 	* Open Modal using supplied parameters
+	 	***/
+
+		c.modalInstance = $uibModal.open({
+
+			templateUrl: 'delitem-selfservice-custom-form-overlay.html',
+			size: 'lg',
+			backdrop: 'static',
+			controllerAs: 'modalC',
+			controller: function() {
+
+				var modalC = this;
+				modalC.modalInstance = c.modalInstance;
+				modalC.title = title;
+				spUtil.get(widget,modalObj).then(function(response) {
+
+					modalC.widget = response;
+
+				})
+
+			}	
+
+		})
+
+	}
+
+};]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.wrap {
+  justify-content: center;
+  flex-wrap: wrap;
+  display: flex;
+}
+
+.cardCount {
+  padding: 10px;
+  border-radius: 10px;
+  width: 32%;
+  margin-bottom: 2%;
+  margin: 5px;
+  flex: 0 1 auto;
+  border: 1px solid rgb(221, 221, 221);
+}
+
+.wrap div:hover{
+  background: #f7f7f7;
+  -webkit-transition: background-color 250ms linear;
+  -ms-transition: background-color 250ms linear;
+  transition: background-color 250ms linear;
+}
+
+.docTitle, .content{
+  margin: 5px;
+  text-align: center;
+}
+
+.newDelivery{
+  margin-top: 5px;
+	width: 65%;
+}
+
+textarea {
+  resize: none;
+}
+
+.btn{
+	margin: 5px;
+}
+
+.selfServiceImgs{
+	height: 30px;
+  width: 30px;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id>delitem_self_service</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Delitem Self Service</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+	/* populate the 'data' object */
+	/* e.g., data.table = $sp.getValue('table'); */
+
+	if(input && input.action == "lookupDelivery") {
+
+		try {
+
+			var lookupDeliveryGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_TABLE);
+			lookupDeliveryGRS.addEncodedQuery("state!=3^recipient=" + input.recipient.value);
+			lookupDeliveryGRS.query();
+			if(lookupDeliveryGRS.next()) {
+				gs.addInfoMessage(lookupDeliveryGRS.delivery_items_awaiting_collection);
+				//gs.addInfoMessage(lookupDeliveryGRS.recipient.first_name);
+			data.deliverySummaryOptions = {
+
+						"deliverySysId": lookupDeliveryGRS.getUniqueValue(),
+						"deliveryItems": lookupDeliveryGRS.delivery_items_awaiting_collection.toString(),
+						"recipientFirstName": lookupDeliveryGRS.recipient.first_name.toString()
+
+					};
+			
+			}
+
+
+		} catch(err) {
+
+			gs.error('['+gs.getCurrentScopeName()+']' + ': Delitem Self Service Widget - Caught error: \n'+err);
+
+		}
+
+	}
+
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-02-04 15:35:31</sys_created_on>
+        <sys_id>b17c06f92fb06910758993acf699b6c6</sys_id>
+        <sys_name>Delitem Self Service</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sp_widget_b17c06f92fb06910758993acf699b6c6</sys_update_name>
+        <template><![CDATA[<div class="panel panel-primary">
+  <div class="panel-heading">
+    Delitem
+  </div>
+  <div class="panel-body">
+    <div class="wrap row">
+      <div class="cardCount"
+           ng-click="c.scanQRCode()">
+        <h5 class="docTitle">
+          <span>
+              <img class="img-circle pointer selfServiceImgs" ng-src="sp-qr-reader-icon.png">
+            </span>
+          Scan QR Code
+        </h5>
+      </div>
+      <div class="cardCount"
+           ng-click="c.manualSearch()">
+        <h5 class="docTitle">
+          <span>
+              <img class="img-circle pointer selfServiceImgs" ng-src="hawt_search_img.png">
+            </span>
+          Search Deliveries
+        </h5>
+      </div> 
+    </div>
+    
+  	<div class="form-group"
+         ng-show="c.data.manualSearch">
+        <span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory" ng-class="{'mandatory-filled': recipient.displayValue != undefined}"></span>
+        <label for="formGroupExampleInput">Name</label>
+        <sn-record-picker field="c.data.recipient"
+                          table="'sys_user'" 
+                          display-field="'name'" 
+                          value-field="'sys_id'" 
+                          search-fields="'name'" 
+                          page-size="100"
+                          id="recordPickerSingle"
+                          autofocus
+                          >
+        </sn-record-picker>
+      <div class="text-right">
+      <button class="btn btn-primary"
+              ng-click="c.manualSearchResult()">
+        Search
+      </button>
+    </div>
+      </div>      
+  </div>    
+  </div>
+]]></template>
+    </sp_widget>
+</record_update>

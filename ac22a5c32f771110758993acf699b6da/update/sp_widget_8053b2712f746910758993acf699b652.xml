@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[api.controller=function($rootScope, $location, $timeout, spUtil, $scope,spModal,$uibModalStack,$uibModal,delitemModalPubSub) {
+	/* widget controller */
+	var c = this;
+
+	c.qr_code = {};	
+
+	c.checkCode = function() {
+
+		c.goTo(c.qr_code.text);
+
+	};
+
+	c.goTo = function(qr_code) {		
+
+		var modalReturnObj = {
+
+			"modalAction" : "qrCodeScaned",
+			"sys_id" : qr_code
+
+		}
+
+		delitemModalPubSub.publish(modalReturnObj);
+
+		/*c.data.action = 'scanned';
+		c.data.button_function = button_function;
+		c.data.qr_code = qr_code;
+		c.server.update().then(function(){
+			c.data.action = undefined;
+			c.data.qr_code = undefined
+
+			$scope.$parent.$parent.buttonClicked($scope.$parent.$parent.options.buttons[0]);
+			if(button_function === 'check_in'){
+
+				var message = '';
+
+				if(c.data.validVisit === 2 || c.data.validVisit === 3){				
+
+					if(c.data.validVisit === 2){	
+						message = '<h2 style="text-align:center">It appears that your Visit has already been checked in!</br></br>Please speak to Reception for further assistance.</br></br>Thanks,</br></br>' + c.data.signOff +'</h2>'
+					}else if(c.data.validVisit === 3){	
+						message = '<h2 style="text-align:center">QR Code not recognised!</br></br>Please speak to Reception for further assistance.</br></br>Thanks,</br></br>' + c.data.signOff +'</h2>'
+					}
+					spModal.open({
+						title: "Hello and Welcome to",
+						message: message,
+						size: 'lg',
+						buttons: []
+					}).then(function(){				
+					})
+
+					setTimeout(function(){ 
+						c.closeModal();
+					}, 3500);
+
+					c.closeModal = function(){
+						$uibModalStack.dismissAll();
+					}
+
+				}else{
+
+					var signature = '';
+					if(c.data.signaturePadProperty){
+						signature = 'Visitor Signature'
+					}
+					else{
+						signature = 'Check Visitor In';
+					}
+
+					if(c.data.visitorRecord.car_registrations_added < c.data.visitorRecord.number_of_parking_spaces_required){
+						//alert('we are here');
+						c.data.showCarReg = true;
+						//alert('show!'+c.options.additional_button_function);
+					}
+					//console.log(c.data.visitorRecord);
+					//alert('testing '+ button_function);
+					spModal.open({
+						title: "Check Visitor(s) In" ,
+						widget: "pop_up_dialog",
+						widgetInput: {
+							"table": "x_187394_hello_and_visitors",
+							"fields": "visit_number,visitor_name,visitor_company_name,photo_complete,car_registration_added,car_registration_skipped,visit_number.visitors_checked_in",
+							//"fields": "visit_number,visitor_name,visitor_company_name",
+							"query_fields": "photo_complete,car_registration_added,car_registration_skipped",
+							"filter": "checked_in=false^visitor_not_attending=false^arriving_later=false^visit_number="+c.qr_code.text,
+							"button_text": signature,//c.options.additional_button_text,
+							"secondary_button_text": c.options.secondary_button_text,
+							"header_button": true,
+							"header_button_text": c.options.header_button_text,
+							"button_function": "updateTable", //c.options.additional_button_function,
+							"secondary_button_function": c.options.secondary_button_function,
+							"record_sys_id": c.qr_code.text,
+							"visitors": false,
+							//"show_breadcrumbs": false,
+							"signature_pad": false,
+							"take_photo": c.data.badgePhoto,
+							"self_check_in": true,
+							"headerTitle": 'Visitors',
+							"parking_spaces_required": c.data.visitorRecord.number_of_parking_spaces_required,
+							"showReg": c.data.showCarReg,
+							"carRegsAdded": c.data.visitorRecord.car_registrations_added,
+							"number_of_visitors": c.data.visitorRecord.number_of_visitors
+
+						},
+						size: 'lg',
+						buttons: []		
+					}).then(function(){
+						//alert('All Checked In!');
+					})
+
+
+				}
+			}else{
+
+				var waiting = 0;
+				c.resetCamera();
+
+				$scope.$parent.$parent.buttonClicked($scope.$parent.$parent.options.buttons[0]);
+
+				var visitorName = c.data.visitorName;
+
+				if(c.data.validCheckOut == 1){
+					spModal.open({
+						title: "Thanks for Visiting!",
+						message: '<h2 style="text-align:center">' + visitorName + ', Thanks for visiting ' + c.data.companyName + '!</br></br>Have a safe journey!</h2>',
+						size: 'lg',
+						buttons: []
+					}).then(function(){				
+					})
+
+					setTimeout(function(){ 
+						c.closeModal();
+					}, 3500);
+
+					c.closeModal = function(){
+						$uibModalStack.dismissAll();
+					}			
+				}
+				//else if(c.data.validCheckOut == 2){
+				else{		
+					var checkOutMessage = '';
+					if(c.data.validCheckOut === 2){	
+						checkOutMessage = '<h2 style="text-align:center">You have already been successfully checked out!</h2></br></br><h3>Thanks for visiting ' + c.data.companyName + '!</br></br>Have a safe journey!</h3>';
+					}else if(c.data.validCheckOut === 3){	
+						checkOutMessage = '<h2 style="text-align:center">QR Code not recognised!</br></br>Please speak to Reception for further assistance.</br></br>Thanks,</br></br>' + c.data.signOff +'</h2>'
+					}		
+
+					spModal.open({
+						title: "Thanks for Visiting!",
+						message: checkOutMessage,
+						size: 'lg',
+						buttons: []
+					}).then(function(){				
+					})
+
+					setTimeout(function(){ 
+						c.closeModal();
+					}, 3500);
+
+					c.closeModal = function(){
+						$uibModalStack.dismissAll();
+					}
+				} 
+			}
+		})*/
+	};
+
+	$timeout(function() {
+		c.decodeImage();
+	}, 0);
+
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.sp-qr-code-live {
+  margin: -16px;
+  margin-bottom: -21px;
+  margin-top: -17px;
+  overflow: hidden;
+}
+
+.sp-qr-code-live,
+video {
+  border-radius: 6px;
+}
+
+video {
+  width: 100%;
+  height: auto;
+}
+
+
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id>delitem_qr_code_live</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {
+    var c = controller;
+
+
+    function decodeOnce(selectedDeviceId) {
+        c.codeReader.decodeFromInputVideoDevice(selectedDeviceId, 'video').then(function(result) {
+            c.qr_code.result = result;
+            c.qr_code.text = result.text;
+            c.checkCode();
+        });
+    }
+
+    c.decodeImage = function() {
+        c.codeReader = new ZXing.BrowserQRCodeReader();
+        c.codeReader.getVideoInputDevices()
+            .then(function(videoInputDevices) {
+                var selectedDeviceId = videoInputDevices[0].deviceId;
+                decodeOnce(selectedDeviceId);
+            });
+    };
+
+    c.resetCamera = function() {
+        c.codeReader.reset();
+    };
+
+}]]></link>
+        <name>Delitem QR Code Live</name>
+        <option_schema>[{"name":"image_icon","section":"other","default_value":"sp-qr-reader-icon.png","label":"Image Icon","type":"string"},{"name":"target_existing_page","section":"other","default_value":"form","label":"Target Existing Page","type":"string"},{"name":"target_creation_page","section":"other","default_value":"visitor_check_out","label":"Target Creation Page","type":"string"},{"name":"table_name","section":"other","default_value":"","label":"Table Name","type":"string"},{"name":"info_message_error","section":"other","default_value":"Thanks for Visiting","label":"Info Message Error","type":"string"},{"name":"lookup_column","section":"other","default_value":"serial_number","label":"Lookup Column","type":"string"},{"name":"info_message","section":"other","default_value":"The machine has been found, you will be redirected shortly.","label":"Info Message","type":"string"}]</option_schema>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+	/* populate the 'data' object */
+	/* e.g., data.table = $sp.getValue('table'); */
+
+	/*
+	data.visitorName = '';
+	data.button_function = input.button_function;	
+	data.validVisit = 0;
+	data.validCheckOut = 0;
+
+	data.signaturePadProperty = gs.getProperty("x_187394_hello_and.signature.pad");
+	data.printVisitorBadges = gs.getProperty("x_187394_hello_and.print_visitor_badges");
+	data.badgePhoto = gs.getProperty("x_187394_hello_and.badge_photo");
+	data.skipPhoto = gs.getProperty("x_187394_hello_and.allow_skip_photo");
+	data.selfCheckInPrintBadges = gs.getProperty("x_187394_hello_and.self.check.in.print.badges");
+	data.signOff = gs.getProperty("x_187394_hello_and.notification.sign.off");
+	data.companyName = gs.getProperty("x_187394_hello_and.company_name");
+	data.carRegistration = gs.getProperty("x_187394_hello_and.car.registration.capture");
+
+	input = input || {};
+
+	if(input){		
+		if (input.qr_code && data.button_function === 'check_out') {
+						
+			var gr = new GlideRecord('x_187394_hello_and_visitors');
+			gr.addQuery('sys_id', input.qr_code);
+			//gr.addQuery('checked_in',true);
+			gr.setLimit(1);
+			gr.query();
+			if (gr.next()) {
+				if(gr.checked_in){
+					data.validCheckOut = 1;
+					data.visitorName = gr.visitor_first_name.toString();
+					//data.checked_in = true;
+					gr.checked_in = false;
+					gr.update();						
+			}
+			else{
+				//data.checked_in = false;				
+				data.validCheckOut = 2;	
+			}
+		}else{
+			data.validCheckOut = 3;
+		}
+	}else if(input.qr_code && data.button_function === 'check_in') {
+			
+			data.visitorRecord = {};
+		
+			var checkIn = new GlideRecord('x_187394_hello_and_visit');
+			checkIn.addQuery('sys_id',input.qr_code);
+			//checkIn.addQuery('visitors_checked_in',false);
+			//checkIn.addQuery('badges_printed',true);
+			checkIn.query();
+			if(checkIn.next()){
+				
+				data.visitorRecord = {};
+				data.visitorRecord.number_of_parking_spaces_required = checkIn.number_of_parking_spaces_required.toString();
+				data.visitorRecord.car_registrations_added = checkIn.car_registrations_added.toString();
+				data.visitorRecord.number_of_visitors = checkIn.number_of_visitors.toString();
+				
+				
+				if(!checkIn.visitors_checked_in){//if not checked in
+					data.validVisit = 1;
+				}else{
+					data.validVisit = 2;//if already checked in
+				}					
+			}else{				
+					data.validVisit = 3;//if not found
+			}
+
+		}
+	}
+	*/
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-02-04 18:25:15</sys_created_on>
+        <sys_id>8053b2712f746910758993acf699b652</sys_id>
+        <sys_name>Delitem QR Code Live</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sp_widget_8053b2712f746910758993acf699b652</sys_update_name>
+        <template><![CDATA[<div class="sp-qr-code-live">
+  <video id="video"></video>
+</div>]]></template>
+    </sp_widget>
+</record_update>
