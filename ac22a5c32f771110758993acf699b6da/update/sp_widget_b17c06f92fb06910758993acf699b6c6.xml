@@ -1,24 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[api.controller=function($scope,$uibModal,spUtil,delitemModalPubSub) {
+        <client_script><![CDATA[api.controller=function($scope,$uibModal,spUtil,delitemModalPubSub,spModal) {
 	/* widget controller */
 	var c = this;
 
-	c.data.collectDeliveryDisabled = true;
+
 	c.data.manualSearch = false;
+	c.data.searchDisabled = true;
 
-	if(c.data.outstandingDeliveryCount > 0) {
+	$scope.$on("field.change", function(evt,parms) {
 
-		c.data.collectDeliveryDisabled = false;
+		if(parms.field.value != '') {
 
-	}
+			c.data.searchDisabled = false;			
+
+		} else {
+
+			c.data.searchDisabled = true;
+
+		}	
+
+	})
 
 	delitemModalPubSub.subscribe($scope, function($event, data) {//Subscription to Angular Provider to retrieve data from Modal and update relevant variables
-
+console.log(data);
 		c.modalInstance.close();
+
+		c.server.get({
+
+			action: "lookupDelivery",
+			deliveryFilter: "sys_id=" + data.sys_id,
+			recipient: c.data.recipient
+
+		}).then(function(rsp) {
+			
+			if(rsp.data.deliveryNotFound) {
+
+				spModal.alert("No outstanding deliveries were located for you " + rsp.data.userFirstName + ", please speak to reception if you need any further assistance");
+
+			} else {
+				
+				c.openModal("delitem_delivery_summary","Outstanding Deliveries",rsp.data.deliverySummaryOptions);
+
+			}
+		})
 		
-			data.deliverySummaryOptions = {
+		/*data.deliverySummaryOptions = {
 
 			"deliverySysId": "fbd68d252f302910758993acf699b665",
 			"deliveryItems": 2,
@@ -26,41 +54,49 @@
 
 		};
 
-		c.openModal("delitem_delivery_summary","Outstanding Deliveries",data.deliverySummaryOptions);
-		
+		c.openModal("delitem_delivery_summary","Outstanding Deliveries",data.deliverySummaryOptions);*/
+
 	})
 
 	c.manualSearch = function() {
-		
+
 		c.data.manualSearch = true;
-		
+
 	}
-	
+
 	c.manualSearchResult = function() {
-		
-			c.server.get({
+
+		c.server.get({
 
 			action: "lookupDelivery",
-			recipient: c.data.recipient		
+			deliveryFilter: "state!=3^recipient=" + c.data.recipient.value,
+			recipient: c.data.recipient
 
 		}).then(function(rsp) {
-console.log(rsp.data);
-			//c.data.recipient = {displayValue: '',value: ''};
-			c.openModal("delitem_delivery_summary","Outstanding Deliveries",rsp.data.deliverySummaryOptions);
+			
+			if(rsp.data.deliveryNotFound) {
+
+				spModal.alert("No outstanding deliveries were located for you " + rsp.data.userFirstName + ", please speak to reception if you need any further assistance");
+
+			} else {
+				
+				c.openModal("delitem_delivery_summary","Outstanding Deliveries",rsp.data.deliverySummaryOptions);
+
+			}
 		})
-		
+
 		//console.log(c.data.recipient);
-		
+
 	}
-	
+
 	c.scanQRCode = function() {
-		
+
 		c.data.manualSearch = false;
-		
+
 		c.openModal('delitem_qr_code_live','Scan your QR Code below');
-		
+
 	}
-	
+
 	c.openModal = function(widget,title,modalObj) {
 
 		/***
@@ -129,13 +165,13 @@ textarea {
   resize: none;
 }
 
-.btn{
-	margin: 5px;
-}
-
 .selfServiceImgs{
 	height: 30px;
   width: 30px;
+}
+
+.searchBtn{
+	margin: 10px;
 }</css>
         <data_table>sp_instance</data_table>
         <demo_data/>
@@ -154,24 +190,37 @@ textarea {
 	/* populate the 'data' object */
 	/* e.g., data.table = $sp.getValue('table'); */
 
+	data.deliveryNotFound = false;
+
 	if(input && input.action == "lookupDelivery") {
 
 		try {
 
 			var lookupDeliveryGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_TABLE);
-			lookupDeliveryGRS.addEncodedQuery("state!=3^recipient=" + input.recipient.value);
+			lookupDeliveryGRS.addEncodedQuery(input.deliveryFilter);
 			lookupDeliveryGRS.query();
 			if(lookupDeliveryGRS.next()) {
-				gs.addInfoMessage(lookupDeliveryGRS.delivery_items_awaiting_collection);
+
 				//gs.addInfoMessage(lookupDeliveryGRS.recipient.first_name);
-			data.deliverySummaryOptions = {
+				data.deliverySummaryOptions = {
 
-						"deliverySysId": lookupDeliveryGRS.getUniqueValue(),
-						"deliveryItems": lookupDeliveryGRS.delivery_items_awaiting_collection.toString(),
-						"recipientFirstName": lookupDeliveryGRS.recipient.first_name.toString()
+					"deliverySysId": lookupDeliveryGRS.getUniqueValue(),
+					"deliveryItems": lookupDeliveryGRS.delivery_items_awaiting_collection.toString(),
+					"recipientFirstName": lookupDeliveryGRS.recipient.first_name.toString()
 
-					};
-			
+				};
+
+			} else {
+
+				var userGRS = new GlideRecordSecure("sys_user");
+				if(userGRS.get(input.recipient.value)) {
+
+					data.userFirstName = userGRS.first_name.toString();
+
+				}
+
+				data.deliveryNotFound = true;
+
 			}
 
 
@@ -225,6 +274,7 @@ textarea {
         <span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory" ng-class="{'mandatory-filled': recipient.displayValue != undefined}"></span>
         <label for="formGroupExampleInput">Name</label>
         <sn-record-picker field="c.data.recipient"
+                          name="recordPickerSingle"
                           table="'sys_user'" 
                           display-field="'name'" 
                           value-field="'sys_id'" 
@@ -235,8 +285,9 @@ textarea {
                           >
         </sn-record-picker>
       <div class="text-right">
-      <button class="btn btn-primary"
-              ng-click="c.manualSearchResult()">
+      <button class="btn btn-primary searchBtn"
+              ng-click="c.manualSearchResult()"
+              ng-class="{ 'disabled' : c.data.searchDisabled }">
         Search
       </button>
     </div>

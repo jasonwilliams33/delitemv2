@@ -2,6 +2,7 @@
     <element db_object_id="fc73a1472f771110758993acf699b6a3" label="Delivery" max_length="40" name="x_187394_delitem_delivery" type="collection">
         <element default="0" label="Delivery Items" max_length="40" name="delivery_items" type="integer"/>
         <element default="0" label="Delivery Items Awaiting Collection" max_length="40" name="delivery_items_awaiting_collection" type="integer"/>
+        <element label="Delivery QR Code" max_length="40" name="delivery_qr_code" type="user_image"/>
         <element attributes="edge_encryption_enabled=true" default="javascript:global.getNextObjNumberPadded();" label="Number" max_length="40" name="number" type="string"/>
         <element attributes="encode_utf8=false" label="Recipient" max_length="32" name="recipient" reference="sys_user" type="reference"/>
         <element attributes="edge_encryption_enabled=true" choice="3" default="1" label="State" max_length="40" name="state" type="choice">
