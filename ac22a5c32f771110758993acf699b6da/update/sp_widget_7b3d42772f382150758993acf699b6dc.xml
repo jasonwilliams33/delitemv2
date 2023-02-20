@@ -53,6 +53,14 @@
 
 		}).then(function(rsp) {
 			
+			var modalReturnObj = {
+				
+				"modalAction" : "remindersSent"
+			
+			}
+		
+		delitemModalPubSub.publish(modalReturnObj);
+			
 		})
 
 	}

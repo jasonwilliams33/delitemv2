@@ -298,14 +298,20 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 	},
 
 	sendReminders : function(reminderArr) {
-
+		
 		try {
+
+			if(!Array.isArray(reminderArr)) {
+
+				reminderArr = reminderArr.split(',');
+
+			}
 
 		var sendReminderArr = [];
 		var notificationBody = "";
 
 		for (var i=0; i< reminderArr.length; i++) {
-		 
+			gs.error("JW Debug: SI loop" + reminderArr[i]);
 			//sendReminderArr.push(this.lookupReminderDelivery(reminderArr[i]));
 			var reminderObj = this.lookupReminderDelivery(reminderArr[i]);
 
@@ -327,7 +333,7 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 		 
 		}		 
 
-		gs.error("JW Debug: " + JSON.stringify(notificationBody));
+		//gs.error("JW Debug: " + JSON.stringify(notificationBody));
 
 	} catch(err) {
 

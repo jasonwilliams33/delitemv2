@@ -21,6 +21,10 @@
 
 			spUtil.addInfoMessage("Notifications Sent!");
 
+		} else if(data.modalAction == "remindersSent") {
+			
+			spUtil.addInfoMessage("Reminders Sent!");
+			
 		}
 
 	})
