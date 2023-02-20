@@ -54,6 +54,7 @@
 			c.data.deliveryModalTitle = 'Delivery Items received today';
 			c.data.deliveryModalTable = c.data.delieveryItemTable;
 			c.data.deliveryModalFields = "date_received,recipient,sender,collection_location,notes,state";
+			c.data.modalWidget = "delivery_table_modal";
 
 		} else if(action == "outstanding") {
 
@@ -61,26 +62,35 @@
 			c.data.deliveryModalTitle = 'Outstanding Delivery Items';
 			c.data.deliveryModalTable = c.data.delieveryItemTable;
 			c.data.deliveryModalFields = "date_received,recipient,sender,collection_location,notes,state";
+			c.data.modalWidget = "delivery_table_modal";
 
 		} else if(action == "collect_delivery") {
 
 			c.data.deliveryModalFilter = c.data.outstandingDeliveryFilter;
 			c.data.deliveryModalTitle = 'Outstanding Deliveries';
-			c.data.deliveryModalTable = c.data.delieveryTable;			
+			c.data.deliveryModalTable = c.data.delieveryTable;
+			c.data.modalWidget = "delivery_table_modal";
+
+		}
+		
+		else if(action == "send_reminders") {
+
+			c.data.deliveryModalTitle = 'Send Reminders';
+			c.data.modalWidget = "delitem_reminders";
 
 		}
 
 		var todaysDeliveryObj = {
 
-			"table": c.data.deliveryModalTable,	
-			"filter": c.data.deliveryModalFilter,
+			"table": c.data.deliveryModalTable || "",	
+			"filter": c.data.deliveryModalFilter || "",
 			"fields": c.data.deliveryModalFields,
 			"window_size": 5,
 			"action": action
 
 		}
 
-		c.openModal('delivery_table_modal',c.data.deliveryModalTitle,todaysDeliveryObj);
+		c.openModal(c.data.modalWidget,c.data.deliveryModalTitle,todaysDeliveryObj);
 
 	}
 
@@ -284,6 +294,12 @@ textarea {
               ng-click="c.openDeliveryModal('collect_delivery')"
               ng-disabled="c.data.collectDeliveryDisabled">
         Collect Delivery <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="wrap row">
+      <button class="btn newDelivery"
+              ng-click="c.openDeliveryModal('send_reminders')">
+        Send Reminders <i class="fa fa-send-o fa-lg fa-fw" aria-hidden="true"></i>
       </button>
     </div>
   </div>

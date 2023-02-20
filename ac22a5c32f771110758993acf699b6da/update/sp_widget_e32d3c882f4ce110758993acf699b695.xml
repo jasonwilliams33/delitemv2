@@ -150,6 +150,7 @@
 
 		}).then(function(rsp) {
 
+			console.log(rsp.data.sendNotificationArr);
 			//for (var i=0; i< rsp.data.sendNotificationArr.length; i++) {
 
 				for (var i=0; i< rsp.data.sendNotificationArr.length; i++) {
@@ -191,7 +192,7 @@
 	})*/
 	
 	c.generateQRCode = function(sys_id) {	
-			
+			console.log("this is from new del: " + sys_id);
 			spModal.open({
       widget: 'delitem_generate_qr_code', 
       widgetInput: {
