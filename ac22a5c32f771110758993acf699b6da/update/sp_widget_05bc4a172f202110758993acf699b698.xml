@@ -75,7 +75,7 @@
 		c.server.get({
 
 			action: "attachSignature",
-			signature: data,
+			signature: data.signature,
 			deliveryItems: c.data.selectedDeliveryItemArr,			
 
 		}).then(function(rsp) {

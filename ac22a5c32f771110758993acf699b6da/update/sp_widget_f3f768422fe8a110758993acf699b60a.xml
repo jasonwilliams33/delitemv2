@@ -2,18 +2,25 @@
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
         <client_script><![CDATA[api.controller=function($scope,delitemModalPubSub) {
-  /* widget controller */
-  var c = this;
-	
+	/* widget controller */
+	var c = this;
+
 	c.date = moment(new Date()).format('dddd Do MMMM YYYY');
-	
-		c.done = function(){	
-			
-		c.data.signature = c.accept();
-		delitemModalPubSub.publish(c.data.signature);	
-				
+
+	c.done = function(){	
+
+		var modalReturnObj = {
+
+			"modalAction" : "signatureAccepted",
+			"signature" : c.accept()
+
+		}
+
+		//c.data.signature = c.accept();
+		delitemModalPubSub.publish(modalReturnObj);
+
 	}
-	
+
 };]]></client_script>
         <controller_as>c</controller_as>
         <css>.signature-main-div {

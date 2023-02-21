@@ -3,8 +3,8 @@
         <category>custom</category>
         <client_script><![CDATA[api.controller=function($scope,$uibModal,spUtil,delitemModalPubSub,spModal) {
 	/* widget controller */
-	var c = this;
 
+	var c = this;
 
 	c.data.manualSearch = false;
 	c.data.searchDisabled = true;
@@ -24,28 +24,38 @@
 	})
 
 	delitemModalPubSub.subscribe($scope, function($event, data) {//Subscription to Angular Provider to retrieve data from Modal and update relevant variables
-console.log(data);
-		c.modalInstance.close();
 
-		c.server.get({
+		if(data.modalAction == "signatureAccepted") {
 
-			action: "lookupDelivery",
-			deliveryFilter: "sys_id=" + data.sys_id,
-			recipient: c.data.recipient
+			c.modalInstance.close();
+			c.data.manualSearch = false;
+			c.data.searchDisabled = true;
 
-		}).then(function(rsp) {
-			
-			if(rsp.data.deliveryNotFound) {
+		} else {
 
-				spModal.alert("No outstanding deliveries were located for you " + rsp.data.userFirstName + ", please speak to reception if you need any further assistance");
+			c.modalInstance.close();
 
-			} else {
-				
-				c.openModal("delitem_delivery_summary","Outstanding Deliveries",rsp.data.deliverySummaryOptions);
+			c.server.get({
 
-			}
-		})
-		
+				action: "lookupDelivery",
+				deliveryFilter: "sys_id=" + data.sys_id,
+				recipient: c.data.recipient
+
+			}).then(function(rsp) {
+
+				if(rsp.data.deliveryNotFound) {
+
+					spModal.alert("No outstanding deliveries were located for you " + rsp.data.userFirstName + ", please speak to reception if you need any further assistance");
+
+				} else {
+
+					c.openModal("delitem_delivery_summary","Outstanding Deliveries",rsp.data.deliverySummaryOptions);
+
+				}
+
+			})
+
+		}
 		/*data.deliverySummaryOptions = {
 
 			"deliverySysId": "fbd68d252f302910758993acf699b665",
@@ -64,7 +74,7 @@ console.log(data);
 
 	}
 
-	c.manualSearchResult = function() {
+	c.executeManualSearch = function() {
 
 		c.server.get({
 
@@ -73,13 +83,13 @@ console.log(data);
 			recipient: c.data.recipient
 
 		}).then(function(rsp) {
-			
+
 			if(rsp.data.deliveryNotFound) {
 
 				spModal.alert("No outstanding deliveries were located for you " + rsp.data.userFirstName + ", please speak to reception if you need any further assistance");
 
 			} else {
-				
+
 				c.openModal("delitem_delivery_summary","Outstanding Deliveries",rsp.data.deliverySummaryOptions);
 
 			}
@@ -286,7 +296,7 @@ textarea {
         </sn-record-picker>
       <div class="text-right">
       <button class="btn btn-primary searchBtn"
-              ng-click="c.manualSearchResult()"
+              ng-click="c.executeManualSearch()"
               ng-class="{ 'disabled' : c.data.searchDisabled }">
         Search
       </button>
