@@ -29,7 +29,13 @@
 
 			c.modalInstance.close();
 			c.data.manualSearch = false;
-			c.data.searchDisabled = true;
+			c.data.recipient = {
+				
+				"value" : "",
+				"displaYValue" : ""
+				
+			}
+			
 
 		} else {
 
@@ -277,8 +283,7 @@ textarea {
           Search Deliveries
         </h5>
       </div> 
-    </div>
-    
+    </div>    
   	<div class="form-group"
          ng-show="c.data.manualSearch">
         <span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory" ng-class="{'mandatory-filled': recipient.displayValue != undefined}"></span>

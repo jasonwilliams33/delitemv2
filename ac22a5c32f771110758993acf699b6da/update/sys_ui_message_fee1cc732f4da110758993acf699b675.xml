@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_message">
+    <sys_ui_message action="INSERT_OR_UPDATE">
+        <application/>
+        <code/>
+        <commented_message/>
+        <key>DI New Delivery</key>
+        <language>en</language>
+        <message>New Delivery</message>
+        <sys_class_name>sys_ui_message</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-02-22 20:53:52</sys_created_on>
+        <sys_id>fee1cc732f4da110758993acf699b675</sys_id>
+        <sys_name>DI New Delivery</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_ui_message_fee1cc732f4da110758993acf699b675</sys_update_name>
+    </sys_ui_message>
+</record_update>

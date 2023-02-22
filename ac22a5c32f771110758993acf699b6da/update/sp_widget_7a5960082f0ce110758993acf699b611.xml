@@ -186,58 +186,75 @@ textarea {
 	/* populate the 'data' object */
 	/* e.g., data.table = $sp.getValue('table'); */
 
-	try {
+	if(!input) {
 
-		data.todaysDeliveriesFilter = "date_receivedONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()";
-		data.outstandingDeliveryItemsFilter = "state!=3";
-		data.outstandingDeliveryFilter = "state!=3";
-		data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
-		data.delieveryTable = DelItemConstants.DELIVERY_TABLE;
-		data.selfService = gs.getProperty("x_187394_delitem.self.service");
-
-		queryTodaysDeliveries = function() {
-
-			var todaysDeliveries = new GlideAggregate(data.delieveryItemTable);
-			todaysDeliveries.addEncodedQuery(data.todaysDeliveriesFilter);
-			todaysDeliveries.addAggregate('COUNT');
-			todaysDeliveries.query();
-			while(todaysDeliveries.next()) {
-
-				return todaysDeliveries.getAggregate('COUNT');
-
-			}
+		retrieveMessages = function() {
+			
+			/*Message Retrieval*/
+			data.deliveryItemsReceivedToday = gs.getMessage("DI Delivery Items received today");
+			data.deliveryItemsAwaitingCollection = gs.getMessage("DI Delivery Items awaiting collection");
+			data.newDelivery = gs.getMessage("DI New Delivery");
+			data.collectDelivery = gs.getMessage("DI Collect Delivery");
+			data.sendReminders = gs.getMessage("DI Send Reminders");
 
 		}
 
-	} catch(err) {
+		retrieveMessages();
+		
+		try {
 
-		gs.error('['+gs.getCurrentScopeName()+']' + ': Delitem Widget - Caught error: \n'+err);
+			data.todaysDeliveriesFilter = "date_receivedONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()";
+			data.outstandingDeliveryItemsFilter = "state!=3";
+			data.outstandingDeliveryFilter = "state!=3";
+			data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
+			data.delieveryTable = DelItemConstants.DELIVERY_TABLE;
+			data.selfService = gs.getProperty("x_187394_delitem.self.service");
 
-	}
+			queryTodaysDeliveries = function() {
 
-	data.todaysDeliveryCount = queryTodaysDeliveries();
+				var todaysDeliveries = new GlideAggregate(data.delieveryItemTable);
+				todaysDeliveries.addEncodedQuery(data.todaysDeliveriesFilter);
+				todaysDeliveries.addAggregate('COUNT');
+				todaysDeliveries.query();
+				while(todaysDeliveries.next()) {
 
-	/*if(input && input.action == "refreshTodaysDeliveryCount") {
+					return todaysDeliveries.getAggregate('COUNT');
+
+				}
+
+			}
+
+		} catch(err) {
+
+			gs.error('['+gs.getCurrentScopeName()+']' + ': Delitem Widget - Caught error: \n'+err);
+
+		}
+
+		data.todaysDeliveryCount = queryTodaysDeliveries();
+
+		/*if(input && input.action == "refreshTodaysDeliveryCount") {
 
 		data.todaysDeliveryCount = queryTodaysDeliveries();
 
 	}*/
 
-	queryOutstandingDeliveries = function() {
+		queryOutstandingDeliveries = function() {
 
-		var outstandingDeliveries = new GlideAggregate(data.delieveryItemTable);
-		outstandingDeliveries.addEncodedQuery(data.outstandingDeliveryItemsFilter);
-		outstandingDeliveries.addAggregate('COUNT');
-		outstandingDeliveries.query();
-		while(outstandingDeliveries.next()) {
+			var outstandingDeliveries = new GlideAggregate(data.delieveryItemTable);
+			outstandingDeliveries.addEncodedQuery(data.outstandingDeliveryItemsFilter);
+			outstandingDeliveries.addAggregate('COUNT');
+			outstandingDeliveries.query();
+			while(outstandingDeliveries.next()) {
 
-			return parseInt(outstandingDeliveries.getAggregate('COUNT'));
+				return parseInt(outstandingDeliveries.getAggregate('COUNT'));
+
+			}
 
 		}
 
-	}
+		data.outstandingDeliveryCount = queryOutstandingDeliveries();
 
-	data.outstandingDeliveryCount = queryOutstandingDeliveries();
+	}
 
 	if(input && input.action == "refreshDeliveryCounts") {
 
@@ -266,7 +283,7 @@ textarea {
       <div class="cardCount"
            ng-click="c.openDeliveryModal('todays')">
        <h5 class="docTitle">
-          Delivery Items received today
+          {{data.deliveryItemsReceivedToday}}
         </h5>
         <div>
           <h4 class="content">
@@ -277,7 +294,7 @@ textarea {
        <div class="cardCount"
            ng-click="c.openDeliveryModal('outstanding')">
         <h5 class="docTitle">
-          Delivery Items awaiting collection
+          {{data.deliveryItemsAwaitingCollection}}
         </h5>
          <div>
            <h4 class="content">
@@ -289,7 +306,7 @@ textarea {
     <div class="wrap row">
       <button class="btn btn-primary newDelivery"
               ng-click="c.openModal('new_delivery','Add New Delivery Item(s)')">
-        New Delivery <i class="fa fa-dropbox fa-lg" aria-hidden="true"></i>
+        {{data.newDelivery}} <i class="fa fa-dropbox fa-lg" aria-hidden="true"></i>
       </button>
     </div>
     <div class="wrap row"
@@ -297,13 +314,13 @@ textarea {
       <button class="btn newDelivery"
               ng-click="c.openDeliveryModal('collect_delivery')"
               ng-disabled="c.data.collectDeliveryDisabled">
-        Collect Delivery <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+        {{data.collectDelivery}} <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
       </button>
     </div>
     <div class="wrap row">
       <button class="btn newDelivery"
               ng-click="c.openDeliveryModal('send_reminders')">
-        Send Reminders <i class="fa fa-send-o fa-lg fa-fw" aria-hidden="true"></i>
+       {{data.sendReminders}} <i class="fa fa-send-o fa-lg fa-fw" aria-hidden="true"></i>
       </button>
     </div>
   </div>
