@@ -57,6 +57,7 @@
         <sys_db_object display_value="" name="sys_properties">sys_properties</sys_db_object>
         <sys_id>1418bb8a8895437e8587161708df39e9</sys_id>
         <sys_metadata>298346c72f092110758993acf699b685</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
         <sys_name>x_187394_delitem.weekly.reminder</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_parent/>
@@ -65,5 +66,7 @@
         <sys_scope_delete display_value="">21fda69da1294409862944902732aaa1</sys_scope_delete>
         <sys_update_name>sys_properties_298346c72f092110758993acf699b685</sys_update_name>
         <sys_update_version display_value="sys_properties_298346c72f092110758993acf699b685">b18346c72f092110758993acf699b688</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-02-20 22:25:35</sys_updated_on>
     </sys_metadata_delete>
 </record_update>

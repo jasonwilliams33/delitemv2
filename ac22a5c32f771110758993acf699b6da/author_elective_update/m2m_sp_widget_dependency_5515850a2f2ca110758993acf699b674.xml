@@ -48,6 +48,7 @@
         <sys_db_object display_value="" name="m2m_sp_widget_dependency">m2m_sp_widget_dependency</sys_db_object>
         <sys_id>21638acb291a4e048b41eb889576f601</sys_id>
         <sys_metadata>5515850a2f2ca110758993acf699b674</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
         <sys_name>pe-scratch-pad.Delitem Scratch Pad</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_parent/>
@@ -56,5 +57,7 @@
         <sys_scope_delete display_value="">21fda69da1294409862944902732aaa1</sys_scope_delete>
         <sys_update_name>m2m_sp_widget_dependency_5515850a2f2ca110758993acf699b674</sys_update_name>
         <sys_update_version display_value="m2m_sp_widget_dependency_5515850a2f2ca110758993acf699b674">d915850a2f2ca110758993acf699b678</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-01-23 18:50:22</sys_updated_on>
     </sys_metadata_delete>
 </record_update>

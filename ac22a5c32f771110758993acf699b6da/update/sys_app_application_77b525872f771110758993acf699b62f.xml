@@ -14,12 +14,15 @@
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>77b525872f771110758993acf699b62f</sys_id>
+        <sys_mod_count>0</sys_mod_count>
         <sys_name>Delitem</sys_name>
         <sys_overrides/>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sys_app_application_77b525872f771110758993acf699b62f</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2022-12-23 16:46:57</sys_updated_on>
         <title>Delitem</title>
         <view_name/>
     </sys_app_application>

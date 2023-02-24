@@ -15,7 +15,7 @@
         <condition/>
         <description/>
         <execute_function>false</execute_function>
-        <filter_condition table="x_187394_delitem_delivery_item">stateCHANGESTO3^EQ<item display_value="Collected" endquery="false" field="state" goto="false" newquery="false" operator="CHANGESTO" or="false" value="3"/>
+        <filter_condition table="x_187394_delitem_delivery_item">stateCHANGESTO3^EQ<item display_value="Awaiting Collection" endquery="false" field="state" goto="false" newquery="false" operator="CHANGESTO" or="false" value="3"/>
             <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
         </filter_condition>
         <is_rest>false</is_rest>
@@ -76,12 +76,15 @@
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>e47454502f34e110758993acf699b63b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
         <sys_name>Update Delivery</sys_name>
         <sys_overrides/>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sys_script_e47454502f34e110758993acf699b63b</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-01-30 21:02:50</sys_updated_on>
         <template/>
         <when>after</when>
     </sys_script>

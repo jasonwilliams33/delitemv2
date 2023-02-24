@@ -26,11 +26,14 @@
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-01-13 14:27:00</sys_created_on>
         <sys_id>2789e4722f102d10758993acf699b64a</sys_id>
+        <sys_mod_count>0</sys_mod_count>
         <sys_name>delitemModalPubSub</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_angular_provider_2789e4722f102d10758993acf699b64a</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-01-14 10:51:12</sys_updated_on>
         <type>service</type>
     </sp_angular_provider>
 </record_update>

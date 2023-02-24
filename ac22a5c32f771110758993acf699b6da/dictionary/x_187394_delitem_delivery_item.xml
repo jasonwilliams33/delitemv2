@@ -11,8 +11,9 @@
         <element attributes="edge_encryption_enabled=true" label="Sender" max_length="120" name="sender" type="string"/>
         <element attributes="edge_encryption_enabled=true" choice="3" default="1" label="State" max_length="40" name="state" type="choice">
             <choice>
-                <element inactive_on_update="false" label="Awaiting Collection" value="2"/>
-                <element inactive_on_update="false" label="Collected" value="3"/>
+                <element inactive_on_update="false" label="Awaiting Collection" value="3"/>
+                <element inactive_on_update="false" label="Collected" value="4"/>
+                <element inactive_on_update="false" label="Expected" value="2"/>
                 <element inactive_on_update="false" label="New" value="1"/>
             </choice>
         </element>

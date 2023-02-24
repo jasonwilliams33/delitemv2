@@ -6,12 +6,15 @@
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-01-23 17:09:22</sys_created_on>
         <sys_id>de8ea4c62fe8a110758993acf699b66f</sys_id>
+        <sys_mod_count>0</sys_mod_count>
         <sys_name>delitem-scratch-pad</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_ui_script display_value="x_187394_delitem.delitem-scratch-pad">8cbe6cc62fe8a110758993acf699b6b8</sys_ui_script>
         <sys_update_name>sp_js_include_de8ea4c62fe8a110758993acf699b66f</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-01-24 16:11:39</sys_updated_on>
         <url/>
     </sp_js_include>
 </record_update>

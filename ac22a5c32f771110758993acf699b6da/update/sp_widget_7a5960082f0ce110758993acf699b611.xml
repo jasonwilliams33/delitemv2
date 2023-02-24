@@ -193,7 +193,7 @@ textarea {
 			/*Message Retrieval*/
 			data.deliveryItemsReceivedToday = gs.getMessage("DI Delivery Items received today");
 			data.deliveryItemsAwaitingCollection = gs.getMessage("DI Delivery Items awaiting collection");
-			data.newDelivery = gs.getMessage("DI New Delivery");
+			data.newDelivery = gs.getMessage("New Delivery");
 			data.collectDelivery = gs.getMessage("DI Collect Delivery");
 			data.sendReminders = gs.getMessage("DI Send Reminders");
 
@@ -269,11 +269,14 @@ textarea {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-12-23 15:06:04</sys_created_on>
         <sys_id>7a5960082f0ce110758993acf699b611</sys_id>
+        <sys_mod_count>3</sys_mod_count>
         <sys_name>Delitem</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_7a5960082f0ce110758993acf699b611</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-02-23 17:58:49</sys_updated_on>
         <template><![CDATA[<div class="panel panel-primary">
   <div class="panel-heading">
     Delitem
@@ -306,7 +309,7 @@ textarea {
     <div class="wrap row">
       <button class="btn btn-primary newDelivery"
               ng-click="c.openModal('new_delivery','Add New Delivery Item(s)')">
-        {{data.newDelivery}} <i class="fa fa-dropbox fa-lg" aria-hidden="true"></i>
+        ${New Delivery} <i class="fa fa-dropbox fa-lg" aria-hidden="true"></i>
       </button>
     </div>
     <div class="wrap row"
