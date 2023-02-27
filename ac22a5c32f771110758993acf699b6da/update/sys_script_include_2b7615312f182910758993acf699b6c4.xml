@@ -84,7 +84,7 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 			var deliveryArr = [];
 
 			var newDeliveryItems = new GlideAggregate(DelItemConstants.DELIVERY_ITEM_TABLE);
-			newDeliveryItems.addEncodedQuery('state=1^delivery=NULL^ORdelivery=undefined');
+			newDeliveryItems.addEncodedQuery('state='+ DelItemConstants.NEW +'^delivery=NULL^ORdelivery=undefined');
 			newDeliveryItems.groupBy('recipient');
 			// 			newDeliveryItems.groupBy('sys_id');
 			newDeliveryItems.addAggregate('COUNT');
@@ -154,7 +154,7 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 			for (var i=0; i< deliveryItemArr.length; i++) {
 
 				var exisitingDeliveryGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_TABLE);
-				exisitingDeliveryGRS.addEncodedQuery('state!=3^recipient=' + deliveryItemArr[i].recipientSysId);
+				exisitingDeliveryGRS.addEncodedQuery('state!=' + DelItemConstants.COLLECTED + '^recipient=' + deliveryItemArr[i].recipientSysId);
 				exisitingDeliveryGRS.query();
 				if(exisitingDeliveryGRS.next()){
 
@@ -233,7 +233,7 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 					}
 
 					updatingDeliveryItemGRS.setValue('delivery',deliverySysId);
-					updatingDeliveryItemGRS.setValue('state',2);
+					updatingDeliveryItemGRS.setValue('state',DelItemConstants.AWAITING_COLLECTION);
 					updatingDeliveryItemGRS.update();
 
 				}
@@ -349,13 +349,13 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-01-10 15:13:14</sys_created_on>
         <sys_id>2b7615312f182910758993acf699b6c4</sys_id>
-        <sys_mod_count>0</sys_mod_count>
+        <sys_mod_count>1</sys_mod_count>
         <sys_name>DelitemUtils</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sys_script_include_2b7615312f182910758993acf699b6c4</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-02-20 22:26:59</sys_updated_on>
+        <sys_updated_on>2023-02-25 13:46:05</sys_updated_on>
     </sys_script_include>
 </record_update>

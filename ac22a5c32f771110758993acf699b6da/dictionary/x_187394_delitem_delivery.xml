@@ -7,9 +7,9 @@
         <element attributes="encode_utf8=false" label="Recipient" max_length="32" name="recipient" reference="sys_user" type="reference"/>
         <element attributes="edge_encryption_enabled=true" choice="3" default="1" label="State" max_length="40" name="state" type="choice">
             <choice>
-                <element inactive_on_update="false" label="Collected" value="3"/>
+                <element inactive_on_update="false" label="Collected" value="4"/>
                 <element inactive_on_update="false" label="New" value="1"/>
-                <element inactive_on_update="false" label="Partially Collected" value="2"/>
+                <element inactive_on_update="false" label="Partially Collected" value="5"/>
             </choice>
         </element>
         <index name="index">
