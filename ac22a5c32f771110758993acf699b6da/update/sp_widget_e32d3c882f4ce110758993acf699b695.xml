@@ -3,16 +3,17 @@
         <category>custom</category>
         <client_script><![CDATA[api.controller=function($scope,spUtil,$timeout,delitemModalPubSub,spModal,$uibModal) {
 	/* widget controller */
-	
+
 	var c = this;
 
 	console.log(c.data.newDeliveryGRSArr);
-	
+
 	c.data.singleItem = false;
 	c.data.multipleItems = true;
 	c.data.showItemForm = false;
 	c.data.missingFields = '';
 	c.missingFieldsError = '';
+	c.data.showLocationUpdate = false;
 
 	if(c.data.newDeliveryCount > 0) {
 
@@ -156,11 +157,11 @@
 			console.log(rsp.data.sendNotificationArr);
 			//for (var i=0; i< rsp.data.sendNotificationArr.length; i++) {
 
-				for (var i=0; i< rsp.data.sendNotificationArr.length; i++) {
-			
-					c.generateQRCode(rsp.data.sendNotificationArr[i]);
-					
-				}
+			for (var i=0; i< rsp.data.sendNotificationArr.length; i++) {
+
+				c.generateQRCode(rsp.data.sendNotificationArr[i]);
+
+			}
 
 			//}
 
@@ -186,29 +187,29 @@
 
 	}
 
-		/*delitemModalPubSub.subscribe($scope, function($event, data) {//Subscription to Angular Provider to retrieve data from Modal and update relevant variables
+	/*delitemModalPubSub.subscribe($scope, function($event, data) {//Subscription to Angular Provider to retrieve data from Modal and update relevant variables
 
 			console.log(data);
-			
+
 		c.modalInstance.close();
 
 	})*/
-	
+
 	c.generateQRCode = function(sys_id) {	
-			console.log("this is from new del: " + sys_id);
-			spModal.open({
-      widget: 'delitem_generate_qr_code', 
-      widgetInput: {
+		console.log("this is from new del: " + sys_id);
+		spModal.open({
+			widget: 'delitem_generate_qr_code', 
+			widgetInput: {
 				sys_id: sys_id
 			}
-    }).then(function () {
-      
-    })
+		}).then(function () {
+
+		})
 
 		/*modalObj = {
 				sys_id: sys_id
 			}
-		
+
 		c.modalInstance = $uibModal.open({
 
 			templateUrl: 'delitem-new-delivery-custom-form-overlay.html',
@@ -228,7 +229,7 @@
 			}	
 
 		})*/
-						
+
 	}
 
 	/*function generateQR(sys_id) {
@@ -264,37 +265,37 @@
 	}*/		
 
 	spUtil.recordWatch($scope, c.data.delieveryItemTable, c.data.newDeliveryFilter, function(name,data) {
-		
+
 		c.server.get({
 
 			action: "refreshNewDeliveries"
-			
+
 		}).then(function(rsp) {
 
 			c.data.newDeliveryGRSArr = rsp.data.newDeliveryGRSArr;
-			
+
 			if(c.data.newDeliveryGRSArr.length > 0) {
-				
+
 				c.data.disabled = false;
-				
+
 			} else {
-				
+
 				c.data.disabled = true;
-				
+
 			}
-			
+
 		})
-		
+
 		/*if(name.data.operation == "insert"){
-			
+
 			c.data.disabled = false;
-			
+
 		} else if(name.data.action == "exit") {
-			
+
 			c.data.disabled = true;
-			
+
 		}*/
-		
+
 	});
 
 	c.addDeliveryItem = function() {
@@ -318,6 +319,32 @@
 	c.cancelForm = function() {
 
 		c.data.showItemForm = false;
+		c.data.showLocationUpdate = false;
+
+	}
+
+	c.confirmCollectionLocation = function(delivery) {
+
+		c.data.showLocationUpdate = true;
+		c.data.deliveryItemSysId = delivery.sys_id;
+		c.data.expectedItemRecipient = delivery.recipient_first_name
+
+	}
+
+	c.received = function() {
+//..console.log(deliveryItemSysId);
+		c.server.get({
+
+			action: "itemReceived",
+			collectionLocation: c.data.collectionLocation,
+			item: c.data.deliveryItemSysId						
+
+		}).then(function(rsp) {
+
+			c.data.showLocationUpdate = false;
+			c.data.collectionLocation = '';
+
+		})
 
 	}
 
@@ -595,10 +622,12 @@ textarea {
 			newDeliveryGRSObj = {};
 			newDeliveryGRSObj.date_received = newDeliveryGRS.date_received.toString();
 			newDeliveryGRSObj.recipient = newDeliveryGRS.recipient.getDisplayValue();
+			newDeliveryGRSObj.recipient_first_name = newDeliveryGRS.recipient.first_name.toString();
 			newDeliveryGRSObj.sender = newDeliveryGRS.sender.toString();
 			newDeliveryGRSObj.collection_location = newDeliveryGRS.collection_location.toString();
 			newDeliveryGRSObj.notes = newDeliveryGRS.notes.toString();
 			newDeliveryGRSObj.state = newDeliveryGRS.state.getDisplayValue();
+			newDeliveryGRSObj.sys_id = newDeliveryGRS.getUniqueValue();
 			data.newDeliveryGRSArr.push(newDeliveryGRSObj);			
 			
 		}
@@ -670,6 +699,12 @@ textarea {
 
 	}
 	
+	if(input && input.action == "itemReceived") {
+		global.JSUtil.logObject(input,"JW Debug: ");
+		var updateExpectedDelivery = new x_187394_delitem.DelitemUtils().updateExpectedDelivery(input);
+		
+	}
+	
 	if(input && input.action == "sendNotifications") {
 
 		data.sendNotificationArr = new x_187394_delitem.DelitemUtils().sendNotifications();
@@ -683,14 +718,14 @@ textarea {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-12-23 16:32:41</sys_created_on>
         <sys_id>e32d3c882f4ce110758993acf699b695</sys_id>
-        <sys_mod_count>36</sys_mod_count>
+        <sys_mod_count>72</sys_mod_count>
         <sys_name>New Delivery</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_e32d3c882f4ce110758993acf699b695</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-02-27 21:00:52</sys_updated_on>
+        <sys_updated_on>2023-03-01 20:35:13</sys_updated_on>
         <template><![CDATA[<div class="containerQRCode">
   <div class="qrcode" id="qrcode">
     <canvas id="canvas" width="200" height="200"></canvas>
@@ -699,8 +734,8 @@ textarea {
 <div>
   <!--<widget id="widget-data-table" options='data.tableOptions'></widget>-->
   <div class="alert alert-info" ng-show="!data.newDeliveryGRSArr.length">
-        There are currently no New or Expected Delivery Items
-      </div>
+    There are currently no New or Expected Delivery Items
+  </div>
   <div class="panel panel-default"
        ng-show="data.newDeliveryGRSArr.length">
     <table class="table table-striped table-primary table-responsive">
@@ -725,7 +760,8 @@ textarea {
           <td class="itemData">{{delivery.state}}</td>
           <td class="itemData">
             <div class="btn-group"
-                 ng-show="delivery.state == 'Expected'">			
+                 ng-show="delivery.state == 'Expected'"
+                 ng-click="c.confirmCollectionLocation(delivery)">			
               <button class="btn btn-primary">
                 Received
               </button>
@@ -734,7 +770,8 @@ textarea {
         </tr>
     </table>
   </div>
-  <div class="btn-group btn-group-justified">
+  <div class="btn-group btn-group-justified"
+       ng-show="!c.data.showLocationUpdate">
     <div class="btn-group">
       <button type="button" class="btn btn-default" ng-click="c.addDeliveryItem()">Add Delivery Item  <i class="fa fa-shopping-basket fa-lg" aria-hidden="true"></i>
       </button>
@@ -783,14 +820,6 @@ textarea {
                           ng-show="c.data.multipleItems==true">
         </sn-record-picker>
       </div>
-      <!-- <div class="autocomplete form-group" ng-show="!c.data.multipleItems">
-        <label for="formGroupExampleInput">Sender (if applicable)</label>
-        <input id="myInput" type="text" ng-model="c.data.sender" class="form-control" name="myCountry" placeholder="i.e. Amazon">
-      </div>
-      <div ng-show="!c.data.multipleItems"
-           ng-model="c.data.sender">
-        <widget id="delitem_autocomplete_input" options='data.autoCompleteOptions'></widget>
-      </div>-->
       <div class="autocomplete form-group"
            ng-show="!c.data.multipleItems">
         <label for="autoCompleteInput"
@@ -831,7 +860,33 @@ textarea {
     </button>
   </div>
 </div>
-
+<div class="panel panel-default"
+     ng-show="c.data.showLocationUpdate">
+  <div class="panel-heading">
+    <h5>
+      Confirm the collection location for {{c.data.expectedItemRecipient}}'s delivery item
+    </h5>
+  </div>  
+  <div class="panel-body">
+    <div class="alert alert-danger alert-dismissible"
+         ng-show="c.data.showError">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <i class="fa fa-exclamation-triangle"></i> Some fields are missing: {{c.data.missingFieldsError}}
+    </div>
+    <div class="form-group">
+      <span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory" ng-class="{'mandatory-filled': collectionLocation.displayValue != undefined}"></span>
+      <label for="formGroupExampleInput">Collection Location</label> 
+      <select class="form-control" ng-model="c.data.collectionLocation" ng-options="item for item in c.data.collectionLocationsArr"></select>
+    </div>
+    <button class="btn btn-default" ng-click="c.cancelForm()">
+      Cancel
+    </button>
+    <button class="btn btn-primary pull-right"
+            ng-click="c.received()">
+      Confirm Receipt
+    </button>
+  </div>
+</div>
 <div ng-show="c.data.showQR">
   <sp-widget widget="c.generateQRCodeWidget"></sp-widget>
 
