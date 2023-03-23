@@ -6,7 +6,7 @@
 
 	var c = this;
 
-	console.log(c.data.newDeliveryGRSArr);
+	console.log(c.data.newDeliveryFieldsArr);
 
 	c.data.singleItem = false;
 	c.data.multipleItems = true;
@@ -86,25 +86,7 @@
 
 	c.saveItem = function(saveAction) {
 
-		/*if(c.data.recipient.value == undefined || c.data.recipient.value == '') {
-
-			c.data.showError = true;
-
-			$timeout(function() {
-
-				c.data.showError = false;
-
-			},3000);
-
-			return;
-
-		} else {
-
-			c.insertItems(saveAction);
-
-		}*/		
-
-		if(c.data.recipient.value == undefined || c.data.recipient.value == '') {
+		if((c.data.recipient.value == undefined || c.data.recipient.value == '') && saveAction != "confirmLocation") {
 
 			c.data.missingFields += 'Recipient,';
 
@@ -136,7 +118,15 @@
 
 		else {
 
-			c.insertItems(saveAction);
+			if(saveAction == "confirmLocation") {
+
+				c.received();
+
+			} else {
+
+				c.insertItems(saveAction);
+
+			}
 
 		}
 
@@ -332,7 +322,7 @@
 	}
 
 	c.received = function() {
-//..console.log(deliveryItemSysId);
+		//..console.log(deliveryItemSysId);
 		c.server.get({
 
 			action: "itemReceived",
@@ -613,26 +603,31 @@ textarea {
 		
 		var newDeliveryGRSObj = {};
 		data.newDeliveryGRSArr = [];
+		data.newDeliveryFieldsArr = [];
 		
-		var newDeliveryGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE)	;
+		var newDeliveryGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
 		newDeliveryGRS.addEncodedQuery(data.newDeliveryFilter);
 		newDeliveryGRS.query();
 		while(newDeliveryGRS.next()) {
 			
 			newDeliveryGRSObj = {};
-			newDeliveryGRSObj.date_received = newDeliveryGRS.date_received.toString();
-			newDeliveryGRSObj.recipient = newDeliveryGRS.recipient.getDisplayValue();
+			newDeliveryGRSObj.date_received = { "fieldName" : "Date Received" , "value" : newDeliveryGRS.date_received.toString() , "display" : true };
+			newDeliveryGRSObj.recipient = { "fieldName" : "Recipient" , "value" : newDeliveryGRS.recipient.getDisplayValue() , "display" : true };
 			newDeliveryGRSObj.recipient_first_name = newDeliveryGRS.recipient.first_name.toString();
-			newDeliveryGRSObj.sender = newDeliveryGRS.sender.toString();
-			newDeliveryGRSObj.collection_location = newDeliveryGRS.collection_location.toString();
-			newDeliveryGRSObj.notes = newDeliveryGRS.notes.toString();
-			newDeliveryGRSObj.state = newDeliveryGRS.state.getDisplayValue();
+			newDeliveryGRSObj.sender = { "fieldName" : "Sender" , "value" : newDeliveryGRS.sender.toString() , "display" : true };
+			newDeliveryGRSObj.collection_location = { "fieldName" : "Collection Location" , "value" : newDeliveryGRS.collection_location.toString() , "display" : true };
+			newDeliveryGRSObj.notes = { "fieldName" : "Notes" , "value" : newDeliveryGRS.notes.toString() , "display" : true };
+			newDeliveryGRSObj.state = { "fieldName" : "State" , "value" : newDeliveryGRS.state.getDisplayValue() , "display" : true };
 			newDeliveryGRSObj.sys_id = newDeliveryGRS.getUniqueValue();
 			data.newDeliveryGRSArr.push(newDeliveryGRSObj);			
+	
+			data.newDeliveryFieldsArr = [newDeliveryGRS.date_received.getLabel(),newDeliveryGRS.recipient.getLabel(),newDeliveryGRS.sender.getLabel(),newDeliveryGRS.collection_location.getLabel(),newDeliveryGRS.notes.getLabel(),newDeliveryGRS.state.getLabel()];
+	
 			
 		}
 		
 	}
+	
 	
 	if(!input) {
 		
@@ -718,14 +713,14 @@ textarea {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-12-23 16:32:41</sys_created_on>
         <sys_id>e32d3c882f4ce110758993acf699b695</sys_id>
-        <sys_mod_count>72</sys_mod_count>
+        <sys_mod_count>91</sys_mod_count>
         <sys_name>New Delivery</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_e32d3c882f4ce110758993acf699b695</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-03-01 20:35:13</sys_updated_on>
+        <sys_updated_on>2023-03-12 16:46:07</sys_updated_on>
         <template><![CDATA[<div class="containerQRCode">
   <div class="qrcode" id="qrcode">
     <canvas id="canvas" width="200" height="200"></canvas>
@@ -752,15 +747,15 @@ textarea {
       </thead>
       <tbody>
         <tr ng-repeat="delivery in c.data.newDeliveryGRSArr">
-          <td class="itemData">{{delivery.date_received}}</td>
-          <td class="itemData">{{delivery.recipient}}</td>
-          <td class="itemData">{{delivery.sender}}</td>
-          <td class="itemData">{{delivery.collection_location}}</td>
-          <td class="itemData">{{delivery.notes}}</td>
-          <td class="itemData">{{delivery.state}}</td>
+          <td class="itemData">{{delivery.date_received.value}}</td>
+          <td class="itemData">{{delivery.recipient.value}}</td>
+          <td class="itemData">{{delivery.sender.value}}</td>
+          <td class="itemData">{{delivery.collection_location.value}}</td>
+          <td class="itemData">{{delivery.notes.value}}</td>
+          <td class="itemData">{{delivery.state.value}}</td>
           <td class="itemData">
             <div class="btn-group"
-                 ng-show="delivery.state == 'Expected'"
+                 ng-show="delivery.state.value == 'Expected'"
                  ng-click="c.confirmCollectionLocation(delivery)">			
               <button class="btn btn-primary">
                 Received
@@ -864,7 +859,7 @@ textarea {
      ng-show="c.data.showLocationUpdate">
   <div class="panel-heading">
     <h5>
-      Confirm the collection location for {{c.data.expectedItemRecipient}}'s delivery item
+      Confirm the collection location for {{c.data.expectedItemRecipient}}'s delivery item:
     </h5>
   </div>  
   <div class="panel-body">
@@ -882,14 +877,13 @@ textarea {
       Cancel
     </button>
     <button class="btn btn-primary pull-right"
-            ng-click="c.received()">
+            ng-click="c.saveItem('confirmLocation')">
       Confirm Receipt
     </button>
   </div>
 </div>
 <div ng-show="c.data.showQR">
   <sp-widget widget="c.generateQRCodeWidget"></sp-widget>
-
 </div>]]></template>
     </sp_widget>
 </record_update>

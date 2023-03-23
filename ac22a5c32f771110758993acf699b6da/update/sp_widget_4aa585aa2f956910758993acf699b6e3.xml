@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[api.controller=function($scope,spAriaUtil) {
+	/* widget controller */
+	var c = this;
+
+	console.log(c);
+
+	c.data.missingFields = '';
+	c.missingFieldsError = '';
+	c.data.showLocationUpdate = false;
+
+		$scope.setOrderBy = function(field) {
+			console.table(field);
+		var d = "asc";
+		// descending default sort for date/time columns for UI consistency
+		//var fieldType = $scope.data.field_labels[field];
+		//if (fieldType == "glide_date_time" || fieldType == "glide_date")
+		//	d = "desc";
+		if ($scope.data.o == field) {
+			if ($scope.data.d == "asc")
+				d = "desc";
+			else
+				d = "asc";
+		}
+
+		/*if (d === "asc") {
+			spAriaUtil.sendLiveMessage($scope.data.msg.sortingByAsc);
+		} else if (d === "desc") {
+			spAriaUtil.sendLiveMessage($scope.data.msg.sortingByDesc);
+		}*/
+
+		$scope.data.o = field;
+			console.log($scope.data.o);
+		$scope.data.d = d;
+			console.log($scope.data.d);
+		//$scope.data.setOrderUserPreferences = true;
+		//$scope.setSearch(true);
+	}
+	
+	c.confirmCollectionLocation = function(delivery) {
+
+		c.data.showLocationUpdate = true;
+		c.data.deliveryItemSysId = delivery.sys_id;
+		c.data.expectedItemRecipient = delivery.recipient_first_name
+
+	}
+	
+		c.saveItem = function(saveAction) {
+
+		if((c.data.recipient.value == undefined || c.data.recipient.value == '') && saveAction != "confirmLocation") {
+
+			c.data.missingFields += 'Recipient,';
+
+		}
+
+		if(c.data.collectionLocation == undefined || c.data.collectionLocation == '') {
+
+			c.data.missingFields += 'Collection Location,';
+
+		}
+
+		if(c.data.missingFields != '') {
+
+			c.data.missingFieldsError = c.generateErrorString(c.data.missingFields);
+			c.data.missingFields = '';
+			c.data.showError = true;
+
+			$timeout(function() {
+
+				c.data.showError = false;
+				c.data.missingFields = '';
+				c.data.missingFieldsError = '';
+
+			},3000);
+
+			return;
+
+		}
+
+		else {
+
+			if(saveAction == "confirmLocation") {
+
+				c.received();
+
+			} else {
+
+				c.insertItems(saveAction);
+
+			}
+
+		}
+
+	}
+	
+		c.received = function() {
+		//..console.log(deliveryItemSysId);
+		c.server.get({
+
+			action: "itemReceived",
+			collectionLocation: c.data.collectionLocation,
+			item: c.data.deliveryItemSysId						
+
+		}).then(function(rsp) {
+
+			c.data.showLocationUpdate = false;
+			c.data.collectionLocation = '';
+
+		})
+
+	}
+
+};]]></client_script>
+        <controller_as>c</controller_as>
+        <css>
+.btn span.glyphicon {    			
+	opacity: 0;
+}
+
+.btn.active span.glyphicon {				
+	opacity: 1;		
+  color: #ffffff;
+}
+
+.btn.active{
+  background: $brand-primary;
+  color: #ffffff;
+}
+
+.btn span.glyphicon {    			
+	opacity: 0;
+}
+
+.btn.active span.glyphicon {				
+	opacity: 1;		
+  color: #ffffff;
+}
+
+.btn.active{
+  background: $brand-primary;
+  color: #ffffff;
+}
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id>delitem_data_table</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Delitem Data Table</name>
+        <option_schema>[{"hint":"Filter to be applied to specified table","name":"filter","section":"Data","label":"Filter","type":"string"},{"displayValue":"Table","hint":"Table to be Queried","name":"table","section":"Data","label":"Table","type":"reference","value":"sys_db_object","ed":{"reference":"sys_db_object"}},{"hint":"Fields to be displayed from specified tab;e","name":"fields","section":"Data","label":"Fields","type":"field_list"},{"name":"inline_button","section":"Behavior","label":"Inline Button","type":"boolean"},{"name":"button_label","section":"Behavior","label":"Button Label","type":"string"},{"name":"inline_checkbox","section":"Behavior","label":"Inline Checkbox","type":"string"}]</option_schema>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+	/* populate the 'data' object */
+	/* e.g., data.table = $sp.getValue('table'); */
+
+	//data.options = input;
+	
+	//data = input || '';
+	
+	data.o = data.o || $sp.getValue('o') || $sp.getValue('order_by');
+	data.d = data.d || $sp.getValue('d') || $sp.getValue('order_direction') || 'asc';
+	
+	data.filter = "stateIN" + DelItemConstants.NEW + "," + DelItemConstants.EXPECTED;
+	data.table = DelItemConstants.DELIVERY_ITEM_TABLE;
+	//data.fields = ["date_received","recipient","sender","collection_location","notes","state"];
+	data.fields = "date_received,recipient,sender,collection_location,notes,state";
+	data.fields_array = data.fields.split(',');
+	data.field_labels = [];
+	data.button_label = "Placeholder"
+	data.inline_button = true;
+	data.inline_checkbox = false;
+
+	var fieldLabelGRS = new GlideRecordSecure(data.table);
+	for (var i in data.fields_array) {
+		var field = data.fields_array[i];
+		
+		var fieldLableGe = fieldLabelGRS.getElement(field);
+		if (fieldLableGe == null)
+			continue;
+
+		data.field_labels.push(fieldLableGe.getLabel());
+		
+	}
+	
+	var gr = new GlideRecordSecure(data.table);
+	gr.addEncodedQuery(data.filter);
+	gr.query();
+	data.list = [];
+
+	while (gr._next()) {
+		var record = {};
+
+		$sp.getRecordElements(record, gr, data.fields);
+		data.list.push(record);		
+	}
+
+
+	/*data.fields = [{"name": "date_received","display_value" : "Date Received"},
+								 {"name": "recipient","display_value" : "Recipient"},
+								 {"name": "sender","display_value" : "Date Received"},
+								 {"name": "collection_location","display_value" : "Collection Location"},
+								 {"name": "notes","display_value" : "Notes"},
+								 {"name": "state","display_value" : "State"}
+								];*/
+	//data.fields = ["Date Received","Recipient","Sender","Colection Location","Notes","State"];
+
+	/*
+	var newDeliveryGRSObj = {};
+	data.newDeliveryGRSArr = [];
+	data.newDeliveryFieldsArr = [];
+
+	var newDeliveryGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
+	newDeliveryGRS.addEncodedQuery(data.filter);
+	newDeliveryGRS.query();
+	while(newDeliveryGRS.next()) {
+
+		newDeliveryGRSObj = {};
+		newDeliveryGRSObj.date_received = { "fieldName" : newDeliveryGRS.date_received.getLabel() , "value" : newDeliveryGRS.date_received.toString() , "display" : true };
+		newDeliveryGRSObj.recipient = { "fieldName" : "Recipient" , "value" : newDeliveryGRS.recipient.getDisplayValue() , "display" : true };
+		newDeliveryGRSObj.recipient_first_name = newDeliveryGRS.recipient.first_name.toString();
+		newDeliveryGRSObj.sender = { "fieldName" : "Sender" , "value" : newDeliveryGRS.sender.toString() , "display" : true };
+		newDeliveryGRSObj.collection_location = { "fieldName" : "Collection Location" , "value" : newDeliveryGRS.collection_location.toString() , "display" : true };
+		newDeliveryGRSObj.notes = { "fieldName" : "Notes" , "value" : newDeliveryGRS.notes.toString() , "display" : true };
+		newDeliveryGRSObj.state = { "fieldName" : "State" , "value" : newDeliveryGRS.state.getDisplayValue() , "display" : true };
+		newDeliveryGRSObj.sys_id = newDeliveryGRS.getUniqueValue();
+		data.newDeliveryGRSArr.push(newDeliveryGRSObj);			
+
+		data.newDeliveryFieldsArr = [newDeliveryGRS.date_received.getLabel(),newDeliveryGRS.recipient.getLabel(),newDeliveryGRS.sender.getLabel(),newDeliveryGRS.collection_location.getLabel(),newDeliveryGRS.notes.getLabel(),newDeliveryGRS.state.getLabel()];
+
+	}
+*/
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-03-03 14:53:01</sys_created_on>
+        <sys_id>4aa585aa2f956910758993acf699b6e3</sys_id>
+        <sys_mod_count>103</sys_mod_count>
+        <sys_name>Delitem Data Table</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sp_widget_4aa585aa2f956910758993acf699b6e3</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-03-13 21:00:10</sys_updated_on>
+        <template><![CDATA[<div class="panel panel-default">
+    <table class="table table-striped table-primary table-responsive">
+      <thead>
+        <tr>
+          <th class="itemData"
+              ng-repeat="field in data.field_labels track by $index">
+            {{field}}         	
+          </th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="delivery in c.data.list track by $index">
+          <td ng-repeat="field in data.fields_array">{{::delivery[field].display_value}}</td>
+          <td class="itemData">
+            <div class="btn-group"
+                 ng-click="c.confirmCollectionLocation(delivery)"
+                 ng-show="data.inline_button">			
+              <button class="btn btn-primary">
+                {{data.button_label}}
+              </button>
+            </div>
+          </td>
+          <td>
+          <div class="btn-group" data-toggle="buttons">	
+            <label class="btn btn-default btn-sm" 
+                   ng-click="c.selectDelivery(delivery.sys_id)"
+                   ng-class="{'active': !!delivery.selected}"
+                   ng-show="data.inline_checkbox">
+              <input type="checkbox" name="singleCheck">
+              <span class="glyphicon glyphicon-ok"></span>
+            </label>
+          </div>          
+        </td>
+        </tr>
+    </table>
+  </div>
+<div class="panel panel-default"
+     ng-show="c.data.showLocationUpdate">
+  <div class="panel-heading">
+    <h5>
+      Confirm the collection location for {{c.data.expectedItemRecipient}}'s delivery item:
+    </h5>
+  </div>  
+  <div class="panel-body">
+    <div class="alert alert-danger alert-dismissible"
+         ng-show="c.data.showError">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <i class="fa fa-exclamation-triangle"></i> Some fields are missing: {{c.data.missingFieldsError}}
+    </div>
+    <div class="form-group">
+      <span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory" ng-class="{'mandatory-filled': collectionLocation.displayValue != undefined}"></span>
+      <label for="formGroupExampleInput">Collection Location</label> 
+      <select class="form-control" ng-model="c.data.collectionLocation" ng-options="item for item in c.data.collectionLocationsArr"></select>
+    </div>
+    <button class="btn btn-default" ng-click="c.cancelForm()">
+      Cancel
+    </button>
+    <button class="btn btn-primary pull-right"
+            ng-click="c.saveItem('confirmLocation')">
+      Confirm Receipt
+    </button>
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>
