@@ -11,6 +11,34 @@
 	c.missingFieldsError = '';
 	c.data.showLocationUpdate = false;
 
+	c.selectedChange = function(e, data) {		
+console.log(c.data.list);
+		console.log(data);
+		var selectedItem = _.find(c.data.list, {'selected': true});
+
+		if(selectedItem) {
+			
+			c.data.selectedItem = data;			
+
+			if(selectedItem.sys_id == data.sys_id) {
+
+				return;
+
+			}	else {
+
+				_.find(c.data.list, {'sys_id': selectedItem.sys_id}).selected = false;
+				_.find(c.data.list, {'sys_id': data.sys_id}).selected = true;			
+				e.stopPropagation();
+				e.preventDefault();
+
+				return false;
+
+			}
+
+		}
+
+	}
+	
 	c.confirmCollectionLocation = function(delivery) {
 
 		c.data.showLocationUpdate = true;
@@ -114,7 +142,10 @@
   background: $brand-primary;
   color: #ffffff;
 }
-</css>
+
+.btn input{
+	display:none;
+}</css>
         <data_table>sp_instance</data_table>
         <demo_data/>
         <description/>
@@ -176,15 +207,16 @@
 		
 	}
 	
-	var gr = new GlideRecordSecure(data.table);
-	gr.addEncodedQuery(data.filter);
-	gr.query();
+	var queryGRS = new GlideRecordSecure(data.table);
+	queryGRS.addEncodedQuery(data.filter);
+	queryGRS.query();
 	data.list = [];
 
-	while (gr._next()) {
+	while (queryGRS._next()) {
 		var record = {};
 
-		$sp.getRecordElements(record, gr, data.fields);
+		$sp.getRecordElements(record, queryGRS, data.fields);
+		record.sys_id = queryGRS.getUniqueValue();
 		data.list.push(record);		
 	}
 
@@ -229,27 +261,60 @@
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-03-03 14:53:01</sys_created_on>
         <sys_id>4aa585aa2f956910758993acf699b6e3</sys_id>
-        <sys_mod_count>129</sys_mod_count>
+        <sys_mod_count>157</sys_mod_count>
         <sys_name>Delitem Data Table</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_4aa585aa2f956910758993acf699b6e3</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-03-23 20:45:48</sys_updated_on>
-        <template><![CDATA[<div class="panel panel-default">
-    <table class="table table-striped table-primary table-responsive">
+        <sys_updated_on>2023-03-24 21:45:38</sys_updated_on>
+        <template><![CDATA[<div class="alert alert-info"
+       ng-show="c.data.list.length == 0">
+        There are currently Deliveries awaiting collection
+      </div>
+<div class="panel panel-default"
+     ng-show="c.data.list.length > 0">
+  
+ <table class="table table-striped table-primary table-responsive">
       <thead>
         <tr>
           <th class="itemData"
               ng-repeat="field in data.field_labels track by $index">
             {{field}}         	
           </th>
-          <th></th>
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="delivery in c.data.list track by $index">
+        <tr ng-repeat="delivery in c.data.list">
+          <td ng-repeat="field in data.fields_array">{{::delivery[field].display_value}}</td>
+          <td class="itemData">
+            <div class="btn-group">			
+              <label class="btn btn-default btn-sm" 
+                     ng-click="c.selectedChange($event, delivery)"
+                     ng-class="{'active': !!delivery.selected}">
+                <input type="checkbox" name="singleCheck"
+                       ng-model="delivery.selected"
+                       >
+                <span class="glyphicon glyphicon-ok"></span>
+              </label>
+            </div>
+          </td>
+        </tr>
+    </table>
+  
+    <!--<table class="table table-striped table-primary table-responsive">
+      <thead>
+        <tr>
+          <th class="itemData"
+              ng-repeat="field in data.field_labels track by $index">
+            {{field}}         	
+          </th>
+          <th ng-show="data.inline_checkbox || data.inline_button">Select</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="delivery in c.data.list">
           <td ng-repeat="field in data.fields_array">{{::delivery[field].display_value}}</td>
           <td class="itemData">
             <div class="btn-group"
@@ -262,17 +327,20 @@
           </td>
           <td>
           <div class="btn-group" data-toggle="buttons">	
+            
             <label class="btn btn-default btn-sm" 
-                   ng-click="c.selectDelivery(delivery.sys_id)"
+                   ng-click="c.selectedChange($event, delivery)"
                    ng-class="{'active': !!delivery.selected}"
                    ng-show="data.inline_checkbox">
-              <input type="checkbox" name="singleCheck">
+              <input type="checkbox" name="singleCheck"
+                     ng-model="delivery.selected">
               <span class="glyphicon glyphicon-ok"></span>
             </label>
+            
           </div>          
         </td>
         </tr>
-    </table>
+    </table>-->
   </div>
 <div class="panel panel-default"
      ng-show="c.data.showLocationUpdate">
