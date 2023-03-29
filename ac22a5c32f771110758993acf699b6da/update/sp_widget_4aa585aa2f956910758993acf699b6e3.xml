@@ -7,21 +7,23 @@
 
 	console.log(c);
 
+	c.data.disabled = true;
+	c.data.selectedDeliveryArr = [];
+
 	c.data.missingFields = '';
 	c.missingFieldsError = '';
 	c.data.showLocationUpdate = false;
 
-	c.selectedChange = function(e, data) {		
-console.log(c.data.list);
-		console.log(data);
-		var selectedItem = _.find(c.data.list, {'selected': true});
+	c.selectedSingleChange = function(e, data) {
 
+		var selectedItem = _.find(c.data.list, {'selected': true});
+		console.log(selectedItem);
 		if(selectedItem) {
-			
+
 			c.data.selectedItem = data;			
 
 			if(selectedItem.sys_id == data.sys_id) {
-
+c.data.disabled = false;
 				return;
 
 			}	else {
@@ -35,10 +37,64 @@ console.log(c.data.list);
 
 			}
 
+		}		
+
+		if(selectedItem) {
+
+			
+
 		}
 
 	}
-	
+
+	c.selectedMultipleChange = function(sys_id) {
+
+		var selectedItemIndex = c.data.selectedDeliveryArr.indexOf(sys_id);
+
+		if(selectedItemIndex == -1) {
+
+			c.data.selectedDeliveryArr.push(sys_id);
+
+		} else {
+
+			c.data.selectedDeliveryArr.splice(selectedItemIndex, 1);
+
+		}
+
+		if(c.data.selectedDeliveryArr.length > 0) { 
+
+			c.data.disabled = false;
+
+		} else {
+
+			c.data.disabled = true;
+
+		}
+
+	}
+
+	c.collectDelivery = function() {
+		console.log(c.data.selectedItem);
+		/*				//console.log(c);	
+		c.server.get({
+
+			action: "retrieveDeliveryItems",
+			deliverySysId: c.data.selectedItem.sys_id,
+			deliveryItems: c.data.selectedItem.deliveryItems,
+			recipientFirstName: c.data.selectedItem.recipientFirstName
+
+		}).then(function(rsp) {
+//console.log(rsp);
+			c.data.deliverySummaryWidget = rsp.data.deliverySummaryWidget;
+
+			c.data.retrievedDeliveryItemArr = rsp.data.retrievedDeliveryItemArr;
+//console.log(c.data.retrievedDeliveryItemArr);
+		})	
+
+		c.data.deliverySelected = true;*/
+
+	}
+
 	c.confirmCollectionLocation = function(delivery) {
 
 		c.data.showLocationUpdate = true;
@@ -46,8 +102,8 @@ console.log(c.data.list);
 		c.data.expectedItemRecipient = delivery.recipient_first_name
 
 	}
-	
-		c.saveItem = function(saveAction) {
+
+	c.saveItem = function(saveAction) {
 
 		if((c.data.recipient.value == undefined || c.data.recipient.value == '') && saveAction != "confirmLocation") {
 
@@ -94,8 +150,8 @@ console.log(c.data.list);
 		}
 
 	}
-	
-		c.received = function() {
+
+	c.received = function() {
 		//..console.log(deliveryItemSysId);
 		c.server.get({
 
@@ -261,14 +317,14 @@ console.log(c.data.list);
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-03-03 14:53:01</sys_created_on>
         <sys_id>4aa585aa2f956910758993acf699b6e3</sys_id>
-        <sys_mod_count>157</sys_mod_count>
+        <sys_mod_count>212</sys_mod_count>
         <sys_name>Delitem Data Table</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_4aa585aa2f956910758993acf699b6e3</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-03-24 21:45:38</sys_updated_on>
+        <sys_updated_on>2023-03-29 21:54:50</sys_updated_on>
         <template><![CDATA[<div class="alert alert-info"
        ng-show="c.data.list.length == 0">
         There are currently Deliveries awaiting collection
@@ -289,10 +345,24 @@ console.log(c.data.list);
         <tr ng-repeat="delivery in c.data.list">
           <td ng-repeat="field in data.fields_array">{{::delivery[field].display_value}}</td>
           <td class="itemData">
-            <div class="btn-group">			
+            <div class="btn-group"
+                 ng-show="c.data.checkBoxSelectFunction == 'single'">			
               <label class="btn btn-default btn-sm" 
-                     ng-click="c.selectedChange($event, delivery)"
-                     ng-class="{'active': !!delivery.selected}">
+                     ng-click="c.selectedSingleChange($event, delivery)"
+                     ng-class="{'active': !!delivery.selected}"
+                     ng-show="data.inlineCheckbox">
+                <input type="checkbox" name="singleCheck"
+                       ng-model="delivery.selected"
+                       >
+                <span class="glyphicon glyphicon-ok"></span>
+              </label>
+            </div>
+            <div class="btn-group" data-toggle="buttons"
+                 ng-show="c.data.checkBoxSelectFunction == 'multiple'">			
+              <label class="btn btn-default btn-sm" 
+                     ng-click="c.selectedMultipleChange(delivery.sys_id)"
+                     ng-class="{'active': !!delivery.selected}"
+                     ng-show="data.inlineCheckbox">
                 <input type="checkbox" name="singleCheck"
                        ng-model="delivery.selected"
                        >
@@ -368,6 +438,29 @@ console.log(c.data.list);
       Confirm Receipt
     </button>
   </div>
-</div>]]></template>
+</div>
+<div ng-show="c.data.tableAction == 'collect_delivery'">
+    <button class="btn btn-primary btn-block collectDelivery"
+            ng-click="c.collectDelivery()"            
+            ng-disabled="c.data.disabled">
+      Collect Delivery <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+    </button>
+  </div>
+<div ng-show="c.data.tableAction == 'reminders'">
+       <button class=" btn btn-default collectBtns"
+          ng-click="c.cancel()">
+    Cancel
+  </button>
+      <button class="btn btn-primary collectBtns pull-right"
+          ng-show="c.data.list.length > 1"
+          ng-disabled="c.data.disabled"
+          ng-click="c.sendReminders('selected')">
+    Send Selected
+  </button> 
+  <button class=" btn btn-primary collectBtns pull-right"
+          ng-click="c.sendReminders('all')">
+    Send <span ng-show="c.data.list.length > 1">All</span>
+  </button>
+    </div>]]></template>
     </sp_widget>
 </record_update>

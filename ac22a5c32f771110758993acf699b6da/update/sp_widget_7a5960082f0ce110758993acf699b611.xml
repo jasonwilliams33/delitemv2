@@ -82,13 +82,25 @@
 			//c.data.modalWidget = "delivery_table_modal";
 			c.data.modalWidget = "delitem_data_table";
 			c.data.inlineCheckbox = true;
+			c.data.checkBoxSelectFunction = "single";
+			c.data.tableAction = "collect_delivery";
 
 		}
 		
 		else if(action == "send_reminders") {
 
+			c.data.deliveryModalFilter = c.data.reminderFilter;
+
+			c.data.deliveryModalTable = c.data.delieveryTable;
+			c.data.deliveryModalFields = "recipient,delivery_items_awaiting_collection";
+			//c.data.modalWidget = "delivery_table_modal";
+			c.data.modalWidget = "delitem_data_table";
+			c.data.inlineCheckbox = true;
+		//	c.data.checkBoxSelectFunction = "single";
 			c.data.deliveryModalTitle = 'Send Reminders';
-			c.data.modalWidget = "delitem_reminders";
+	//		c.data.modalWidget = "delitem_reminders";
+			c.data.checkBoxSelectFunction = "multiple";
+			c.data.tableAction = "reminders";
 
 		}
 
@@ -121,9 +133,11 @@
 			"fields": c.data.deliveryModalFields,
 			"window_size": 5,
 			"action": action,
-			"inline_button" : false,
-			"inline_checkbox" : c.data.inlineCheckbox,
-			"options" : ["table","filter","fields","window_size","action","inline_button","inline_checkbox"]
+			"inlineButton" : false,
+			"inlineCheckbox" : c.data.inlineCheckbox,
+			"options" : ["table","filter","fields","window_size","action","inlineButton","inlineCheckbox","checkBoxSelectFunction","tableAction"],
+			"checkBoxSelectFunction" : c.data.checkBoxSelectFunction,
+			"tableAction" : c.data.tableAction
 
 		}
 
@@ -271,7 +285,8 @@ textarea {
 			data.delieveryTable = DelItemConstants.DELIVERY_TABLE;
 			data.newDeliveryItem = DelItemConstants.NEW;
 			data.expectedDeliveryItem = DelItemConstants.EXPECTED;
-			data.selfService = gs.getProperty("x_187394_delitem.self.service");			
+			data.selfService = gs.getProperty("x_187394_delitem.self.service");
+			data.reminderFilter = "state!=" + DelItemConstants.COLLECTED;
 
 			data.todaysDeliveryCount = queryTodaysDeliveries();
 
@@ -300,14 +315,14 @@ textarea {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-12-23 15:06:04</sys_created_on>
         <sys_id>7a5960082f0ce110758993acf699b611</sys_id>
-        <sys_mod_count>26</sys_mod_count>
+        <sys_mod_count>33</sys_mod_count>
         <sys_name>Delitem</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_7a5960082f0ce110758993acf699b611</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-03-24 08:55:07</sys_updated_on>
+        <sys_updated_on>2023-03-29 21:26:00</sys_updated_on>
         <template><![CDATA[<div class="panel panel-primary">
   <div class="panel-heading">
     Delitem

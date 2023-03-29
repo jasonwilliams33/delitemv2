@@ -56,7 +56,7 @@
 	}
 	
 	c.selectedChange = function(e, data) {		
-console.log(c.data.deliveriesArr);
+alert("fired");
 		var selectedItem = _.find(c.data.deliveriesArr, {'selected': true});
 
 		if(selectedItem) {
@@ -83,7 +83,7 @@ console.log(c.data.deliveriesArr);
 			}
 
 		}
-
+console.log(c.data.selectedItem);
 	}
 	
 };]]></client_script>
@@ -265,14 +265,14 @@ console.log(c.data.deliveriesArr);
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-01-14 10:42:15</sys_created_on>
         <sys_id>b8ffbccf2fdc2d10758993acf699b61d</sys_id>
-        <sys_mod_count>12</sys_mod_count>
+        <sys_mod_count>15</sys_mod_count>
         <sys_name>Delivery Table Modal</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_b8ffbccf2fdc2d10758993acf699b61d</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-03-24 18:39:19</sys_updated_on>
+        <sys_updated_on>2023-03-29 09:19:56</sys_updated_on>
         <template><![CDATA[<div ng-show="!c.data.deliverySelected">
   <div ng-show="c.data.displayDataTable">
     <widget id="widget-data-table" options='data.tableOptions'></widget>    
