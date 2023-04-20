@@ -59,8 +59,8 @@
 			c.data.deliveryModalTable = c.data.delieveryItemTable;
 			//c.data.deliveryModalFields = ["date_received","recipient","sender","collection_location","notes","state"];
 			c.data.deliveryModalFields = "date_received,recipient,sender,collection_location,notes,state";
-			//c.data.modalWidget = "delivery_table_modal";
-			c.data.modalWidget = "delitem_data_table";		
+			c.data.modalWidget = "delivery_table_modal";
+			//c.data.modalWidget = "delitem_data_table";		
 			c.data.inlineCheckbox = false;
 
 		} else if(action == "outstanding") {
@@ -69,8 +69,8 @@
 			c.data.deliveryModalTitle = 'Outstanding Delivery Items';
 			c.data.deliveryModalTable = c.data.delieveryItemTable;
 			c.data.deliveryModalFields = "date_received,recipient,sender,collection_location,notes,state";
-			//c.data.modalWidget = "delivery_table_modal";
-			c.data.modalWidget = "delitem_data_table";
+			c.data.modalWidget = "delivery_table_modal";
+			//c.data.modalWidget = "delitem_data_table";
 			c.data.inlineCheckbox = false;
 
 		} else if(action == "collect_delivery") {
@@ -79,8 +79,8 @@
 			c.data.deliveryModalTitle = 'Outstanding Deliveries';
 			c.data.deliveryModalTable = c.data.delieveryTable;
 			c.data.deliveryModalFields = "recipient,delivery_items,sys_created_on";
-			//c.data.modalWidget = "delivery_table_modal";
-			c.data.modalWidget = "delitem_data_table";
+			c.data.modalWidget = "delivery_table_modal";
+			//c.data.modalWidget = "delitem_data_table";
 			c.data.inlineCheckbox = true;
 			c.data.checkBoxSelectFunction = "single";
 			c.data.tableAction = "collect_delivery";
@@ -94,11 +94,11 @@
 			c.data.deliveryModalTable = c.data.delieveryTable;
 			c.data.deliveryModalFields = "recipient,delivery_items_awaiting_collection";
 			//c.data.modalWidget = "delivery_table_modal";
-			c.data.modalWidget = "delitem_data_table";
+			//c.data.modalWidget = "delitem_data_table";
 			c.data.inlineCheckbox = true;
 		//	c.data.checkBoxSelectFunction = "single";
 			c.data.deliveryModalTitle = 'Send Reminders';
-	//		c.data.modalWidget = "delitem_reminders";
+			c.data.modalWidget = "delitem_reminders";
 			c.data.checkBoxSelectFunction = "multiple";
 			c.data.tableAction = "reminders";
 
@@ -315,14 +315,14 @@ textarea {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-12-23 15:06:04</sys_created_on>
         <sys_id>7a5960082f0ce110758993acf699b611</sys_id>
-        <sys_mod_count>33</sys_mod_count>
+        <sys_mod_count>35</sys_mod_count>
         <sys_name>Delitem</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_7a5960082f0ce110758993acf699b611</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-03-29 21:26:00</sys_updated_on>
+        <sys_updated_on>2023-04-13 14:56:24</sys_updated_on>
         <template><![CDATA[<div class="panel panel-primary">
   <div class="panel-heading">
     Delitem

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_ng_template">
+    <sp_ng_template action="INSERT_OR_UPDATE">
+        <id>delitem-custom-data-table.html</id>
+        <sp_widget display_value="Delivery Table Modal">b8ffbccf2fdc2d10758993acf699b61d</sp_widget>
+        <sys_class_name>sp_ng_template</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-04-14 13:25:54</sys_created_on>
+        <sys_id>5d144d48975a21108c1bf911f053afc3</sys_id>
+        <sys_mod_count>8</sys_mod_count>
+        <sys_name>delitem-custom-data-table.html</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sp_ng_template_5d144d48975a21108c1bf911f053afc3</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-04-18 19:26:14</sys_updated_on>
+        <template><![CDATA[<table class="table table-striped table-primary table-responsive">
+      <thead>
+        <tr>
+          <th class="itemData"
+              ng-repeat="field in data.field_labels track by $index">
+            {{field}}         	
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="delivery in c.data.list">
+          <td ng-repeat="field in data.fields_array">{{::delivery[field].display_value}}</td>
+          <td class="itemData">
+            <div class="btn-group"
+                 ng-show="c.data.checkBoxSelectFunction == 'single'">			
+              <label class="btn btn-default btn-sm" 
+                     ng-click="c.selectedSingleChange($event, delivery)"
+                     ng-class="{'active': !!delivery.selected}"
+                     ng-show="data.inlineCheckbox">
+                <input type="checkbox" name="singleCheck"
+                       ng-model="delivery.selected"
+                       >
+                <span class="glyphicon glyphicon-ok"></span>
+              </label>
+            </div>
+            <div class="btn-group" data-toggle="buttons"
+                 ng-show="c.data.checkBoxSelectFunction == 'multiple'">			
+              <label class="btn btn-default btn-sm" 
+                     ng-click="c.selectedMultipleChange(delivery.sys_id)"
+                     ng-class="{'active': !!delivery.selected}"
+                     ng-show="data.inlineCheckbox">
+                <input type="checkbox" name="singleCheck"
+                       ng-model="delivery.selected"
+                       >
+                <span class="glyphicon glyphicon-ok"></span>
+              </label>
+            </div>
+          </td>
+        </tr>
+    </table>
+<!--<table class="table table-striped table-primary table-responsive">
+      <thead>
+        <tr>
+          <th class="itemData">Recipient</th> 
+          <th class="itemData">Delivery Items</th>
+          <th class="itemData">Created</th>
+          <th class="itemData">Select</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="delivery in c.data.deliveriesArr">
+          <td class="itemData">{{delivery.recipient}}</td>
+          <td class="itemData">{{delivery.deliveryItems}}</td>
+          <td class="itemData">{{delivery.created}}</td>
+          <td class="itemData">
+            <div class="btn-group">			
+              <label class="btn btn-default btn-sm" 
+                     ng-click="c.selectedChange($event, delivery)"
+                     ng-class="{'active': !!delivery.selected}">
+                <input type="checkbox" name="singleCheck"
+                       ng-model="delivery.selected"
+                       >
+                <span class="glyphicon glyphicon-ok"></span>
+              </label>
+            </div>
+          </td>
+        </tr>
+    </table>-->]]></template>
+    </sp_ng_template>
+</record_update>

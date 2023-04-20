@@ -56,7 +56,7 @@
 	}
 	
 	c.selectedChange = function(e, data) {		
-alert("fired");
+
 		var selectedItem = _.find(c.data.deliveriesArr, {'selected': true});
 
 		if(selectedItem) {
@@ -242,37 +242,22 @@ console.log(c.data.selectedItem);
 
 		data.deliverySummaryWidget = $sp.getWidget("delitem_delivery_summary", data.deliverySummaryOptions);
 
-		/*	var deliveryItemGR = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
-		deliveryItemGR.addEncodedQuery("delivery=" + input.deliverySysId);
-		deliveryItemGR.query();
-		while(deliveryItemGR.next()) {
-
-			data.retrievedDeliveryItemObj = {};
-			data.retrievedDeliveryItemObj.date_received = deliveryItemGR.date_received.toString();
-			data.retrievedDeliveryItemObj.sender = deliveryItemGR.sender.toString();
-			data.retrievedDeliveryItemObj.notes = deliveryItemGR.notes.toString();
-			data.retrievedDeliveryItemObj.collection_location = deliveryItemGR.collection_location.toString();
-			data.retrievedDeliveryItemObj.sys_id = deliveryItemGR.getUniqueValue();
-			data.retrievedDeliveryItemArr.push(data.retrievedDeliveryItemObj);
-
-		}*/					
-
 	}
-
+	
 })();]]></script>
         <servicenow>false</servicenow>
         <sys_class_name>sp_widget</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-01-14 10:42:15</sys_created_on>
         <sys_id>b8ffbccf2fdc2d10758993acf699b61d</sys_id>
-        <sys_mod_count>15</sys_mod_count>
+        <sys_mod_count>30</sys_mod_count>
         <sys_name>Delivery Table Modal</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_b8ffbccf2fdc2d10758993acf699b61d</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-03-29 09:19:56</sys_updated_on>
+        <sys_updated_on>2023-04-20 10:17:44</sys_updated_on>
         <template><![CDATA[<div ng-show="!c.data.deliverySelected">
   <div ng-show="c.data.displayDataTable">
     <widget id="widget-data-table" options='data.tableOptions'></widget>    
@@ -283,6 +268,7 @@ console.log(c.data.selectedItem);
       </div>
   <div class="panel panel-default"
        ng-show="!c.data.displayDataTable && c.data.deliveriesArr.length > 0">
+    <!--<div ng-include="'delitem-custom-data-table.html'"></div>-->
     <table class="table table-striped table-primary table-responsive">
       <thead>
         <tr>
@@ -310,7 +296,7 @@ console.log(c.data.selectedItem);
             </div>
           </td>
         </tr>
-    </table>  
+    </table>
   </div>
   <div>
     <button class="btn btn-primary btn-block collectDelivery"
