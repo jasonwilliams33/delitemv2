@@ -4,7 +4,7 @@
         <client_script><![CDATA[api.controller=function($scope,$uibModal,spUtil,delitemModalPubSub) {
 	/* widget controller */
 	var c = this;
-
+//console.log(c.data);
 	c.data.collectDeliveryDisabled = true;
 
 	if(c.data.outstandingDeliveryCount > 0) {
@@ -38,6 +38,7 @@
 		}).then(function(rsp) {
 
 			c.data.todaysDeliveryCount = rsp.data.todaysDeliveryCount;
+			c.data.expectedDeliveryCount = rsp.data.expectedDeliveryCount;
 			c.data.outstandingDeliveryCount = rsp.data.outstandingDeliveryCount;
 
 			if(c.data.outstandingDeliveryCount > 0) {
@@ -61,6 +62,16 @@
 			c.data.deliveryModalFields = "date_received,recipient,sender,collection_location,notes,state";
 			c.data.modalWidget = "delivery_table_modal";
 			//c.data.modalWidget = "delitem_data_table";		
+			c.data.inlineCheckbox = false;
+
+		} else if(action == "expected") {
+
+			c.data.deliveryModalFilter = c.data.expectedDeliveryItemsFilter;
+			c.data.deliveryModalTitle = 'Expected Delivery Items';
+			c.data.deliveryModalTable = c.data.delieveryItemTable;
+			c.data.deliveryModalFields = "recipient,sender,notes,state";
+			c.data.modalWidget = "delivery_table_modal";
+			//c.data.modalWidget = "delitem_data_table";
 			c.data.inlineCheckbox = false;
 
 		} else if(action == "outstanding") {
@@ -93,12 +104,12 @@
 
 			c.data.deliveryModalTable = c.data.delieveryTable;
 			c.data.deliveryModalFields = "recipient,delivery_items_awaiting_collection";
-			//c.data.modalWidget = "delivery_table_modal";
+			c.data.modalWidget = "delivery_table_modal";
 			//c.data.modalWidget = "delitem_data_table";
 			c.data.inlineCheckbox = true;
 		//	c.data.checkBoxSelectFunction = "single";
 			c.data.deliveryModalTitle = 'Send Reminders';
-			c.data.modalWidget = "delitem_reminders";
+			//c.data.modalWidget = "delitem_reminders";
 			c.data.checkBoxSelectFunction = "multiple";
 			c.data.tableAction = "reminders";
 
@@ -146,7 +157,7 @@
 	}
 
 	c.openModal = function(widget,title,modalObj) {
-console.log(modalObj);
+//console.log(modalObj);
 		/***
 	 	* Open Modal using supplied parameters
 	 	***/
@@ -185,7 +196,7 @@ console.log(modalObj);
 .cardCount {
   padding: 10px;
   border-radius: 10px;
-  width: 32%;
+  width: 30%;
   margin-bottom: 2%;
   margin: 5px;
   flex: 0 1 auto;
@@ -235,13 +246,21 @@ textarea {
 
 	queryOutstandingDeliveries = function() {
 
-		var outstandingDeliveries = new GlideAggregate(data.delieveryItemTable);
-		outstandingDeliveries.addEncodedQuery(data.outstandingDeliveryItemsFilter);
-		outstandingDeliveries.addAggregate('COUNT');
-		outstandingDeliveries.query();
-		while(outstandingDeliveries.next()) {
+		try {
 
-			return parseInt(outstandingDeliveries.getAggregate('COUNT'));
+			var outstandingDeliveries = new GlideAggregate(data.delieveryItemTable);
+			outstandingDeliveries.addEncodedQuery(data.outstandingDeliveryItemsFilter);
+			outstandingDeliveries.addAggregate('COUNT');
+			outstandingDeliveries.query();
+			while(outstandingDeliveries.next()) {
+
+				return parseInt(outstandingDeliveries.getAggregate('COUNT'));
+
+			}
+
+		} catch(err) {
+
+			gs.error('['+gs.getCurrentScopeName()+']' + ': Delitem Widget: queryOutstandingDeliveries - Caught error: \n'+err);
 
 		}
 
@@ -249,28 +268,66 @@ textarea {
 
 	queryTodaysDeliveries = function() {
 
-		var todaysDeliveries = new GlideAggregate(data.delieveryItemTable);
-		todaysDeliveries.addEncodedQuery(data.todaysDeliveriesFilter);
-		todaysDeliveries.addAggregate('COUNT');
-		todaysDeliveries.query();
-		while(todaysDeliveries.next()) {
+		try {
 
-			return todaysDeliveries.getAggregate('COUNT');
+			var todaysDeliveries = new GlideAggregate(data.delieveryItemTable);
+			todaysDeliveries.addEncodedQuery("date_receivedONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()^state!=" + DelItemConstants.EXPECTED);
+			todaysDeliveries.addAggregate('COUNT');
+			todaysDeliveries.query();
+			while(todaysDeliveries.next()) {
+
+				return todaysDeliveries.getAggregate('COUNT');			
+
+			}
+
+		} catch(err) {
+
+			gs.error('['+gs.getCurrentScopeName()+']' + ': Delitem Widget: queryTodaysDeliveries - Caught error: \n'+err);
 
 		}
 
 	}
 
-//	if(!input) {
+	queryExpectedDeliveries = function() {
+
+		try {
+
+			var expectedDeliveries = new GlideAggregate(data.delieveryItemTable);
+			expectedDeliveries.addEncodedQuery("state=" + DelItemConstants.EXPECTED);
+			expectedDeliveries.addAggregate('COUNT');
+			expectedDeliveries.query();
+			while(expectedDeliveries.next()) {
+
+				return expectedDeliveries.getAggregate('COUNT');
+
+			}
+
+		} catch(err) {
+
+			gs.error('['+gs.getCurrentScopeName()+']' + ': Delitem Widget: queryExpectedDeliveries - Caught error: \n'+err);
+
+		}
+	}
+
+	//if(!input) {
 
 		retrieveMessages = function() {
 
-			/*Message Retrieval*/
-			data.deliveryItemsReceivedToday = gs.getMessage("DI Delivery Items received today");
-			data.deliveryItemsAwaitingCollection = gs.getMessage("DI Delivery Items awaiting collection");
-			data.newDelivery = gs.getMessage("New Delivery");
-			data.collectDelivery = gs.getMessage("DI Collect Delivery");
-			data.sendReminders = gs.getMessage("DI Send Reminders");
+			try {
+
+				/*Message Retrieval*/
+				data.deliveryItemsReceivedToday = gs.getMessage("DI Delivery Items received today");
+				data.deliveryItemsExpectedToday = gs.getMessage("DI Delivery Items expected");
+				data.deliveryItemsAwaitingCollection = gs.getMessage("DI Delivery Items awaiting collection");
+				data.newDelivery = gs.getMessage("New Delivery");
+				data.collectDelivery = gs.getMessage("DI Collect Delivery");
+				data.sendReminders = gs.getMessage("DI Send Reminders");
+
+			} catch(err) {
+
+				gs.error('['+gs.getCurrentScopeName()+']' + ': Delitem Widget: retrieveMessages - Caught error: \n'+err);
+
+			}
 
 		}
 
@@ -278,8 +335,9 @@ textarea {
 
 		try {
 
-			data.todaysDeliveriesFilter = "date_receivedONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()";
+			data.todaysDeliveriesFilter = "date_receivedONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()^state!=" + DelItemConstants.EXPECTED;
 			data.outstandingDeliveryItemsFilter = "state!=" + DelItemConstants.COLLECTED;
+			data.expectedDeliveryItemsFilter = "state=" + DelItemConstants.EXPECTED;
 			data.outstandingDeliveryFilter = "state!=" + DelItemConstants.COLLECTED;
 			data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
 			data.delieveryTable = DelItemConstants.DELIVERY_TABLE;
@@ -289,23 +347,30 @@ textarea {
 			data.reminderFilter = "state!=" + DelItemConstants.COLLECTED;
 
 			data.todaysDeliveryCount = queryTodaysDeliveries();
-
+			data.expectedDeliveryCount = queryExpectedDeliveries();
 			data.outstandingDeliveryCount = queryOutstandingDeliveries();
 
 		} catch(err) {
 
-			gs.error('['+gs.getCurrentScopeName()+']' + ': Delitem Widget - Caught error: \n'+err);
+			gs.error('['+gs.getCurrentScopeName()+']' + ': Delitem Widget: onLoad Script - Caught error: \n'+err);
 
 		}
-
-
-
+		
 	//}
 
 	if(input && input.action == "refreshDeliveryCounts") {
 
-		data.todaysDeliveryCount = queryTodaysDeliveries();
-		data.outstandingDeliveryCount = queryOutstandingDeliveries();
+		try {
+
+			data.todaysDeliveryCount = queryTodaysDeliveries();
+			data.expectedDeliveryCount = queryExpectedDeliveries();
+			data.outstandingDeliveryCount = queryOutstandingDeliveries();
+
+		} catch (err) {
+
+			gs.error('['+gs.getCurrentScopeName()+']' + ': Delitem Widget: refreshDeliveryCounts - Caught error: \n'+err);
+
+		}
 
 	}
 
@@ -315,14 +380,14 @@ textarea {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-12-23 15:06:04</sys_created_on>
         <sys_id>7a5960082f0ce110758993acf699b611</sys_id>
-        <sys_mod_count>35</sys_mod_count>
+        <sys_mod_count>80</sys_mod_count>
         <sys_name>Delitem</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_7a5960082f0ce110758993acf699b611</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-04-13 14:56:24</sys_updated_on>
+        <sys_updated_on>2023-06-23 15:56:18</sys_updated_on>
         <template><![CDATA[<div class="panel panel-primary">
   <div class="panel-heading">
     Delitem
@@ -337,6 +402,17 @@ textarea {
         <div>
           <h4 class="content">
             {{data.todaysDeliveryCount}}
+          </h4>
+        </div>       
+      </div>
+       <div class="cardCount"
+           ng-click="c.openDeliveryModal('expected')">
+       <h5 class="docTitle">
+          {{data.deliveryItemsExpectedToday}}
+        </h5>
+        <div>
+          <h4 class="content">
+            {{data.expectedDeliveryCount}}
           </h4>
         </div>       
       </div>

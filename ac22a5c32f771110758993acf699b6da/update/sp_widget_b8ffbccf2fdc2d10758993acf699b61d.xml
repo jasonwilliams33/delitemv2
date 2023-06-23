@@ -4,7 +4,7 @@
         <client_script><![CDATA[api.controller=function() {
   /* widget controller */
   var c = this;
-			
+			console.log(c);
 	c.data.deliverySelected = false;
 	c.data.delveryItemsSelected = false;
 	c.data.selectedDeliveryItemArr = [];
@@ -210,7 +210,7 @@ console.log(c.data.selectedItem);
 	///data.newDeliveryFilter = "date_receivedONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()";
 	//data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
 
-	if(data.options.action == "todays" || data.options.action == "outstanding") {
+	if(data.options.action == "todays" || data.options.action == "outstanding" || data.options.action == "expected") {
 
 		data.displayDataTable = true;
 
@@ -224,11 +224,13 @@ console.log(c.data.selectedItem);
 
 		"table": data.options.table,
 		"filter": data.options.filter,
-		"fields": "date_received,recipient,sender,collection_location,notes,state",
+		"fields": data.options.fields,//"date_received,recipient,sender,collection_location,notes,state",
 		"window_size": data.options.window_size,
 		"hide_header": true
 
 	};
+	
+	data.customTableOptions = data.options;
 
 	if(input && input.action == "retrieveDeliveryItems") {
 
@@ -250,17 +252,18 @@ console.log(c.data.selectedItem);
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-01-14 10:42:15</sys_created_on>
         <sys_id>b8ffbccf2fdc2d10758993acf699b61d</sys_id>
-        <sys_mod_count>30</sys_mod_count>
+        <sys_mod_count>48</sys_mod_count>
         <sys_name>Delivery Table Modal</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_b8ffbccf2fdc2d10758993acf699b61d</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-04-20 10:17:44</sys_updated_on>
+        <sys_updated_on>2023-06-23 16:18:40</sys_updated_on>
         <template><![CDATA[<div ng-show="!c.data.deliverySelected">
   <div ng-show="c.data.displayDataTable">
-    <widget id="widget-data-table" options='data.tableOptions'></widget>    
+    <widget id="widget-data-table" options='data.tableOptions'></widget>
+    <div ng-include="'delitem-custom-data-table.html'"></div>
   </div>
   <div class="alert alert-info"
        ng-show="!c.data.displayDataTable && c.data.deliveriesArr.length == 0">
@@ -269,7 +272,7 @@ console.log(c.data.selectedItem);
   <div class="panel panel-default"
        ng-show="!c.data.displayDataTable && c.data.deliveriesArr.length > 0">
     <!--<div ng-include="'delitem-custom-data-table.html'"></div>-->
-    <table class="table table-striped table-primary table-responsive">
+    <!--<table class="table table-striped table-primary table-responsive">
       <thead>
         <tr>
           <th class="itemData">Recipient</th> 
@@ -296,18 +299,38 @@ console.log(c.data.selectedItem);
             </div>
           </td>
         </tr>
-    </table>
+    </table>-->
+    <widget id="delitem_data_table" options='data.customTableOptions'></widget>
   </div>
   <div>
     <button class="btn btn-primary btn-block collectDelivery"
             ng-click="c.collectDelivery()"
-            ng-show="!c.data.displayDataTable">
+            ng-show="!c.data.displayDataTable && c.data.options.action == 'collect_delivery'">
       Collect Delivery <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
     </button>
   </div>
+  <div ng-show="c.data.options.action == 'send_reminders'">
+       <button class=" btn btn-default collectBtns"
+          ng-click="c.cancel()">
+    Cancel
+  </button>
+      <button class="btn btn-primary collectBtns pull-right"
+          ng-show="c.data.outstandingDeliveryArr.length > 1"
+          ng-disabled="c.data.disabled"
+          ng-click="c.sendReminders('selected')">
+    Send Selected
+  </button> 
+  <button class=" btn btn-primary collectBtns pull-right"
+          ng-click="c.sendReminders('all')">
+    Send <span ng-show="c.data.outstandingDeliveryArr.length > 1">All</span>
+  </button>
+    </div>
 </div>
+
+
 <div ng-show="c.data.deliverySelected && !c.data.delveryItemsSelected">
   <sp-widget widget="c.data.deliverySummaryWidget"></sp-widget>
-</div>]]></template>
+</div>
+]]></template>
     </sp_widget>
 </record_update>

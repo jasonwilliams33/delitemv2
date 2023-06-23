@@ -6,8 +6,6 @@
 
 	var c = this;
 
-	console.log(c.data.newDeliveryFieldsArr);
-
 	c.data.singleItem = false;
 	c.data.multipleItems = true;
 	c.data.showItemForm = false;
@@ -132,7 +130,7 @@
 
 	}
 
-	c.sendNotifications = function(){
+	c.sendNotifications = function() {
 
 		//generateQR("First QR Code Test");
 
@@ -322,7 +320,7 @@
 	}
 
 	c.received = function() {
-		//..console.log(deliveryItemSysId);
+		console.log(c.data.deliveryItemSysId);
 		c.server.get({
 
 			action: "itemReceived",
@@ -599,14 +597,15 @@ textarea {
 
 	queryNewDeliveries = function() {
 
-		data.newDeliveryFilter = "stateIN" + DelItemConstants.NEW + "," + DelItemConstants.EXPECTED;
+		data.newExpectedDeliveryFilter = "stateIN" + DelItemConstants.NEW + "," + DelItemConstants.EXPECTED;
+		data.newDeliveryFilter = "stateIN" + DelItemConstants.NEW;
 		
 		var newDeliveryGRSObj = {};
 		data.newDeliveryGRSArr = [];
 		data.newDeliveryFieldsArr = [];
 		
 		var newDeliveryGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
-		newDeliveryGRS.addEncodedQuery(data.newDeliveryFilter);
+		newDeliveryGRS.addEncodedQuery(data.newExpectedDeliveryFilter);
 		newDeliveryGRS.query();
 		while(newDeliveryGRS.next()) {
 			
@@ -614,9 +613,9 @@ textarea {
 			newDeliveryGRSObj.date_received = { "fieldName" : "Date Received" , "value" : newDeliveryGRS.date_received.toString() , "display" : true };
 			newDeliveryGRSObj.recipient = { "fieldName" : "Recipient" , "value" : newDeliveryGRS.recipient.getDisplayValue() , "display" : true };
 			newDeliveryGRSObj.recipient_first_name = newDeliveryGRS.recipient.first_name.toString();
-			newDeliveryGRSObj.sender = { "fieldName" : "Sender" , "value" : newDeliveryGRS.sender.toString() , "display" : true };
-			newDeliveryGRSObj.collection_location = { "fieldName" : "Collection Location" , "value" : newDeliveryGRS.collection_location.toString() , "display" : true };
-			newDeliveryGRSObj.notes = { "fieldName" : "Notes" , "value" : newDeliveryGRS.notes.toString() , "display" : true };
+			newDeliveryGRSObj.sender = { "fieldName" : "Sender" , "value" : newDeliveryGRS.sender.toString() || "N/A", "display" : true };
+			newDeliveryGRSObj.collection_location = { "fieldName" : "Collection Location" , "value" : newDeliveryGRS.collection_location.toString() || "N/A", "display" : true };
+			newDeliveryGRSObj.notes = { "fieldName" : "Notes" , "value" : newDeliveryGRS.notes.toString() || "N/A" , "display" : true };
 			newDeliveryGRSObj.state = { "fieldName" : "State" , "value" : newDeliveryGRS.state.getDisplayValue() , "display" : true };
 			newDeliveryGRSObj.sys_id = newDeliveryGRS.getUniqueValue();
 			data.newDeliveryGRSArr.push(newDeliveryGRSObj);			
@@ -645,7 +644,7 @@ textarea {
 	data.collectionLocations = gs.getProperty("x_187394_delitem.collection.locations");
 	data.collectionLocationsArr = data.collectionLocations.split(",");
 	
-	data.tableOptions = {
+	/*data.tableOptions = {
 
 		"table": "x_187394_delitem_delivery_item",
 		"useInstanceTitle":false,
@@ -653,7 +652,7 @@ textarea {
 		"fields": "date_received,recipient,sender,collection_location,notes,state",
 		"window_size": 5
 
-	};
+	};*/
 
 	var newDeliveries = new GlideAggregate(data.delieveryItemTable);
 	newDeliveries.addEncodedQuery(data.newDeliveryFilter);
@@ -695,7 +694,7 @@ textarea {
 	}
 	
 	if(input && input.action == "itemReceived") {
-		global.JSUtil.logObject(input,"JW Debug: ");
+		
 		var updateExpectedDelivery = new x_187394_delitem.DelitemUtils().updateExpectedDelivery(input);
 		
 	}
@@ -713,14 +712,14 @@ textarea {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-12-23 16:32:41</sys_created_on>
         <sys_id>e32d3c882f4ce110758993acf699b695</sys_id>
-        <sys_mod_count>91</sys_mod_count>
+        <sys_mod_count>96</sys_mod_count>
         <sys_name>New Delivery</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_e32d3c882f4ce110758993acf699b695</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-03-12 16:46:07</sys_updated_on>
+        <sys_updated_on>2023-06-22 09:55:20</sys_updated_on>
         <template><![CDATA[<div class="containerQRCode">
   <div class="qrcode" id="qrcode">
     <canvas id="canvas" width="200" height="200"></canvas>

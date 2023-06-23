@@ -5,7 +5,16 @@
 	/* widget controller */
 	var c = this;
 
-	console.log(c);
+	//console.log(c);
+	
+	$scope.currentPage = 0;
+	$scope.rowsPerPage = 5;
+	
+	$scope.numberOfPages = function() {
+		
+		return Math.ceil($scope.c.data.list.length/$scope.rowsPerPage);
+		
+	};
 
 	c.data.disabled = true;
 	c.data.selectedDeliveryArr = [];
@@ -15,9 +24,9 @@
 	c.data.showLocationUpdate = false;
 
 	c.selectedSingleChange = function(e, data) {
-
+//console.log(data);
 		var selectedItem = _.find(c.data.list, {'selected': true});
-		console.log(selectedItem);
+		
 		if(selectedItem) {
 
 			c.data.selectedItem = data;			
@@ -42,7 +51,6 @@
 		if(selectedItem) {
 
 
-
 		}
 
 	}
@@ -50,7 +58,7 @@
 	c.selectedMultipleChange = function(sys_id) {
 
 		var selectedItemIndex = c.data.selectedDeliveryArr.indexOf(sys_id);
-
+//console.log(sys_id);
 		if(selectedItemIndex == -1) {
 
 			c.data.selectedDeliveryArr.push(sys_id);
@@ -70,11 +78,11 @@
 			c.data.disabled = true;
 
 		}
-
+//console.log(c.data.selectedDeliveryArr);
 	}
 
 	c.collectDelivery = function() {
-		console.log(c.data.selectedItem);
+		//console.log(c.data.selectedItem);
 		/*				//console.log(c);	
 		c.server.get({
 
@@ -99,14 +107,14 @@
 		
 		try {
 			
-alert(action);
+
 		if(action == "all") {
 
 			c.data.selectedDeliveryArr = c.data.outstandingDeliveryArr;
 
 		}
 
-		console.log(c.data.selectedDeliveryArr);
+		//console.log(c.data.selectedDeliveryArr);
 
 		c.server.get({
 
@@ -125,7 +133,7 @@ alert(action);
 
 		})
 		} catch (err) {
-			console.log(err);
+			//console.log(err);
 		}
 	}
 
@@ -235,7 +243,101 @@ alert(action);
 
 .btn input{
 	display:none;
-}</css>
+}
+
+//////////////
+
+.panel-heading {
+  padding-left: 8px;
+}
+
+thead {
+  border-bottom: 1px solid #ddd;
+}
+
+table {
+  margin-bottom: 0;
+}
+
+.table &gt; thead &gt; tr &gt; th {
+  
+  border: 1px solid #ddd;
+  cursor: pointer;
+  vertical-align: middle;
+
+  &amp;:nth-child(2) {
+    border-left: none;
+  }
+
+
+
+  &amp;:last-child {
+    border-right: none;
+  }
+}
+
+th i {
+  display: inline-block;
+  margin-left: 5px;
+  color: #A0A0A0;
+}
+
+div.data-table-high-contrast th i {
+ color: $gray; 
+}
+
+th .disabled{
+  color:#ddd;
+}
+
+.th-title {
+  display: inline-block;
+  color: $primary;
+}
+
+.panel-body {
+  overflow: auto;
+  padding: 0px;
+}
+
+/*
+.selected {
+  color: #fff;
+  background-color: $data-table-selected;
+  border-color: 1px solid #fff;
+}*/
+
+tbody tr:last-child {
+  border-bottom: none;
+}
+
+.pruned-msg {
+  padding-bottom: 10px;
+  padding-left: 4px;
+  text-align: center;
+}
+
+.pruned-msg-filter-pad {
+  padding-top:8px;
+}
+
+.filter-breadcrumbs {
+  padding-top: 3px;
+}
+
+.filter-breadcrumbs ~ .table {
+  border-top: 1px solid #ddd;
+}
+
+.dropdown-toggle {
+  background: none;
+  padding: 0 0 4px 0;
+}
+
+.sp-list-cell {
+  white-space: pre-wrap;
+}
+</css>
         <data_table>sp_instance</data_table>
         <demo_data/>
         <description/>
@@ -253,18 +355,53 @@ alert(action);
 	/* populate the 'data' object */
 	/* e.g., data.table = $sp.getValue('table'); */
 
-	data.fields_array = input.fields.split(',');
-	data.field_labels = [];
-
-	optCopy(input.options);
-
+	/*TESTING*/
+	//console.log(input);
+//	data.fields = "date_received,recipient,sender,collection_location,notes,state";
+	//data.fields_array = ["date_received","recipient","sender","collection_location","notes","state"];//input.fields.split(',');
+	//data.fields_array = options.fields.split(',');
+	//data.field_labels = [];
+	
+	//data.table = DelItemConstants.DELIVERY_ITEM_TABLE;
+	//data.filter = "state!=" + DelItemConstants.COLLECTED;
+	//data.filter = "date_receivedONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()^state!=" + DelItemConstants.EXPECTED;
+//	data.options = ["table","filter","fields","window_size","action","inlineButton","inlineCheckbox","checkBoxSelectFunction","tableAction"];
+	
+		//data.page_index = 5;//data.p - 1;
+	
+/*	var windowSize = data.window_size || $sp.getValue('maximum_entries') || 20;
+	windowSize = parseInt(windowSize);
+	if (isNaN(windowSize) || windowSize < 1)
+		windowSize = 20;
+	data.window_size = windowSize;
+		data.window_start = data.page_index * data.window_size;
+	data.window_end = (data.page_index + 1) * data.window_size;*/
+	
+//	data.checkBoxSelectFunction = 'multiple';
+	//data.inlineCheckbox = false;
+	//data.inlineButton = true;
+	
+	/*TESTING*/
+	
 	function optCopy(names) {
 		names.forEach(function(name) {
-			data[name] = input[name];	
+			data[name] = data[name];	
 		})
 	}
+	
+	try {
+		
+		data.field_labels = [];
+	data.inputOptions = options;
+	data.fields_array = options.fields.split(',');
+	
+	//optCopy(input);
 
-	var fieldLabelGRS = new GlideRecordSecure(data.table);
+	
+
+		//optCopy(data.options);
+		
+	var fieldLabelGRS = new GlideRecordSecure(data.inputOptions.table);
 	for (var i in data.fields_array) {
 		var field = data.fields_array[i];
 
@@ -276,18 +413,21 @@ alert(action);
 
 	}
 
-	var queryGRS = new GlideRecordSecure(data.table);
-	queryGRS.addEncodedQuery(data.filter);
+	var queryGRS = new GlideRecordSecure(data.inputOptions.table);
+	queryGRS.addEncodedQuery(data.inputOptions.filter);
 	queryGRS.query();
 	data.list = [];
 
 	while (queryGRS._next()) {
 		var record = {};
 
-		$sp.getRecordElements(record, queryGRS, data.fields);
+		$sp.getRecordElements(record, queryGRS, data.inputOptions.fields);
 		record.sys_id = queryGRS.getUniqueValue();
 		data.list.push(record);		
 	}
+	
+		data.row_count = queryGRS.getRowCount();
+	data.num_pages = Math.ceil(data.row_count / data.inputOptions.window_size);
 
 	if(input) {
 		try {
@@ -297,6 +437,11 @@ gs.error("JW Debug: "+ JSON.stringify(input));
 			gs.error("JW Debug: " + err);
 		}
 	}
+	
+	} catch (err) {
+		gs.error("JW Debug: Widget Error: " + err);
+	}
+	
 	/*data.fields = [{"name": "date_received","display_value" : "Date Received"},
 								 {"name": "recipient","display_value" : "Recipient"},
 								 {"name": "sender","display_value" : "Date Received"},
@@ -337,22 +482,169 @@ gs.error("JW Debug: "+ JSON.stringify(input));
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-03-03 14:53:01</sys_created_on>
         <sys_id>4aa585aa2f956910758993acf699b6e3</sys_id>
-        <sys_mod_count>224</sys_mod_count>
+        <sys_mod_count>356</sys_mod_count>
         <sys_name>Delitem Data Table</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_4aa585aa2f956910758993acf699b6e3</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-04-04 19:49:37</sys_updated_on>
-        <template><![CDATA[<div class="alert alert-info"
+        <sys_updated_on>2023-06-23 16:16:40</sys_updated_on>
+        <template><![CDATA[<!--  <div class="panel panel-{{options.color}} b" ng-class="{'data-table-high-contrast': accessibilityModeEnabled}">
+    <div class="panel-heading form-inline" ng-hide="options.hide_header">
+      <span class="dropdown m-r-xs">
+        <button aria-label="{{data.title || data.table_plural}} ${Context Menu}" class="btn dropdown-toggle glyphicon glyphicon-menu-hamburger" style="line-height: 1.4em" id="optionsMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+        <ul class="dropdown-menu" aria-labelledby="optionsMenu">
+          <li ng-repeat="t in ::exportTypes">
+            <a ng-if="!tinyUrlEnabled" ng-href="/{{data.table}}_list.do?{{::t.value}}&sysparm_query={{data.exportQueryEncoded}}&sysparm_view={{data.view}}&sysparm_fields={{data.fields}}" target="_new" tabindex="-1">${Export as} {{::t.label}}</a>
+            <a ng-if="tinyUrlEnabled" ng-href="/{{data.table}}_list.do?{{::t.value}}&sysparm_tiny={{tinyUrl}}" target="_new" tabindex="-1">${Export as} {{::t.label}}</a>
+          </li>
+        </ul>
+      </span>
+      <h2 class="panel-title" style="display:inline"><i ng-if="options.glyph" class="fa fa-{{options.glyph}} m-r"></i>{{data.title || data.table_plural}}<span class="sr-only">${table} - ${page} {{data.p}}</span></h2>
+      <button name="new" role="button" class="btn btn-primary btn-sm m-l-xs" ng-click="newRecord()" ng-if="options.show_new && data.canCreate && !data.newButtonUnsupported" aria-label="${Create new record}">${New}</button>
+      <div class="pull-right" ng-if="options.show_keywords">
+		<form ng-if="data.hasTextIndex" ng-submit="setSearch(true)">
+        <div class="input-group" role="presentation">
+          <input type="text" name="datatable-search" ng-model="data.keywords" ng-model-options="{debounce:250}" class="form-control" placeholder="${Keyword Search}" aria-label="${Keyword Search}">
+          <span class="input-group-btn">
+            <button name="search" class="btn btn-default" type="submit" aria-label="${Search}" data-original-title="{{::c.data.searchMsg}}" data-toggle="tooltip" data-placement="bottom"><span class="glyphicon glyphicon-search"></span></button>
+          </span>
+        </div>
+        </form>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    
+    <div class="panel-body">
+      <div class="clearfix"></div>
+      <div class="alert alert-info" ng-if="!data.list.length && !data.num_pages && !data.invalid_table && !loadingData">
+        ${No records in {{data.table_label}} <span ng-if="data.filter">using that filter</span>}
+      </div>
+      <table class="table table-striped table-responsive" ng-if="data.list.length">
+        <thead>
+          <tr>
+            <th ng-repeat="field in data.field_labels track by $index" class="text-nowrap" ng-click="setOrderBy(field)"
+             scope="col" role="columnheader" aria-sort="{{field == data.o ? (data.d == 'asc'? 'ascending': 'descending') : 'none'}}">
+              <div class="th-title" title="${Sort by} {{field == data.o ? (data.d == 'asc' ?  '${Descending}': '${Ascending}') : '${Ascending}'}}" role="button" tabindex="0" aria-label="{{data.column_labels[field]}}">{{field}}</div>
+              <i class="fa" ng-if="field == data.o" ng-class="{'asc': 'fa-chevron-up', 'desc': 'fa-chevron-down'}[data.d]"></i>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in data.list track by item.sys_id">
+            <td role="{{$first ? 'rowheader' : 'cell'}}" class="pointer sp-list-cell" ng-class="{selected: item.selected}" ng-click="go(item.targetTable, item)" ng-repeat="field in ::data.fields_array" data-field="{{::field}}" data-th="{{::data.column_labels[field]}}"><a href="javascript:void(0)" ng-if="$first" aria-label="${Open record}: {{::item[field].display_value}}">{{::item[field].display_value | limitTo : item[field].limit}}{{::item[field].display_value.length > item[field].limit ? '...' : ''}}</a><span ng-if="!$first">{{::item[field].display_value | limitTo : item[field].limit}}{{::item[field].display_value.length > item[field].limit ? '...' : ''}}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div ng-class="{'pruned-msg-filter-pad': (!options.show_breadcrumbs || !data.filter) && !data.list.length}" class="pruned-msg" ng-if="rowsWerePruned()">
+        <span ng-if="rowsPruned == 1">${{{rowsPruned}} row removed by security constraints}</span>
+        <span ng-if="rowsPruned > 1">${{{rowsPruned}} rows removed by security constraints}</span>
+      </div>
+    </div>
+    
+    <div class="panel-footer" ng-hide="options.hide_footer" ng-if="data.row_count" role="navigation" aria-label="${Pagination}">
+      <div class="btn-toolbar m-r pull-left">
+        <div class="btn-group">
+          <a href="javascript:void(0)" ng-click="setPageNum(data.p - 1)" ng-class="{'disabled': data.p == 1}" class="btn btn-default" aria-label="${Previous page} {{data.p == 1 ? '${disabled}' : ''}}" tabindex="{{(data.p == 1) ? -1 : 0}}"><i class="fa fa-chevron-left"></i></a>
+        </div>
+        <div ng-if="data.num_pages > 1 && data.num_pages < 20" class="btn-group">
+          <a ng-repeat="i in getNumber(data.num_pages) track by $index" ng-click="setPageNum($index + 1)" href="javascript:void(0)" ng-class="{active: ($index + 1) == data.p}" type="button" class="btn btn-default" aria-label="${Page} {{$index + 1}}" ng-attr-aria-current="{{($index + 1) == data.p ? 'page' : undefined}}">{{$index + 1}}</a>
+        </div>
+        <div class="btn-group">
+          <a href="javascript:void(0)" ng-click="setPageNum(data.p + 1)" ng-class="{'disabled': data.p == data.num_pages}" class="btn btn-default" aria-label="${Next page} {{data.p == data.num_pages ? '${disabled}' : ''}}" tabindex="{{(data.p == data.num_pages) ? -1 : 0}}"><i class="fa fa-chevron-right"></i></a>
+        </div>
+      </div>
+      <div class="m-t-xs panel-title">${Rows {{data.window_start + 1}} - {{ mathMin(data.window_end,data.row_count) }} of {{data.row_count}}}</div>
+
+      <span class="clearfix"></span>
+    </div>
+  </div>-->
+
+   <table class="table table-striped table-primary table-responsive table-bordered" ng-if="data.list.length">
+        <caption class="sr-only">{{data.title || data.table_plural}}</caption>
+        <thead>
+          <tr>
+            <th ng-repeat="field in data.field_labels track by $index" class="text-nowrap" ng-click="setOrderBy(field)"
+             scope="col" role="columnheader" aria-sort="{{field == data.o ? (data.d == 'asc'? 'ascending': 'descending') : 'none'}}">
+              <div class="th-title" title="${Sort by} {{field == data.o ? (data.d == 'asc' ?  '${Descending}': '${Ascending}') : '${Ascending}'}}" role="button" tabindex="0" aria-label="{{data.column_labels[field]}}">{{field}}</div>
+              <i class="fa" ng-if="field == data.o" ng-class="{'asc': 'fa-chevron-up', 'desc': 'fa-chevron-down'}[data.d]"></i>
+            </th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in data.list track by item.sys_id"
+              ng-if="($index < ((currentPage+1) * rowsPerPage)) && ($index >= (((currentPage+1) * rowsPerPage) - rowsPerPage))">
+            <td role="{{$first ? 'rowheader' : 'cell'}}" class="pointer sp-list-cell" ng-class="{selected: item.selected}" ng-click="go(item.targetTable, item)" ng-repeat="field in ::data.fields_array" data-field="{{::field}}" data-th="{{::data.column_labels[field]}}"><a href="javascript:void(0)" ng-if="$first" aria-label="${Open record}: {{::item[field].display_value}}">{{::item[field].display_value | limitTo : item[field].limit}}{{::item[field].display_value.length > item[field].limit ? '...' : ''}}</a><span ng-if="!$first">{{::item[field].display_value | limitTo : item[field].limit}}{{::item[field].display_value.length > item[field].limit ? '...' : ''}}</span>
+            </td>
+            <td class="itemData">
+            <div class="btn-group"
+                 ng-show="c.data.inputOptions.checkBoxSelectFunction == 'single'">			
+              <label class="btn btn-default btn-sm" 
+                     ng-click="c.selectedSingleChange($event, item)"
+                     ng-class="{'active': !!item.selected}"
+                     ng-show="data.inputOptions.inlineCheckbox">
+                <input type="checkbox" name="singleCheck"
+                       ng-model="item.selected"
+                       >
+                <span class="glyphicon glyphicon-ok"></span>
+              </label>
+            </div>
+            <div class="btn-group" data-toggle="buttons"
+                 ng-show="c.data.inputOptions.checkBoxSelectFunction == 'multiple'">			
+              <label class="btn btn-default btn-sm" 
+                     ng-click="c.selectedMultipleChange(item.sys_id)"
+                     ng-class="{'active': !!item.selected}"
+                     ng-show="data.inputOptions.inlineCheckbox">
+                <input type="checkbox" name="singleCheck"
+                       ng-model="item.selected"
+                       >
+                <span class="glyphicon glyphicon-ok"></span>
+              </label>
+            </div>
+            <div class="btn-group"
+                 ng-show="item.state.value == 2 && c.data.inputOptions.inlineButton"
+                 ng-click="c.confirmCollectionLocation(delivery)">			
+              <button class="btn btn-primary">
+                Received
+              </button>
+            </div>          
+          </td>
+          </tr>
+        </tbody>
+      </table>
+
+<!--<div class="panel-footer">
+        <div class="btn-toolbar m-r pull-left"
+             ng-show="c.data.list.length > rowsPerPage">
+          <div class="btn-group">
+            <a ng-disabled="currentPage == 0" href="javascript:void(0)" ng-click="currentPage=0" class="btn btn-default"  aria-label="${Previous page}"><i class="fa fa-angle-double-left"></i></a>
+          </div>     
+          <div class="btn-group">
+            <a ng-disabled="currentPage == 0" href="javascript:void(0)" ng-click="currentPage = currentPage-1" class="btn btn-default"  aria-label="${Previous page}"><i class="fa fa-angle-left"></i></a>
+          </div>     
+          <div class="btn-group">
+            <a ng-disabled="currentPage >= filteredList.length/rowsPerPage - 1" href="javascript:void(0)" ng-click="currentPage = currentPage+1" class="btn btn-default" aria-label="${Next page}"><i class="fa fa-angle-right"></i></a>          
+          </div>
+          <div class="btn-group">
+            <a ng-disabled="currentPage >= filteredList.length/rowsPerPage - 1" href="javascript:void(0)" ng-click="currentPage = numberOfPages()-1" class="btn btn-default" aria-label="${Next page}"><i class="fa fa-angle-double-right"></i></a>          
+          </div>       
+        </div>   
+        <div class="m-t-xs panel-title">Page {{currentPage+1}} of {{numberOfPages()}}<span class="m-t-xs panel-title pull-right"></span><span class="m-t-xs panel-title pull-right">{{c.data.list.length}} Row<span ng-if="c.data.list.length > 1">s</span></span></div>
+        <span class="clearfix"></span>
+      </div>
+<!--<div class="alert alert-info"
        ng-show="c.data.list.length == 0">
         There are currently Deliveries awaiting collection
       </div>
 <div class="panel panel-default"
-     ng-show="c.data.list.length > 0">
+     ng-show="c.data.list.length > 0">-->
   
- <table class="table table-striped table-primary table-responsive">
+    
+  
+<!-- <table class="table table-striped table-primary table-responsive">
       <thead>
         <tr>
           <th class="itemData"
@@ -362,7 +654,8 @@ gs.error("JW Debug: "+ JSON.stringify(input));
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="delivery in c.data.list">
+        <tr ng-repeat="delivery in c.data.list"
+            ng-if="($index < ((currentPage+1) * rowsPerPage)) && ($index >= (((currentPage+1) * rowsPerPage) - rowsPerPage))">
           <td ng-repeat="field in data.fields_array">{{::delivery[field].display_value}}</td>
           <td class="itemData">
             <div class="btn-group"
@@ -392,6 +685,26 @@ gs.error("JW Debug: "+ JSON.stringify(input));
           </td>
         </tr>
     </table>
+  
+  <div class="panel-footer">
+        <div class="btn-toolbar m-r pull-left"
+             ng-show="c.data.list.length > rowsPerPage">
+          <div class="btn-group">
+            <a ng-disabled="currentPage == 0" href="javascript:void(0)" ng-click="currentPage=0" class="btn btn-default"  aria-label="${Previous page}"><i class="fa fa-angle-double-left"></i></a>
+          </div>     
+          <div class="btn-group">
+            <a ng-disabled="currentPage == 0" href="javascript:void(0)" ng-click="currentPage = currentPage-1" class="btn btn-default"  aria-label="${Previous page}"><i class="fa fa-angle-left"></i></a>
+          </div>     
+          <div class="btn-group">
+            <a ng-disabled="currentPage >= filteredList.length/rowsPerPage - 1" href="javascript:void(0)" ng-click="currentPage = currentPage+1" class="btn btn-default" aria-label="${Next page}"><i class="fa fa-angle-right"></i></a>          
+          </div>
+          <div class="btn-group">
+            <a ng-disabled="currentPage >= filteredList.length/rowsPerPage - 1" href="javascript:void(0)" ng-click="currentPage = numberOfPages()-1" class="btn btn-default" aria-label="${Next page}"><i class="fa fa-angle-double-right"></i></a>          
+          </div>       
+        </div>   
+        <div class="m-t-xs panel-title">Page {{currentPage+1}} of {{numberOfPages()}}<span class="m-t-xs panel-title pull-right"></span><span class="m-t-xs panel-title pull-right">{{c.data.list.length}} Row<span ng-if="c.data.list.length > 1">s</span></span></div>
+        <span class="clearfix"></span>
+      </div>
   
     <!--<table class="table table-striped table-primary table-responsive">
       <thead>
@@ -430,8 +743,9 @@ gs.error("JW Debug: "+ JSON.stringify(input));
           </div>          
         </td>
         </tr>
-    </table>-->
-  </div>
+    </table>
+
+<!--  </div>
 <div class="panel panel-default"
      ng-show="c.data.showLocationUpdate">
   <div class="panel-heading">

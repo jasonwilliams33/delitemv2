@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_applet_launcher_m2m_section">
+    <sys_sg_applet_launcher_m2m_section action="INSERT_OR_UPDATE">
+        <applet_launcher display_value="Delitem">e4b83e5c976361108c1bf911f053af12</applet_launcher>
+        <order>10</order>
+        <section display_value="My Deliveries">952aba1097a361108c1bf911f053af37</section>
+        <sys_class_name>sys_sg_applet_launcher_m2m_section</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-06-16 19:56:54</sys_created_on>
+        <sys_id>9d2aba1097a361108c1bf911f053af3a</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name/>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_sg_applet_launcher_m2m_section_9d2aba1097a361108c1bf911f053af3a</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-06-16 19:56:54</sys_updated_on>
+    </sys_sg_applet_launcher_m2m_section>
+</record_update>
