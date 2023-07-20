@@ -16,22 +16,22 @@
         <run_dayofmonth>1</run_dayofmonth>
         <run_dayofweek/>
         <run_period>1970-01-31 00:00:00</run_period>
-        <run_start>2023-06-29 16:23:49</run_start>
+        <run_start>2023-07-20 16:23:48</run_start>
         <run_time/>
         <run_type>periodically</run_type>
         <solution_definition/>
         <sys_class_name>ml_training_request_schedule</sys_class_name>
         <sys_created_by>admin</sys_created_by>
-        <sys_created_on>2023-06-29 16:23:49</sys_created_on>
-        <sys_id>3a060d28977b21108c1bf911f053afcf</sys_id>
+        <sys_created_on>2023-07-20 16:23:48</sys_created_on>
+        <sys_id>836f499b97c831108c1bf911f053af0f</sys_id>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>EM ALert Clustering Solution</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
-        <sys_update_name>ml_training_request_schedule_3a060d28977b21108c1bf911f053afcf</sys_update_name>
+        <sys_update_name>ml_training_request_schedule_836f499b97c831108c1bf911f053af0f</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-06-29 16:23:49</sys_updated_on>
+        <sys_updated_on>2023-07-20 16:23:48</sys_updated_on>
         <time_zone/>
         <upgrade_safe>false</upgrade_safe>
     </ml_training_request_schedule>

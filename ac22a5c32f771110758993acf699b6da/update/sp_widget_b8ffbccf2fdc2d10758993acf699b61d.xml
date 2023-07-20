@@ -1,75 +1,117 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[api.controller=function($scope,delitemModalPubSub) {
-  /* widget controller */
-  var c = this;
-			console.log(c);
+        <client_script><![CDATA[api.controller=function($scope,delitemModalPubSub,spUtil) {
+	/* widget controller */
+	var c = this;
+	console.log(c);
 	c.data.deliverySelected = false;
 	c.data.delveryItemsSelected = false;
 	c.data.selectedDeliveryItemArr = [];
 	c.data.selectedDeliveryItemObj = {};
 	c.data.sendSelectedDisabled = true;
+	c.data.collectDeliveryDisabled = true;
 	c.data.selectedDeliveryArr = [];
-		$scope.currentPage = 0;
+	$scope.currentPage = 0;
 	$scope.rowsPerPage = 5;
-	
+
 	$scope.numberOfPages = function() {
-		
+
 		return Math.ceil($scope.c.data.list.length/$scope.rowsPerPage);
-		
+
 	};
-		
+
 	c.collectDelivery = function() {
-					//console.log(c);	
-		c.server.get({
+		
+		var modalReturnObj = {
+
+				"modalAction" : "collectDelivery",
+				"selectedDelivery" : c.data.selectedItem
+
+			}
+
+			delitemModalPubSub.publish(modalReturnObj);
+
+		/*spUtil.get("delitem_delivery_summary", {
+			
+			deliverySysId: c.data.selectedItem.sys_id,
+			deliveryItems: c.data.selectedItem.delivery_items.display_value,
+			recipientFirstName: c.data.selectedItem.recipient.display_value
+
+		}).then(function(response) {
+			console.log(response);
+			c.deliverySummaryWidget = response;
+
+		});*/
+
+	}
+
+	/*c.collectDelivery = function() {
+
+		try {
+
+			c.data.embeddedAction = "retrieveDeliveryItems";
+			c.server.update().then(function(){
+			c.data.action = undefined;
+				alert("i'm back");
+
+
+		})
+
+		/*c.server.get({
 
 			action: "retrieveDeliveryItems",
-			deliverySysId: c.data.selectedItem.sys_id,
-			deliveryItems: c.data.selectedItem.deliveryItems,
-			recipientFirstName: c.data.selectedItem.recipientFirstName
+			deliverySysId: c.data.selectedItem.sys_id
+			//deliveryItems: c.data.selectedItem.delivery_items.display_value,
+			//recipientFirstName: c.data.selectedItem.recipient.display_value
 
 		}).then(function(rsp) {
-//console.log(rsp);
+console.log(rsp);
 			c.data.deliverySummaryWidget = rsp.data.deliverySummaryWidget;
-			
+
 			c.data.retrievedDeliveryItemArr = rsp.data.retrievedDeliveryItemArr;
 //console.log(c.data.retrievedDeliveryItemArr);
 		})	
-		
+
 		c.data.deliverySelected = true;
-		
+	}catch(err){
+		console.log("here it is: " + err);
 	}
-	
+	}*/
+
 	/*c.collect = function() {
-		
+
 		c.data.deliveryItemsSelected = true;
 		console.log(c.data.selectedDeliveryItemArr);
-		
+
 	}*/
-	
+
 	c.selectDeliveryItem = function(sys_id) {
-		
+
 		var selectedItemIndex = c.data.selectedDeliveryItemArr.indexOf(sys_id);
-		
+
 		if(selectedItemIndex == -1) {
-		
+
 			c.data.selectedDeliveryItemArr.push(sys_id);
-			
-			
+
+
 		} else {
-			
+
 			c.data.selectedDeliveryItemArr.splice(selectedItemIndex, 1);
-						
+
 		}
 
 	}
+
 	c.selectedSingleChange = function(e, data) {
-//console.log(data);
+		//console.log(data);
+		//onsole.log("this is the lodash func: " + _.find(c.data.list, {'selected': true}));
 		var selectedItem = _.find(c.data.list, {'selected': true});
-		
+		console.log(selectedItem);
+
 		if(selectedItem) {
 
+			c.data.collectDeliveryDisabled = false;
 			c.data.selectedItem = data;			
 
 			if(selectedItem.sys_id == data.sys_id) {
@@ -85,21 +127,16 @@
 
 				return false;
 
-			}
+			}		
 
 		}		
-
-		if(selectedItem) {
-
-
-		}
 
 	}
 
 	c.selectedMultipleChange = function(sys_id) {
 
 		var selectedItemIndex = c.data.selectedDeliveryArr.indexOf(sys_id);
-//console.log(sys_id);
+		//console.log(sys_id);
 		if(selectedItemIndex == -1) {
 
 			c.data.selectedDeliveryArr.push(sys_id);
@@ -119,9 +156,9 @@
 			c.data.sendSelectedDisabled = true;
 
 		}
-console.log(c.data.selectedDeliveryArr);
+		console.log(c.data.selectedDeliveryArr);
 	}
-	
+
 	c.sendReminders = function(action) {
 
 		if(action == "all") {
@@ -129,32 +166,32 @@ console.log(c.data.selectedDeliveryArr);
 			c.data.selectedDeliveryArr = c.data.list;
 
 		}
-console.log(c.data.selectedDeliveryArr);
+		console.log(c.data.selectedDeliveryArr);
 		c.server.get({
 
 			action: "sendReminders",
 			selectedDeliveryArr: c.data.selectedDeliveryArr
 
 		}).then(function(rsp) {
-			
+
 			var modalReturnObj = {
-				
+
 				"modalAction" : "remindersSent"
-			
+
 			}
-		
-		delitemModalPubSub.publish(modalReturnObj);
-			
+
+			delitemModalPubSub.publish(modalReturnObj);
+
 		})
 
 	}
 
-	/*c.selectedChange = function(e, data) {		
+	c.selectedChange = function(e, data) {		
 
 		var selectedItem = _.find(c.data.deliveriesArr, {'selected': true});
 
 		if(selectedItem) {
-			
+
 			c.data.selectedItem = data;			
 
 			if(selectedItem.sys_id == data.sys_id) {
@@ -177,9 +214,9 @@ console.log(c.data.selectedDeliveryArr);
 			}
 
 		}
-console.log(c.data.selectedItem);
-	}*/
-	
+		console.log(c.data.selectedItem);
+	}
+
 };]]></client_script>
         <controller_as>c</controller_as>
         <css>.panel-heading{
@@ -315,7 +352,7 @@ console.log(c.data.selectedItem);
 	}
 	
 		data.row_count = queryGRS.getRowCount();
-	data.num_pages = Math.ceil(data.row_count / data.options.window_size);
+		data.num_pages = Math.ceil(data.row_count / data.options.window_size);
 
 	
 	/*
@@ -362,10 +399,10 @@ console.log(c.data.selectedItem);
 
 	};
 	
-	data.customTableOptions = data.options;
+	//data.customTableOptions = data.options;
 
-	if(input && input.action == "retrieveDeliveryItems") {
-
+	/*if(input) {
+gs.error("JW Debug: widget " + JSON.stringify(data));
 		data.deliverySummaryOptions = {
 
 			"deliverySysId": input.deliverySysId,
@@ -376,11 +413,32 @@ console.log(c.data.selectedItem);
 
 		data.deliverySummaryWidget = $sp.getWidget("delitem_delivery_summary", data.deliverySummaryOptions);
 
-	}
+	}*/
+	
+	/*if(input) {
+		try {
+			gs.error("JW Debug: widget " + JSON.stringify(data));
+		console.log(input);
+		
+
+		data.deliverySummaryOptions = {
+
+			"deliverySysId": input.deliverySysId,
+			"deliveryItems": input.deliveryItems,
+			"recipientFirstName": input.recipientFirstName
+
+		};
+
+		data.deliverySummaryWidget = $sp.getWidget("delitem_delivery_summary", data.deliverySummaryOptions);
+		
+		} catch(err) {
+			gs.error("JW Debug: widget err: " + err);
+		}
+	}*/
 	
 	if(input && input.action == "sendReminders") {
 		
-		var sendReminders = new x_187394_delitem.DelitemUtils().sendReminders(input.selectedDeliveryArr);
+		var sendReminders = new DelitemUtils().sendReminders(input.selectedDeliveryArr);
 		
 	}
 	
@@ -390,14 +448,14 @@ console.log(c.data.selectedItem);
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-01-14 10:42:15</sys_created_on>
         <sys_id>b8ffbccf2fdc2d10758993acf699b61d</sys_id>
-        <sys_mod_count>72</sys_mod_count>
+        <sys_mod_count>141</sys_mod_count>
         <sys_name>Delivery Table Modal</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_b8ffbccf2fdc2d10758993acf699b61d</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-06-29 19:35:27</sys_updated_on>
+        <sys_updated_on>2023-07-20 16:23:17</sys_updated_on>
         <template><![CDATA[<div ng-show="!c.data.deliverySelected">
   <div ng-show="c.data.displayDataTable">
     <widget id="widget-data-table" options='data.tableOptions'></widget>
@@ -405,8 +463,8 @@ console.log(c.data.selectedItem);
   </div>
   <div class="alert alert-info"
        ng-show="!c.data.displayDataTable && c.data.deliveriesArr.length == 0">
-        There are currently Deliveries awaiting collection
-      </div>
+    There are currently Deliveries awaiting collection
+  </div>
   <div class="panel panel-default"
        ng-show="!c.data.displayDataTable && data.list.length">
     <!--<div ng-include="'delitem-custom-data-table.html'"></div>-->
@@ -439,26 +497,26 @@ console.log(c.data.selectedItem);
         </tr>
     </table>-->
     <!--<widget id="delitem_data_table" options='data.customTableOptions'></widget>-->
-    
+
     <table class="table table-striped table-primary table-responsive table-bordered" ng-if="data.list.length">
-        <caption class="sr-only">{{data.title || data.table_plural}}</caption>
-        <thead>
-          <tr>
-            <th ng-repeat="field in data.field_labels track by $index" class="text-nowrap" ng-click="setOrderBy(field)"
-             scope="col" role="columnheader" aria-sort="{{field == data.o ? (data.d == 'asc'? 'ascending': 'descending') : 'none'}}">
-              <div class="th-title" title="${Sort by} {{field == data.o ? (data.d == 'asc' ?  '${Descending}': '${Ascending}') : '${Ascending}'}}" role="button" tabindex="0" aria-label="{{data.column_labels[field]}}">{{field}}</div>
-              <i class="fa" ng-if="field == data.o" ng-class="{'asc': 'fa-chevron-up', 'desc': 'fa-chevron-down'}[data.d]"></i>
-            </th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-repeat="item in data.list track by item.sys_id"
-              ng-if="($index < ((currentPage+1) * rowsPerPage)) && ($index >= (((currentPage+1) * rowsPerPage) - rowsPerPage))"
-              >
-            <td role="{{$first ? 'rowheader' : 'cell'}}" class="pointer sp-list-cell" ng-class="{selected: item.selected}" ng-click="go(item.targetTable, item)" ng-repeat="field in ::data.fields_array" data-field="{{::field}}" data-th="{{::data.column_labels[field]}}"><a href="javascript:void(0)" ng-if="$first" aria-label="${Open record}: {{::item[field].display_value}}">{{::item[field].display_value | limitTo : item[field].limit}}{{::item[field].display_value.length > item[field].limit ? '...' : ''}}</a><span ng-if="!$first">{{::item[field].display_value | limitTo : item[field].limit}}{{::item[field].display_value.length > item[field].limit ? '...' : ''}}</span>
-            </td>
-            <td class="itemData">
+      <caption class="sr-only">{{data.title || data.table_plural}}</caption>
+      <thead>
+        <tr>
+          <th ng-repeat="field in data.field_labels track by $index" class="text-nowrap" ng-click="setOrderBy(field)"
+              scope="col" role="columnheader" aria-sort="{{field == data.o ? (data.d == 'asc'? 'ascending': 'descending') : 'none'}}">
+            <div class="th-title" title="${Sort by} {{field == data.o ? (data.d == 'asc' ?  '${Descending}': '${Ascending}') : '${Ascending}'}}" role="button" tabindex="0" aria-label="{{data.column_labels[field]}}">{{field}}</div>
+            <i class="fa" ng-if="field == data.o" ng-class="{'asc': 'fa-chevron-up', 'desc': 'fa-chevron-down'}[data.d]"></i>
+          </th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in data.list track by item.sys_id"
+            ng-if="($index < ((currentPage+1) * rowsPerPage)) && ($index >= (((currentPage+1) * rowsPerPage) - rowsPerPage))"
+            >
+          <td role="{{$first ? 'rowheader' : 'cell'}}" class="pointer sp-list-cell" ng-class="{selected: item.selected}" ng-click="go(item.targetTable, item)" ng-repeat="field in ::data.fields_array" data-field="{{::field}}" data-th="{{::data.column_labels[field]}}"><a href="javascript:void(0)" ng-if="$first" aria-label="${Open record}: {{::item[field].display_value}}">{{::item[field].display_value | limitTo : item[field].limit}}{{::item[field].display_value.length > item[field].limit ? '...' : ''}}</a><span ng-if="!$first">{{::item[field].display_value | limitTo : item[field].limit}}{{::item[field].display_value.length > item[field].limit ? '...' : ''}}</span>
+          </td>
+          <td class="itemData">
             <div class="btn-group"
                  ng-show="c.data.options.checkBoxSelectFunction == 'single'">			
               <label class="btn btn-default btn-sm" 
@@ -491,39 +549,39 @@ console.log(c.data.selectedItem);
               </button>
             </div>          
           </td>
-          </tr>
-        </tbody>
-      </table>
-    
+        </tr>
+      </tbody>
+    </table>
+
   </div>
   <div>
     <button class="btn btn-primary btn-block collectDelivery"
             ng-click="c.collectDelivery()"
+            ng-disabled="c.data.collectDeliveryDisabled"
             ng-show="!c.data.displayDataTable && c.data.options.action == 'collect_delivery'">
       Collect Delivery <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
     </button>
   </div>
   <div ng-show="c.data.options.action == 'send_reminders'">
-       <button class=" btn btn-default collectBtns"
-          ng-click="c.cancel()">
-    Cancel
-  </button>
-      <button class="btn btn-primary collectBtns pull-right"
-          ng-show="c.data.list.length > 1"
-          ng-disabled="c.data.sendSelectedDisabled"
-          ng-click="c.sendReminders('selected')">
-    Send Selected
-  </button> 
-  <button class=" btn btn-primary collectBtns pull-right"
-          ng-click="c.sendReminders('all')">
-    Send <span ng-show="c.data.list.length > 1">All</span>
-  </button>
-    </div>
+    <button class=" btn btn-default collectBtns"
+            ng-click="c.cancel()">
+      Cancel
+    </button>
+    <button class="btn btn-primary collectBtns pull-right"
+            ng-show="c.data.list.length > 1"
+            ng-disabled="c.data.sendSelectedDisabled"
+            ng-click="c.sendReminders('selected')">
+      Send Selected
+    </button> 
+    <button class=" btn btn-primary collectBtns pull-right"
+            ng-click="c.sendReminders('all')">
+      Send <span ng-show="c.data.list.length > 1">All</span>
+    </button>
+  </div>
 </div>
 
-
 <div ng-show="c.data.deliverySelected && !c.data.delveryItemsSelected">
-  <sp-widget widget="c.data.deliverySummaryWidget"></sp-widget>
+  <sp-widget widget="c.deliverySummaryWidget"></sp-widget>
 </div>
 ]]></template>
     </sp_widget>

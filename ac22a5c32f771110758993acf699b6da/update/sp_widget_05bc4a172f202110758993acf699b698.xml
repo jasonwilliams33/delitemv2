@@ -180,7 +180,11 @@
 	//}
 	var deliverySysId;
 	
-	if(data.selfService == "false") {
+	deliverySysId = data.options.sys_id;
+		data.recipientFirstName = data.options.recipientFirstName;
+		data.deliveryItems = parseInt(data.options.deliveryItems);
+	
+	/*if(data.selfService == "false") {
 	
 		deliverySysId = options.deliverySysId;
 		data.recipientFirstName = options.recipientFirstName;
@@ -192,19 +196,21 @@
 		data.recipientFirstName = data.options.recipientFirstName;
 		data.deliveryItems = parseInt(data.options.deliveryItems);
 		
-	}
+	}*/
 	
 	data.retrievedDeliveryItemArr = [];
 	data.retrievedDeliveryItemSysIdArr = [];
 	data.multipleItems = false;
 
+	gs.error("JW Debug, delivery Sys ID: " + data.deliveryItems);
+	
 	try {
 
 		var deliveryItemGR = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
 		deliveryItemGR.addEncodedQuery("state!=" + DelItemConstants.COLLECTED + "^ORstate=NULL^delivery=" + deliverySysId);
 		deliveryItemGR.query();
 		while(deliveryItemGR.next()) {
-
+			
 			data.retrievedDeliveryItemObj = {};
 			data.retrievedDeliveryItemObj.date_received = deliveryItemGR.date_received.toString();
 			data.retrievedDeliveryItemObj.sender = deliveryItemGR.sender.toString() || "N/A";
@@ -264,14 +270,14 @@
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-01-27 21:11:45</sys_created_on>
         <sys_id>05bc4a172f202110758993acf699b698</sys_id>
-        <sys_mod_count>3</sys_mod_count>
+        <sys_mod_count>10</sys_mod_count>
         <sys_name>Delitem Delivery Summary</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_05bc4a172f202110758993acf699b698</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-03-11 18:31:56</sys_updated_on>
+        <sys_updated_on>2023-07-20 16:50:50</sys_updated_on>
         <template><![CDATA[<div class="jumbotron inner">
   <h3 class="headingText"
       ng-show="!c.data.deliveryItemsSelected">
