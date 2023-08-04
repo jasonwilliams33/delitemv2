@@ -26,6 +26,7 @@
 			spUtil.addInfoMessage("Reminders Sent!");
 			
 		} else if(data.modalAction == "collectDelivery") {
+			//alert('here');
 			
 			console.log(data);
 			c.openModal("delitem_delivery_summary","Outstanding Deliveries",data.selectedDelivery);
@@ -94,7 +95,7 @@
 			c.data.deliveryModalFilter = c.data.outstandingDeliveryFilter;
 			c.data.deliveryModalTitle = 'Outstanding Deliveries';
 			c.data.deliveryModalTable = c.data.delieveryTable;
-			c.data.deliveryModalFields = "recipient,delivery_items,sys_created_on";
+			c.data.deliveryModalFields = "recipient,delivery_items_awaiting_collection,sys_created_on";
 			c.data.modalWidget = "delivery_table_modal";
 			//c.data.modalWidget = "delitem_data_table";
 			c.data.inlineCheckbox = true;
@@ -385,14 +386,14 @@ textarea {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-12-23 15:06:04</sys_created_on>
         <sys_id>7a5960082f0ce110758993acf699b611</sys_id>
-        <sys_mod_count>84</sys_mod_count>
+        <sys_mod_count>92</sys_mod_count>
         <sys_name>Delitem</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_7a5960082f0ce110758993acf699b611</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-07-20 15:59:32</sys_updated_on>
+        <sys_updated_on>2023-07-31 15:16:43</sys_updated_on>
         <template><![CDATA[<div class="panel panel-primary">
   <div class="panel-heading">
     Delitem
