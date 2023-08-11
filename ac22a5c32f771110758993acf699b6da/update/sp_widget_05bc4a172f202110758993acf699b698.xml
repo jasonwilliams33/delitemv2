@@ -7,12 +7,28 @@
 	
 	console.log(c);
 	
+	//c.data.modalAction = c.;modalAction
+	
 /*	if(c.data.selfService == "true") {
 		console.log(c);
 	} else {
 	console.log(c);	
 	}
 	*/
+	
+		c.done = function(){
+
+		var modalReturnObj = {
+
+			"modalAction" : "signatureAccepted",
+			"signature" : c.accept()
+
+		}
+
+		//c.data.signature = c.accept();
+		delitemModalPubSub.publish(modalReturnObj);
+
+	}
 	
 	c.data.selectedDeliveryItemArr = [];
 	c.data.deliveryItemsSelected = false;
@@ -54,7 +70,7 @@
 			
 		}
 		
-		c.data.deliveryItemsSelected = true;		
+		c.data.deliveryItemsSelected = true;
 
 	}
 	
@@ -71,7 +87,7 @@
 	}
 
 	delitemModalPubSub.subscribe($scope, function($event, data) {
-console.log(data);
+//console.log(data);
 		c.data.obj = data;
 		c.server.get({
 
@@ -156,6 +172,45 @@ console.log(data);
 .headingText{
 	text-align: center;
   color: #ffffff;
+}
+
+/////////////
+
+.signature-main-div {
+  margin: 50px;
+  margin-top: 10px;
+  border-radius: 6px;
+  .signature {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+  }
+  .signature canvas {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin: 0 auto;
+    cursor: pointer;
+  }
+}
+
+/*.scratch-pad{
+	margin: 25px;
+}*/
+
+.img{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;  
+  margin-bottom: 20px;
+}
+
+h3,h4,p{
+text-align: center;
+}
+
+.btn{
+  //float: right;
+  //margin: 5px;
 }</css>
         <data_table>sp_instance</data_table>
         <demo_data/>
@@ -183,9 +238,9 @@ console.log(data);
 	
 	//gs.error("JW Debug, delivery Sys ID: " + JSON.stringify(data));
 	
-	deliverySysId = data.options.sys_id;
-		data.recipientFirstName = data.options.recipientFirstName;
-		data.deliveryItems = data.options.delivery_items_awaiting_collection.value;
+		deliverySysId = data.options.selectedDelivery.sys_id;
+		data.recipientFirstName = data.options.selectedDelivery.recipientFirstName;
+		data.deliveryItems = data.options.selectedDelivery.delivery_items_awaiting_collection.value;
 	
 	/*if(data.selfService == "false") {
 	
@@ -274,14 +329,14 @@ gs.error("JW Debug, delivery widgetInput: " + JSON.stringify(data));
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-01-27 21:11:45</sys_created_on>
         <sys_id>05bc4a172f202110758993acf699b698</sys_id>
-        <sys_mod_count>28</sys_mod_count>
+        <sys_mod_count>38</sys_mod_count>
         <sys_name>Delitem Delivery Summary</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_05bc4a172f202110758993acf699b698</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-08-01 09:42:39</sys_updated_on>
+        <sys_updated_on>2023-08-11 15:20:11</sys_updated_on>
         <template><![CDATA[<div class="jumbotron inner">
   <h3 class="headingText"
       ng-show="!c.data.deliveryItemsSelected">
@@ -341,7 +396,26 @@ gs.error("JW Debug, delivery widgetInput: " + JSON.stringify(data));
   </button>
     </div>
 <div ng-show="c.data.deliveryItemsSelected">
-  <widget id="delitem_scratch_pad"></widget>
+  <!--<widget id="delitem_scratch_pad"></widget>-->
+  <div class="panel panel-default">
+  <div class="panel-body">  
+    <div class="signature-main-div">
+      <!--<img ng-if="c.data.companyLogo != ''" class="img" src="{{c.data.companyLogo}}" width="97.5" height="47.3"/>-->
+      <h3>
+        {{c.data.options.visitor_name.display_value}}
+      </h3>
+      <h4>
+        {{c.date}}
+      </h4>
+      <p>
+        Please sign below and click 'Accept Signature' when completed:
+      </p>
+      <scratch-pad class="scratch-pad" accept="c.accept" clear="clear" height="150" width="350"></scratch-pad>  
+      <button class="btn btn-primary" ng-click="c.done()">Accept signature</button>
+      <button class="btn btn-default" ng-click="clear()">Clear signature</button>
+    </div>
+  </div>
+</div>
 </div>]]></template>
     </sp_widget>
 </record_update>
