@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[api.controller=function($scope,delitemModalPubSub,spUtil) {
+        <client_script><![CDATA[api.controller=function($scope,delitemModalPubSub,spUtil,spAriaUtil) {
 	/* widget controller */
 	var c = this;
 	
@@ -230,6 +230,41 @@ console.log(rsp);
 		}
 		console.log(c.data.selectedItem);
 	}
+	
+		$scope.setOrderBy = function(field) {
+			//alert(field);
+			console.log($scope.data.column_types);
+			
+			try {
+		var d = "asc";
+		// descending default sort for date/time columns for UI consistency
+		var fieldType = $scope.data.column_types[field];
+				console.log(fieldType);
+		if (fieldType == "glide_date_time" || fieldType == "glide_date")
+			d = "desc";
+		if ($scope.data.o == field) {
+			if ($scope.data.d == "asc")
+				d = "desc";
+			else
+				d = "asc";
+		}
+
+		/*if (d === "asc") {
+			spAriaUtil.sendLiveMessage($scope.data.msg.sortingByAsc);
+		} else if (d === "desc") {
+			spAriaUtil.sendLiveMessage($scope.data.msg.sortingByDesc);
+		}*/
+
+		$scope.data.o = field;
+		$scope.data.d = d;
+		$scope.data.setOrderUserPreferences = true;
+		//$scope.setSearch(true);
+				
+				} catch (err){
+	console.log("JW Debug client: " + err);
+	
+}
+	}
 
 };]]></client_script>
         <controller_as>c</controller_as>
@@ -313,7 +348,13 @@ console.log(rsp);
 .headingText,.itemData{
 	text-align: center;
   //color: #ffffff;
-}</css>
+}
+
+.th-title {
+  display: inline-block;
+  color: $primary;
+}
+</css>
         <data_table>sp_instance</data_table>
         <demo_data/>
         <description/>
@@ -330,12 +371,14 @@ console.log(rsp);
         <script><![CDATA[(function() {
 	/* populate the 'data' object */
 	/* e.g., data.table = $sp.getValue('table'); */
-
+try {
 	
 	data.field_labels = [];
 	data.options = input;
 	data.fields_array = data.options.fields.split(',');
-	
+	console.log(data.fields_array);
+	//data.msg.sortingByAsc = gs.getMessage("Sorting by ascending");
+	//data.msg.sortingByDesc = gs.getMessage("Sorting by descending");
 	//optCopy(input);
 
 		//optCopy(data.options);
@@ -363,12 +406,31 @@ console.log(rsp);
 		$sp.getRecordElements(record, queryGRS, data.options.fields);
 		record.sys_id = queryGRS.getUniqueValue();
 		data.list.push(record);		
+		
 	}
 	
 		data.row_count = queryGRS.getRowCount();
 		data.num_pages = Math.ceil(data.row_count / data.options.window_size);
-
+data.column_labels = {};
+	data.column_types = {};
 	
+		var grForMetaData = new GlideRecord(data.options.table);
+	
+		// use GlideRecord to get field labels vs. GlideRecordSecure
+	for (var i in data.fields_array) {
+		var field = data.fields_array[i];
+		var ge = grForMetaData.getElement(field);
+		if (ge == null)
+			continue;
+
+		data.column_labels[field] = ge.getLabel();
+		data.column_types[field] = ge.getED().getInternalType();
+		
+	}
+	} catch (err){
+	gs.error("JW Debug: " + err);
+	
+}
 	/*
 	data.options = input || '';
 	data.deliveriesArr = [];
@@ -456,20 +518,67 @@ gs.error("JW Debug: widget " + JSON.stringify(data));
 		
 	}
 	
+	// getOrderColumn logic mirrors that of Desktop UI when no sort column is specified
+	function getOrderColumn() {
+		// First check for user preference
+		var pref = gs.getUser().getPreference(data.table + ".db.order");
+		if (!GlideStringUtil.nil(pref)) {
+			data.o = pref;
+			if (gs.getUser().getPreference(data.table + ".db.order.direction") == "DESC")
+				data.d = 'desc';
+			return;
+		}
+
+		// If no user pref, check for table default using same logic as Desktop UI:
+		// 1) if task, use number
+		// 2) if any field has isOrder attribute, use that
+		// 3) use order, number, name column if exists (in that priority)
+		if (grForMetaData.isValidField("sys_id") && grForMetaData.getElement("sys_id").getED().getFirstTableName() == "task") {
+			data.o = "number";
+			return;
+		}
+		
+		// Next check for isOrder attribute on any column
+		var elements = grForMetaData.getElements();
+		// Global and scoped GlideRecord.getElements return two different things,
+		// so convert to Array if needed before looping through
+		if (typeof elements.size != "undefined") {
+			var elementArr = [];
+			for (var i = 0; i < elements.size(); i++)
+				elementArr.push(elements.get(i));
+			elements = elementArr;
+		}
+		// Now we can loop through
+		for (var j = 0; elements.length > j; j++) {
+			var element = elements[j];
+			if (element.getAttribute("isOrder") == "true") {
+				data.o = element.getName();
+				return;
+			}
+		}
+		// As last resort, sort on Order, Number, or Name column
+		if (grForMetaData.isValidField("order"))
+			data.o = "order";
+		else if (grForMetaData.isValidField("number"))
+			data.o = "number";
+		else if (grForMetaData.isValidField("name"))
+			data.o = "name";
+	}
+
 })();]]></script>
         <servicenow>false</servicenow>
         <sys_class_name>sp_widget</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-01-14 10:42:15</sys_created_on>
         <sys_id>b8ffbccf2fdc2d10758993acf699b61d</sys_id>
-        <sys_mod_count>149</sys_mod_count>
+        <sys_mod_count>178</sys_mod_count>
         <sys_name>Delivery Table Modal</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_b8ffbccf2fdc2d10758993acf699b61d</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-10-21 10:52:05</sys_updated_on>
+        <sys_updated_on>2023-10-21 19:21:04</sys_updated_on>
         <template><![CDATA[<div ng-show="!c.data.deliverySelected">
   <div ng-show="c.data.displayDataTable">
    <widget id="widget-data-table" options='data.tableOptions'></widget>
