@@ -4,7 +4,7 @@
         <client_script><![CDATA[api.controller=function($scope,$uibModal,spUtil,delitemModalPubSub) {
 	/* widget controller */
 	var c = this;
-//console.log(c.data);
+	//console.log(c.data);
 	c.data.collectDeliveryDisabled = true;
 
 	if(c.data.outstandingDeliveryCount > 0) {
@@ -14,7 +14,8 @@
 	}
 
 	delitemModalPubSub.subscribe($scope, function($event, data) {//Subscription to Angular Provider to retrieve data from Modal and update relevant variables
-
+		//alert(data.modalAction);
+		console.log(data);
 		c.modalInstance.close();
 
 		if(data.modalAction == "sendNotifications") {
@@ -22,15 +23,27 @@
 			spUtil.addInfoMessage("Notifications Sent!");
 
 		} else if(data.modalAction == "remindersSent") {
-			
+
 			spUtil.addInfoMessage("Reminders Sent!");
-			
+
 		} else if(data.modalAction == "collectDelivery") {
 			//alert('here');
-			
+
 			//console.log(data);
-			c.openModal("delitem_delivery_summary","Outstanding Deliveries Test",data);
-			
+			c.openModal("delitem_delivery_summary","Outstanding Deliveries",data);
+
+		} else if(data.modalAction === "signatureAccepted") {
+
+			c.data.obj = data;
+			c.server.get({
+
+				action: "attachSignature",
+				signature: data.signature,
+				deliveryItems: c.data.selectedDeliveryItemArr,			
+
+			}).then(function(rsp) {
+
+			})
 		}
 
 	})
@@ -103,7 +116,7 @@
 			c.data.tableAction = "collect_delivery";
 
 		}
-		
+
 		else if(action == "send_reminders") {
 
 			c.data.deliveryModalFilter = c.data.reminderFilter;
@@ -113,7 +126,7 @@
 			c.data.modalWidget = "delivery_table_modal";
 			//c.data.modalWidget = "delitem_data_table";
 			c.data.inlineCheckbox = true;
-		//	c.data.checkBoxSelectFunction = "single";
+			//	c.data.checkBoxSelectFunction = "single";
 			c.data.deliveryModalTitle = 'Send Reminders';
 			//c.data.modalWidget = "delitem_reminders";
 			c.data.checkBoxSelectFunction = "multiple";
@@ -130,19 +143,19 @@
 			"action": action
 
 		}*/
-		
-		
-			/*data.filter = "stateIN" + DelItemConstants.NEW + "," + DelItemConstants.EXPECTED;
+
+
+		/*data.filter = "stateIN" + DelItemConstants.NEW + "," + DelItemConstants.EXPECTED;
 	data.table = DelItemConstants.DELIVERY_ITEM_TABLE;
 	//data.fields = ["date_received","recipient","sender","collection_location","notes","state"];
 	data.fields = "date_received,recipient,sender,collection_location,notes,state";
 	data.fields_array = data.fields.split(',');*/
-	
-	
-	//data.button_label = "Placeholder"
-	//data.inline_button = true;
-	//data.inline_checkbox = false;
-		
+
+
+		//data.button_label = "Placeholder"
+		//data.inline_button = true;
+		//data.inline_checkbox = false;
+
 		var widgetOptions = {
 
 			"table": c.data.deliveryModalTable,	
@@ -163,7 +176,7 @@
 	}
 
 	c.openModal = function(widget,title,modalObj) {
-//console.log(modalObj);
+		//console.log(modalObj);
 		/***
 	 	* Open Modal using supplied parameters
 	 	***/
@@ -232,6 +245,11 @@ textarea {
 
 .btn{
 	margin: 5px;
+}
+
+.collectBtns{
+	margin: 5px;
+  margin-top: 100px !important;
 }</css>
         <data_table>sp_instance</data_table>
         <demo_data/>
@@ -379,6 +397,36 @@ textarea {
 		}
 
 	}
+	
+	if(input && input.action == "signatureAccepted") {
+		
+		try {
+			
+		for(var i = 0; i < input.deliveryItems.length; i++) {
+
+				var attach = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
+				attach.get(input.deliveryItems[i]);
+
+				var dataUrl = input.signature.dataUrl;
+				var dataUrlSplit = dataUrl.split('base64,');
+
+				var attachment = new GlideSysAttachment();
+				var attachmentSysId = attachment.writeBase64(attach, "signature.png", "image/png", dataUrlSplit[1]);
+
+				attach.setValue('state',DelItemConstants.COLLECTED);
+				attach.setValue('date_collected',new GlideDateTime());
+				attach.setValue('recipient_signature',attachmentSysId);
+				attach.update();
+
+			}
+		
+				} catch(err) {
+
+			gs.error('['+gs.getCurrentScopeName()+']' + ': widget - Caught error: \n'+err);
+
+		}
+		
+	}
 
 })();]]></script>
         <servicenow>false</servicenow>
@@ -386,14 +434,14 @@ textarea {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-12-23 15:06:04</sys_created_on>
         <sys_id>7a5960082f0ce110758993acf699b611</sys_id>
-        <sys_mod_count>97</sys_mod_count>
+        <sys_mod_count>105</sys_mod_count>
         <sys_name>Delitem</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_7a5960082f0ce110758993acf699b611</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-08-11 13:57:53</sys_updated_on>
+        <sys_updated_on>2023-10-20 18:35:17</sys_updated_on>
         <template><![CDATA[<div class="panel panel-primary">
   <div class="panel-heading">
     Delitem
