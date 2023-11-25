@@ -232,47 +232,62 @@ text-align: center;
         <script><![CDATA[(function() {
 	/* populate the 'data' object */
 	/* e.g., data.table = $sp.getValue('table'); */
-try {
-	data.selfService = gs.getProperty("x_187394_delitem.self.service");
-	//c.data.thisistheinput = input;
-//	if(data.selfService == "false") {
+	try {
+
+		data.selfService = gs.getProperty("x_187394_delitem.self.service");
+		//c.data.thisistheinput = input;
+		//	if(data.selfService == "false") {
 		data.options = input || '';
-	//}
-	var deliverySysId;
-	
-	//gs.error("JW Debug, delivery Sys ID: " + JSON.stringify(data));
-	
-		deliverySysId = data.options.selectedDelivery.sys_id;
-		data.recipientFirstName = data.options.selectedDelivery.recipientFirstName;
-		data.deliveryItems = data.options.selectedDelivery.delivery_items_awaiting_collection.value;
-	
-	/*if(data.selfService == "false") {
-	
+		//}
+		var deliverySysId;
+
+		//gs.error("JW Debug, delivery Sys ID: " + JSON.stringify(data));
+
+		if(data.selfService == "true") {
+			
+			deliverySysId = data.options.sys_id;
+			data.recipientFirstName = data.options.recipientFirstName;
+			data.deliveryItems = data.options.delivery_items_awaiting_collection.value;
+				
+		} else {
+			
+			deliverySysId = data.options.selectedDelivery.sys_id;
+			data.recipientFirstName = data.options.selectedDelivery.recipientFirstName;
+			data.deliveryItems = data.options.selectedDelivery.delivery_items_awaiting_collection.value;
+			
+		}
+		
+		gs.error("JW Debug, delivery Sys ID: " + deliverySysId);
+		
+		
+
+		/*if(data.selfService == "false") {
+
 		deliverySysId = options.deliverySysId;
 		data.recipientFirstName = options.recipientFirstName;
 		data.deliveryItems = options.deliveryItems;
-		
+
 	} else {
-		
+
 		deliverySysId = data.options.deliverySysId;
 		data.recipientFirstName = data.options.recipientFirstName;
 		data.deliveryItems = parseInt(data.options.deliveryItems);
-		
-	}*/
-	
-	data.retrievedDeliveryItemArr = [];
-	data.retrievedDeliveryItemSysIdArr = [];
-	data.multipleItems = false;
 
-	//gs.error("JW Debug, delivery Sys ID: " + data.deliveryItems);
-	
-	
+	}*/
+
+		data.retrievedDeliveryItemArr = [];
+		data.retrievedDeliveryItemSysIdArr = [];
+		data.multipleItems = false;
+
+		//gs.error("JW Debug, delivery Sys ID: " + data.deliveryItems);
+
+
 
 		var deliveryItemGR = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
-		deliveryItemGR.addEncodedQuery("state!=" + DelItemConstants.COLLECTED + "^ORstate=NULL^delivery=" + deliverySysId);
+		deliveryItemGR.addEncodedQuery("state!=" + DelItemConstants.COLLECTED + "^delivery=" + deliverySysId);
 		deliveryItemGR.query();
 		while(deliveryItemGR.next()) {
-			
+gs.error("JW Debug, Delivery items found");
 			data.retrievedDeliveryItemObj = {};
 			data.retrievedDeliveryItemObj.date_received = deliveryItemGR.date_received.toString();
 			data.retrievedDeliveryItemObj.sender = deliveryItemGR.sender.toString() || "N/A";
@@ -282,25 +297,25 @@ try {
 			data.retrievedDeliveryItemArr.push(data.retrievedDeliveryItemObj);
 			data.retrievedDeliveryItemSysIdArr.push(deliveryItemGR.getUniqueValue());
 			data.recipientFirstName = deliveryItemGR.recipient.first_name.toString();
-			
+
 		}
-		
-		if(data.deliveryItems > 1) {
+gs.error("JW Debug, Delivery items found: " + data.deliveryItems );
+		if(deliveryItemGR.getRowCount() > 1) {
 
-				data.multipleItems = true;
+			data.multipleItems = true;
 
-			}
+		}
 
 	} catch(err) {
 
-		gs.error('['+gs.getCurrentScopeName()+']' + ': widget - Caught error: \n'+err);
+		gs.error('['+gs.getCurrentScopeName()+']' + ': Summary widget - Caught error: \n'+err);
 
 	}
 
 	if(input ) {
 
 		try {
-gs.error("JW Debug, delivery widgetInput: " + JSON.stringify(data));
+			gs.error("JW Debug, delivery widgetInput: " + JSON.stringify(data));
 			for(var i = 0; i < input.deliveryItems.length; i++) {
 
 				var attach = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
@@ -333,14 +348,14 @@ gs.error("JW Debug, delivery widgetInput: " + JSON.stringify(data));
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-01-27 21:11:45</sys_created_on>
         <sys_id>05bc4a172f202110758993acf699b698</sys_id>
-        <sys_mod_count>64</sys_mod_count>
+        <sys_mod_count>74</sys_mod_count>
         <sys_name>Delitem Delivery Summary</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_05bc4a172f202110758993acf699b698</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-10-20 18:19:24</sys_updated_on>
+        <sys_updated_on>2023-11-25 12:09:11</sys_updated_on>
         <template><![CDATA[<div class="jumbotron inner">
   <h3 class="headingText"
       ng-show="!c.data.deliveryItemsSelected">

@@ -4,9 +4,9 @@
         <client_script><![CDATA[api.controller=function($scope,delitemModalPubSub,spUtil,spAriaUtil) {
 	/* widget controller */
 	var c = this;
-	
+
 	//console.log(c);
-	
+
 	c.data.deliverySelected = false;
 	c.data.delveryItemsSelected = false;
 	c.data.selectedDeliveryItemArr = [];
@@ -24,18 +24,18 @@
 	};
 
 	c.collectDelivery = function() {
-		
+
 		var modalReturnObj = {
 
-				"modalAction" : "collectDelivery",
-				"selectedDelivery" : c.data.selectedItem
+			"modalAction" : "collectDelivery",
+			"selectedDelivery" : c.data.selectedItem
 
-			}
+		}
 
-			delitemModalPubSub.publish(modalReturnObj);
+		delitemModalPubSub.publish(modalReturnObj);
 
 		/*spUtil.get("delitem_delivery_summary", {
-			
+
 			deliverySysId: c.data.selectedItem.sys_id,
 			deliveryItems: c.data.selectedItem.delivery_items.display_value,
 			recipientFirstName: c.data.selectedItem.recipient.display_value
@@ -168,7 +168,7 @@ console.log(rsp);
 			c.data.selectedDeliveryArr = c.data.list;
 
 		}
-		
+
 		c.server.get({
 
 			action: "sendReminders",
@@ -187,9 +187,9 @@ console.log(rsp);
 		})
 
 	}
-	
-		c.cancel = function() {
-		
+
+	c.cancel = function() {
+
 		var modalReturnObj = {
 
 			"modalAction" : "cancel"
@@ -230,40 +230,41 @@ console.log(rsp);
 		}
 		console.log(c.data.selectedItem);
 	}
-	
-		$scope.setOrderBy = function(field) {
-			//alert(field);
-			console.log($scope.data.column_types);
-			
-			try {
-		var d = "asc";
-		// descending default sort for date/time columns for UI consistency
-		var fieldType = $scope.data.column_types[field];
-				console.log(fieldType);
-		if (fieldType == "glide_date_time" || fieldType == "glide_date")
-			d = "desc";
-		if ($scope.data.o == field) {
-			if ($scope.data.d == "asc")
-				d = "desc";
-			else
-				d = "asc";
-		}
 
-		/*if (d === "asc") {
+	$scope.setOrderBy = function(field) {
+		//alert(field);
+		console.log(c.data);
+
+		try {
+			var d = "asc";
+			// descending default sort for date/time columns for UI consistency
+			var fieldType = c.data.column_types["recipient"];
+			console.log(fieldType);
+			if (fieldType == "glide_date_time" || fieldType == "glide_date") {
+				d = "desc";
+			}
+			if (c.data.o == field) {
+				if (c.data.d == "asc")
+					d = "desc";
+				else
+					d = "asc";
+			}
+
+			if (d === "asc") {
 			spAriaUtil.sendLiveMessage($scope.data.msg.sortingByAsc);
 		} else if (d === "desc") {
 			spAriaUtil.sendLiveMessage($scope.data.msg.sortingByDesc);
-		}*/
+		}
 
-		$scope.data.o = field;
-		$scope.data.d = d;
-		$scope.data.setOrderUserPreferences = true;
-		//$scope.setSearch(true);
-				
-				} catch (err){
-	console.log("JW Debug client: " + err);
-	
-}
+			c.data.o = field;
+			c.data.d = d;
+			c.data.setOrderUserPreferences = true;
+			//$scope.setSearch(true);
+
+		} catch (err){
+			console.log("JW Debug client: " + err);
+
+		}
 	}
 
 };]]></client_script>
@@ -363,7 +364,136 @@ console.log(rsp);
         <has_preview>true</has_preview>
         <id>delivery_table_modal</id>
         <internal>false</internal>
-        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <link><![CDATA[function(scope, element, attrs, ctrl){
+	var $ul, $contextMenu;
+
+	scope.focusOnTableHeader = function() {
+		element.find(".data-table-title").attr("tabindex", "-1").focus();
+	}
+
+	element.on('contextmenu', function(e){
+		if (e.ctrlKey)
+			return; // ctrlKey is for the debug menu, not this menu
+
+		var rowScope = angular.element(e.target).scope();
+		var field, item, fieldVal;
+
+		// Context Menu for tbody
+		if (angular.isDefined(rowScope.field) && angular.isDefined(rowScope.item)){
+			e.preventDefault();
+			field = rowScope.field;
+			item = rowScope.item;
+			fieldVal = item[field].value;
+
+			var items = [
+				['${Show Matching}', function(){
+					ctrl.createQueryTerm(scope.data.table, field, item.sys_id, '=').then(function(term){
+						ctrl.showMatching(field, term);
+					});
+				}],
+				['${Filter Out}', function(){
+					ctrl.createQueryTerm(scope.data.table, field, item.sys_id, '!=').then(function(term){
+						ctrl.filterOut(field, term);
+					});
+				}]
+			];
+
+			renderContextMenu(items);
+			setContextMenuPosition(e);
+		}
+	});
+
+	function renderContextMenu(items){
+		var scrollHeight = $('body').get(0).scrollHeight;
+		$contextMenu = angular.element('<div>', {'class': 'dropdown clearfix context-dropdown open'});
+
+		$contextMenu.on('click', function (e) {
+			if ($(e.target).hasClass('dropdown')) {
+				_clearContextMenus(event);
+			}
+		});
+		$contextMenu.on('contextmenu', function (event) {
+			event.preventDefault();
+			_clearContextMenus(event);
+		});
+
+		$contextMenu.css({
+			position: 'absolute',
+			top: 0,
+			height: scrollHeight,
+			left: 0,
+			right: 0,
+			zIndex: 9999
+		});
+
+		$('body').append($contextMenu);
+
+		$ul = angular.element('<ul>', {
+			'class': 'dropdown-menu',
+			'role': 'menu'
+		});
+		renderItems();
+		$contextMenu.append($ul);
+
+		function renderItems(){
+			angular.forEach(items, function (item) {
+				var $li = angular.element('<li>');
+
+				if (item === null) {
+					$li.addClass('divider');
+				} else {
+					var $a = angular.element('<a>');
+					$a.attr({tabindex: '-1', href:'#'});
+					$a.text(item[0]);
+					$li.append($a);
+					$li.on('click', function (e) {
+						e.preventDefault();
+						scope.$apply(function () {
+							_clearContextMenus(e);
+							item[1].call(item, item);
+						});
+					});
+				}
+
+				$ul.append($li);
+			});
+		}
+	}
+
+	function _clearContextMenus(event){
+		if (!event){
+			return;
+		}
+
+		angular.element(event.currentTarget).removeClass('context');
+
+		var els = angular.element(".context-dropdown");
+		angular.forEach(els, function(el){
+			angular.element(el).remove();
+		});
+	}
+
+	var contextMenuItemHeight = 0;
+	function setContextMenuPosition(event){
+		if (contextMenuItemHeight === 0)
+			contextMenuItemHeight = $ul.children(0).height();
+
+		// Why not just call .width() and .height() on the container? Because those calculations cause browsers to reflow
+		// that can cause IE10 to take 200ms to render a context menu.
+		var cmWidth = 150;
+		var cmHeight = contextMenuItemHeight * $ul.children().length;
+		var startX = event.pageX + cmWidth >= window.innerWidth ? event.pageX - cmWidth : event.pageX;
+		var startY = event.pageY + cmHeight >= window.innerHeight ? event.pageY - cmHeight : event.pageY;
+
+		$ul.css({
+			display: 'block',
+			position: 'absolute',
+			left: startX,
+			top: startY,
+			'min-width': cmWidth
+		});
+	}
+}]]></link>
         <name>Delivery Table Modal</name>
         <option_schema/>
         <public>false</public>
@@ -371,66 +501,71 @@ console.log(rsp);
         <script><![CDATA[(function() {
 	/* populate the 'data' object */
 	/* e.g., data.table = $sp.getValue('table'); */
-try {
-	
-	data.field_labels = [];
-	data.options = input;
-	data.fields_array = data.options.fields.split(',');
-	console.log(data.fields_array);
-	//data.msg.sortingByAsc = gs.getMessage("Sorting by ascending");
-	//data.msg.sortingByDesc = gs.getMessage("Sorting by descending");
-	//optCopy(input);
+	try {
+
+		data.field_labels = [];
+		data.options = input;
+		data.fields_array = data.options.fields.split(',');
+		console.log(data.fields_array);
+		//data.msg.sortingByAsc = gs.getMessage("Sorting by ascending");
+		//data.msg.sortingByDesc = gs.getMessage("Sorting by descending");
+		//optCopy(input);
 
 		//optCopy(data.options);
 		
-	var fieldLabelGRS = new GlideRecordSecure(data.options.table);
-	for (var i in data.fields_array) {
-		var field = data.fields_array[i];
-
-		var fieldLableGe = fieldLabelGRS.getElement(field);
-		if (fieldLableGe == null)
-			continue;
-
-		data.field_labels.push(fieldLableGe.getLabel());
-
-	}
-
-	var queryGRS = new GlideRecordSecure(data.options.table);
-	queryGRS.addEncodedQuery(data.options.filter);
-	queryGRS.query();
-	data.list = [];
-
-	while (queryGRS._next()) {
-		var record = {};
-
-		$sp.getRecordElements(record, queryGRS, data.options.fields);
-		record.sys_id = queryGRS.getUniqueValue();
-		data.list.push(record);		
 		
-	}
-	
+	data.msg = {};
+	data.msg.sortingByAsc = gs.getMessage("Sorting by ascending");
+	data.msg.sortingByDesc = gs.getMessage("Sorting by descending");
+
+		var fieldLabelGRS = new GlideRecordSecure(data.options.table);
+		for (var i in data.fields_array) {
+			var field = data.fields_array[i];
+
+			var fieldLableGe = fieldLabelGRS.getElement(field);
+			if (fieldLableGe == null)
+				continue;
+
+			data.field_labels.push(fieldLableGe.getLabel());
+
+		}
+
+		var queryGRS = new GlideRecordSecure(data.options.table);
+		queryGRS.addEncodedQuery(data.options.filter);
+		queryGRS.query();
+		data.list = [];
+
+		while (queryGRS._next()) {
+			var record = {};
+
+			$sp.getRecordElements(record, queryGRS, data.options.fields);
+			record.sys_id = queryGRS.getUniqueValue();
+			data.list.push(record);		
+
+		}
+
 		data.row_count = queryGRS.getRowCount();
 		data.num_pages = Math.ceil(data.row_count / data.options.window_size);
-data.column_labels = {};
-	data.column_types = {};
-	
-		var grForMetaData = new GlideRecord(data.options.table);
-	
-		// use GlideRecord to get field labels vs. GlideRecordSecure
-	for (var i in data.fields_array) {
-		var field = data.fields_array[i];
-		var ge = grForMetaData.getElement(field);
-		if (ge == null)
-			continue;
+		data.column_labels = {};
+		data.column_types = {};
 
-		data.column_labels[field] = ge.getLabel();
-		data.column_types[field] = ge.getED().getInternalType();
-		
-	}
+		var grForMetaData = new GlideRecord(data.options.table);
+
+		// use GlideRecord to get field labels vs. GlideRecordSecure
+		for (var i in data.fields_array) {
+			var field = data.fields_array[i];
+			var ge = grForMetaData.getElement(field);
+			if (ge == null)
+				continue;
+
+			data.column_labels[field] = ge.getLabel();
+			data.column_types[field] = ge.getED().getInternalType();
+
+		}
 	} catch (err){
-	gs.error("JW Debug: " + err);
-	
-}
+		gs.error("JW Debug server: " + err);
+
+	}
 	/*
 	data.options = input || '';
 	data.deliveriesArr = [];
@@ -455,6 +590,8 @@ data.column_labels = {};
 	///data.newDeliveryFilter = "date_receivedONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()";
 	//data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
 */
+	
+
 	if(data.options.action == "todays" || data.options.action == "outstanding" || data.options.action == "expected") {
 
 		data.displayDataTable = true;
@@ -474,7 +611,7 @@ data.column_labels = {};
 		"hide_header": true
 
 	};
-	
+
 	//data.customTableOptions = data.options;
 
 	/*if(input) {
@@ -490,12 +627,12 @@ gs.error("JW Debug: widget " + JSON.stringify(data));
 		data.deliverySummaryWidget = $sp.getWidget("delitem_delivery_summary", data.deliverySummaryOptions);
 
 	}*/
-	
+
 	/*if(input) {
 		try {
 			gs.error("JW Debug: widget " + JSON.stringify(data));
 		console.log(input);
-		
+
 
 		data.deliverySummaryOptions = {
 
@@ -506,18 +643,18 @@ gs.error("JW Debug: widget " + JSON.stringify(data));
 		};
 
 		data.deliverySummaryWidget = $sp.getWidget("delitem_delivery_summary", data.deliverySummaryOptions);
-		
+
 		} catch(err) {
 			gs.error("JW Debug: widget err: " + err);
 		}
 	}*/
-	
+
 	if(input && input.action == "sendReminders") {
-		
+
 		var sendReminders = new DelitemUtils().sendReminders(input.selectedDeliveryArr);
-		
+
 	}
-	
+
 	// getOrderColumn logic mirrors that of Desktop UI when no sort column is specified
 	function getOrderColumn() {
 		// First check for user preference
@@ -537,7 +674,7 @@ gs.error("JW Debug: widget " + JSON.stringify(data));
 			data.o = "number";
 			return;
 		}
-		
+
 		// Next check for isOrder attribute on any column
 		var elements = grForMetaData.getElements();
 		// Global and scoped GlideRecord.getElements return two different things,
@@ -571,18 +708,38 @@ gs.error("JW Debug: widget " + JSON.stringify(data));
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-01-14 10:42:15</sys_created_on>
         <sys_id>b8ffbccf2fdc2d10758993acf699b61d</sys_id>
-        <sys_mod_count>178</sys_mod_count>
+        <sys_mod_count>210</sys_mod_count>
         <sys_name>Delivery Table Modal</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_b8ffbccf2fdc2d10758993acf699b61d</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-10-21 19:21:04</sys_updated_on>
+        <sys_updated_on>2023-11-24 22:52:56</sys_updated_on>
         <template><![CDATA[<div ng-show="!c.data.deliverySelected">
   <div ng-show="c.data.displayDataTable">
-   <widget id="widget-data-table" options='data.tableOptions'></widget>
-   <!--  <div ng-include="'delitem-custom-data-table.html'"></div>-->
+  <widget id="widget-data-table" options='data.tableOptions'></widget>
+      <!--<div ng-include="'delitem-custom-data-table.html'"></div>-->
+    
+    <!------------------>
+    <table class="table table-striped table-primary table-responsive table-bordered">
+      <thead>
+        <tr>
+          <th class="itemData"
+              ng-repeat="field in data.field_labels track by $index">
+            <div class="th-title">
+              {{field}}
+            </div>  	
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="delivery in c.data.list">
+          <td ng-repeat="field in data.fields_array">{{::delivery[field].display_value}}</td>      
+        </tr>
+    </table>
+    <!------------------>
+    
   </div>
   <div class="alert alert-info"
        ng-show="!c.data.displayDataTable && c.data.deliveriesArr.length == 0">
@@ -625,12 +782,11 @@ gs.error("JW Debug: widget " + JSON.stringify(data));
       <caption class="sr-only">{{data.title || data.table_plural}}</caption>
       <thead>
         <tr>
-          <th ng-repeat="field in data.field_labels track by $index" class="text-nowrap" ng-click="setOrderBy(field)"
+       <th ng-repeat="field in data.field_labels track by $index" class="text-nowrap" ng-click="setOrderBy(field)"
               scope="col" role="columnheader" aria-sort="{{field == data.o ? (data.d == 'asc'? 'ascending': 'descending') : 'none'}}">
             <div class="th-title" title="${Sort by} {{field == data.o ? (data.d == 'asc' ?  '${Descending}': '${Ascending}') : '${Ascending}'}}" role="button" tabindex="0" aria-label="{{data.column_labels[field]}}">{{field}}</div>
             <i class="fa" ng-if="field == data.o" ng-class="{'asc': 'fa-chevron-up', 'desc': 'fa-chevron-down'}[data.d]"></i>
           </th>
-          <th></th>
         </tr>
       </thead>
       <tbody>

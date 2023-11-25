@@ -81,7 +81,7 @@
 	}
 
 	c.executeManualSearch = function() {
-
+//console.log(c.data.recipient);
 		c.server.get({
 
 			action: "lookupDelivery",
@@ -89,7 +89,7 @@
 			recipient: c.data.recipient
 
 		}).then(function(rsp) {
-console.log(rsp);
+//console.log(rsp);
 			if(rsp.data.deliveryNotFound) {
 
 				spModal.alert("No outstanding deliveries were located for you " + rsp.data.userFirstName + ", please speak to reception if you need any further assistance");
@@ -114,7 +114,7 @@ console.log(rsp);
 	}
 
 	c.openModal = function(widget,title,modalObj) {
-
+//console.log(modalObj);
 		/***
 	 	* Open Modal using supplied parameters
 	 	***/
@@ -210,18 +210,18 @@ textarea {
 	data.collected = DelItemConstants.COLLECTED;
 
 	if(input && input.action == "lookupDelivery") {
-
+gs.error("JW Debug: data: " + JSON.stringify(input));
 		try {
 
 			var lookupDeliveryGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_TABLE);
 			lookupDeliveryGRS.addEncodedQuery(input.deliveryFilter);
 			lookupDeliveryGRS.query();
 			if(lookupDeliveryGRS.next()) {
-
+gs.error("JW Debug, record found: " + lookupDeliveryGRS.number);
 				data.deliverySummaryOptions = {
 
 					"sys_id": lookupDeliveryGRS.getUniqueValue(),
-					"deliveryItems": lookupDeliveryGRS.delivery_items_awaiting_collection.toString(),
+					"delivery_items_awaiting_collection": lookupDeliveryGRS.delivery_items_awaiting_collection.toString(),
 					"recipientFirstName": lookupDeliveryGRS.recipient.first_name.toString()
 
 				};
@@ -253,14 +253,14 @@ textarea {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-02-04 15:35:31</sys_created_on>
         <sys_id>b17c06f92fb06910758993acf699b6c6</sys_id>
-        <sys_mod_count>5</sys_mod_count>
+        <sys_mod_count>12</sys_mod_count>
         <sys_name>Delitem Self Service</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_b17c06f92fb06910758993acf699b6c6</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-07-20 16:20:36</sys_updated_on>
+        <sys_updated_on>2023-11-25 11:58:50</sys_updated_on>
         <template><![CDATA[<div class="panel panel-primary">
   <div class="panel-heading">
     Delitem
@@ -271,8 +271,8 @@ textarea {
            ng-click="c.scanQRCode()">
         <h5 class="docTitle">
           <span>
-              <img class="img-circle pointer selfServiceImgs" ng-src="sp-qr-reader-icon.png">
-            </span>
+            <img class="img-circle pointer selfServiceImgs" ng-src="sp-qr-reader-icon.png">
+          </span>
           Scan QR Code
         </h5>
       </div>
@@ -280,37 +280,37 @@ textarea {
            ng-click="c.manualSearch()">
         <h5 class="docTitle">
           <span>
-              <img class="img-circle pointer selfServiceImgs" ng-src="hawt_search_img.png">
-            </span>
+            <img class="img-circle pointer selfServiceImgs" ng-src="hawt_search_img.png">
+          </span>
           Search Deliveries
         </h5>
       </div> 
     </div>    
-  	<div class="form-group"
+    <div class="form-group"
          ng-show="c.data.manualSearch">
-        <span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory" ng-class="{'mandatory-filled': recipient.displayValue != undefined}"></span>
-        <label for="formGroupExampleInput">Name</label>
-        <sn-record-picker field="c.data.recipient"
-                          name="recordPickerSingle"
-                          table="'sys_user'" 
-                          display-field="'name'" 
-                          value-field="'sys_id'" 
-                          search-fields="'name'" 
-                          page-size="100"
-                          id="recordPickerSingle"
-                          autofocus
-                          >
-        </sn-record-picker>
+      <span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory" ng-class="{'mandatory-filled': recipient.displayValue != undefined}"></span>
+      <label for="formGroupExampleInput">Name</label>
+      <sn-record-picker field="c.data.recipient"
+                        name="recordPickerSingle"
+                        table="'sys_user'" 
+                        display-field="'name'" 
+                        value-field="'sys_id'" 
+                        search-fields="'name'" 
+                        page-size="100"
+                        id="recordPickerSingle"
+                        autofocus
+                        >
+      </sn-record-picker>
       <div class="text-right">
-      <button class="btn btn-primary searchBtn"
-              ng-click="c.executeManualSearch()"
-              ng-class="{ 'disabled' : c.data.searchDisabled }">
-        Search
-      </button>
-    </div>
-      </div>      
+        <button class="btn btn-primary searchBtn"
+                ng-click="c.executeManualSearch()"
+                ng-class="{ 'disabled' : c.data.searchDisabled }">
+          Search
+        </button>
+      </div>
+    </div>      
   </div>    
-  </div>
+</div>
 ]]></template>
     </sp_widget>
 </record_update>
