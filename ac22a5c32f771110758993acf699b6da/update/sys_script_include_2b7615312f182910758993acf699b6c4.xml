@@ -36,6 +36,8 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 
 			}
 
+			newDeliveryItemGRS.setValue('date_received',new GlideDateTime());
+
 			newDeliveryItem = newDeliveryItemGRS.insert();
 
 			return newDeliveryItem;
@@ -94,7 +96,7 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 				newDeliveryItemObj = {};
 				newDeliveryItemObj.recipient = newDeliveryItems.recipient.getDisplayValue().toString();
 				newDeliveryItemObj.recipientSysId = newDeliveryItems.recipient.toString();
-				newDeliveryItemObj.recipientFirsName = newDeliveryItems.recipient.first_name.toString();
+				newDeliveryItemObj.recipientFirstName = newDeliveryItems.recipient.first_name.toString();
 				// 				newDeliveryItemObj.deliveryItemSysId = newDeliveryItems.sys_id.toString();
 				newDeliveryItemObj.date = new GlideDateTime();
 				newDeliveryItemObj.count = newDeliveryItems.getAggregate('COUNT');
@@ -254,7 +256,7 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 
 			existingDeliveryArr[i].senderStr = existingDeliveryArr[i].senderStr.replace(/,\s*$/, "");
 
-			var body = "Hi " + existingDeliveryArr[i].recipientFirsName + ",\nYou have a new delivery";
+			var body = "Hi " + existingDeliveryArr[i].recipientFirstName + ",\nYou have a new delivery";
 
 			if(existingDeliveryArr[i].senderStr != '' && existingDeliveryArr[i].count == 1) {
 
@@ -288,7 +290,7 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 			reminderDeliveryObj = {};
 			reminderDeliveryObj.recipient = reminderDeliveryGRS.recipient.getDisplayValue().toString();
 			reminderDeliveryObj.recipientSysId = reminderDeliveryGRS.recipient.toString();
-			reminderDeliveryObj.recipientFirsName = reminderDeliveryGRS.recipient.first_name.toString();
+			reminderDeliveryObj.recipientFirstName = reminderDeliveryGRS.recipient.first_name.toString();
 			reminderDeliveryObj.outstanding_delivery_items = parseInt(reminderDeliveryGRS.delivery_items_awaiting_collection);
 
 			return reminderDeliveryObj;
@@ -298,7 +300,7 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 	},
 
 	sendReminders : function(reminderArr) {
-
+		
 		try {
 
 			if(!Array.isArray(reminderArr)) {
@@ -314,7 +316,7 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 				
 				var reminderObj = this.lookupReminderDelivery(reminderArr[i]);
 
-				notificationBody = "Hi " + reminderObj.recipientFirsName + ',\nYou have ';
+				notificationBody = "Hi " + reminderObj.recipientFirstName + ',\nYou have ';
 
 				if(reminderObj.outstanding_delivery_items > 1) {
 
@@ -349,6 +351,7 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 
 				deliveryItemGRS.setValue('state',DelItemConstants.NEW);
 				deliveryItemGRS.setValue('collection_location',deliveryItem.collectionLocation);
+				deliveryItemGRS.setValue('date_received', new GlideDateTime());
 				deliveryItemGRS.update();
 
 			}
@@ -367,13 +370,13 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-01-10 15:13:14</sys_created_on>
         <sys_id>2b7615312f182910758993acf699b6c4</sys_id>
-        <sys_mod_count>11</sys_mod_count>
+        <sys_mod_count>20</sys_mod_count>
         <sys_name>DelitemUtils</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sys_script_include_2b7615312f182910758993acf699b6c4</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-06-21 09:47:11</sys_updated_on>
+        <sys_updated_on>2023-11-28 21:27:32</sys_updated_on>
     </sys_script_include>
 </record_update>

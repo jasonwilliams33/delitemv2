@@ -56,9 +56,14 @@
 
 				deliveryGR.setValue('state',DelItemConstants.COLLECTED);
 
+			} else {
+				
+				deliveryGR.setValue('state',DelItemConstants.PARTIALLY_COLLECTED);
+				
 			}
 
-			deliveryGR.setValue('delivery_items_awaiting_collection',parseInt(deliveryGR.delivery_items_awaiting_collection) - 1);
+			deliveryGR.setValue('delivery_items_awaiting_collection',parseInt(deliveryGR.delivery_items_awaiting_collection) - 1);			
+			
 			deliveryGR.update();
 
 		}
@@ -76,7 +81,7 @@
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>e47454502f34e110758993acf699b63b</sys_id>
-        <sys_mod_count>3</sys_mod_count>
+        <sys_mod_count>5</sys_mod_count>
         <sys_name>Update Delivery</sys_name>
         <sys_overrides/>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
@@ -84,7 +89,7 @@
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sys_script_e47454502f34e110758993acf699b63b</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-02-28 20:19:06</sys_updated_on>
+        <sys_updated_on>2023-11-25 13:23:05</sys_updated_on>
         <template/>
         <when>after</when>
     </sys_script>
