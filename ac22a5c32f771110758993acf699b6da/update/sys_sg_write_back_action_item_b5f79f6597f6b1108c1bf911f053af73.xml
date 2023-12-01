@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_write_back_action_item">
     <sys_sg_write_back_action_item action="INSERT_OR_UPDATE">
-        <description/>
+        <description>Cancel Expected Delivery Item</description>
         <execution_script/>
-        <name>Add Expected Delivery</name>
+        <name>Cancel Expected Delivery Item</name>
         <parameter_screen/>
         <query_condition/>
         <sys_class_name>sys_sg_write_back_action_item</sys_class_name>
         <sys_created_by>admin</sys_created_by>
-        <sys_created_on>2023-06-16 19:58:55</sys_created_on>
-        <sys_id>ea6abe5097a361108c1bf911f053af3c</sys_id>
-        <sys_mod_count>9</sys_mod_count>
-        <sys_name>Add Expected Delivery</sys_name>
+        <sys_created_on>2023-11-29 08:44:13</sys_created_on>
+        <sys_id>b5f79f6597f6b1108c1bf911f053af73</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>Cancel Expected Delivery Item</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
-        <sys_update_name>sys_sg_write_back_action_item_ea6abe5097a361108c1bf911f053af3c</sys_update_name>
+        <sys_update_name>sys_sg_write_back_action_item_b5f79f6597f6b1108c1bf911f053af73</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-12-01 21:34:40</sys_updated_on>
+        <sys_updated_on>2023-11-29 08:47:19</sys_updated_on>
         <table>x_187394_delitem_delivery_item</table>
-        <template>recipient={{recipient}}^sender={{sender}}^state=2^notes={{notes}}^date_expected=javascript: new GlideDateTime().getDate()^EQ</template>
-        <type>new</type>
+        <template>state=6^EQ</template>
+        <type>update</type>
         <use_current_record_as_condition>true</use_current_record_as_condition>
         <use_fields_for_ref_lookup>false</use_fields_for_ref_lookup>
     </sys_sg_write_back_action_item>
-    <sys_translated_text action="delete_multiple" query="documentkey=ea6abe5097a361108c1bf911f053af3c"/>
+    <sys_translated_text action="delete_multiple" query="documentkey=b5f79f6597f6b1108c1bf911f053af73"/>
 </record_update>

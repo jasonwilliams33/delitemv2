@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_push_notif_msg_content">
+    <sys_push_notif_msg_content action="INSERT_OR_UPDATE">
+        <name>Expected Delivery Chase</name>
+        <push_app display_value="ServiceNow Request Application">ac7f61d273122300d63a566a4cf6a78b</push_app>
+        <script><![CDATA[(function buildJSON(/*GlideRecord*/ current, /*String*/ message, /*Object*/ attributes) {
+
+	var layoutFields = {"Identifier" : "number", "Description" : "short_description", "Status" : "state" };
+
+	return new global.ActionablePushPayloadBuilder(current, "a0116ce6977671108c1bf911f053af1c", layoutFields).buildJSON();
+
+})(current, message, attributes);]]></script>
+        <sys_class_name>sys_push_notif_msg_content</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-12-01 22:10:53</sys_created_on>
+        <sys_id>32c3ec2a977671108c1bf911f053afea</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Expected Delivery Chase</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_push_notif_msg_content_32c3ec2a977671108c1bf911f053afea</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-12-01 22:10:53</sys_updated_on>
+    </sys_push_notif_msg_content>
+</record_update>

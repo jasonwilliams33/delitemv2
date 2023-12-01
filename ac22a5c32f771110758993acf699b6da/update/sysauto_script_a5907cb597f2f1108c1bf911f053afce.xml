@@ -2,7 +2,7 @@
     <sysauto_script action="INSERT_OR_UPDATE">
         <active>true</active>
         <business_calendar/>
-        <condition><![CDATA[var dailyReminderTime = gs.getProperty("x_187394_delitem.daily.reminder");
+        <condition><![CDATA[var dailyReminderTime = gs.getProperty("x_187394_delitem.expected.delivery.chase.time");
 
 if(dailyReminderTime) {
 	
@@ -15,7 +15,7 @@ if(dailyReminderTime) {
 }]]></condition>
         <conditional>true</conditional>
         <entered_time>1970-01-01 00:00:00</entered_time>
-        <name>Daily Reminder Check</name>
+        <name>Expected Delivery Chase</name>
         <offset/>
         <offset_type>0</offset_type>
         <run_as display_value="Jason Williams">6816f79cc0a8016401c5a33be04be441</run_as>
@@ -28,42 +28,42 @@ if(dailyReminderTime) {
         <run_type>daily</run_type>
         <script><![CDATA[try {
 
-	var outstandingDeliveryArr = [];
+	var expectedDeliveryArr = [];
 
-	var deliveryReminderGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_TABLE);
-	deliveryReminderGRS.addEncodedQuery("state!=" + DelItemConstants.COLLECTED);
-	deliveryReminderGRS.query();
-	while(deliveryReminderGRS.next()) {
+	var expectedDeliveryGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
+	expectedDeliveryGRS.addEncodedQuery("state=" + DelItemConstants.EXPECTED);
+	expectedDeliveryGRS.query();
+	while(expectedDeliveryGRS.next()) {
 
-		outstandingDeliveryArr.push(deliveryReminderGRS.getUniqueValue());
+		expectedDeliveryArr.push(expectedDeliveryGRS.getUniqueValue());
 
 	}
 
-	if(outstandingDeliveryArr.length > 0) {
+	if(expectedDeliveryArr.length > 0) {
 
-		var scheduledDailyReminderGDT = new GlideDateTime(new GlideDateTime().getLocalDate() + ' ' + gs.getProperty("x_187394_delitem.daily.reminder"));
+		var scheduledExpectedChaseGDT = new GlideDateTime(new GlideDateTime().getLocalDate() + ' ' + gs.getProperty("x_187394_delitem.expected.delivery.chase.time"));
 
-		gs.eventQueueScheduled("x_187394_delitem.delivery.reminder", current, outstandingDeliveryArr, "", scheduledDailyReminderGDT);
+		gs.eventQueueScheduled("x_187394_delitem.expected.delivery.chase", current, expectedDeliveryArr, "", scheduledExpectedChaseGDT);
 
 	}
 
 } catch(err) {
 
-	gs.error('['+gs.getCurrentScopeName()+']' + ': Daily Reminder Scheduled Script - Caught error: \n'+err);
+	gs.error('['+gs.getCurrentScopeName()+']' + ': Expected Delivery Chase Scheduled Script - Caught error: \n'+err);
 
 }]]></script>
         <sys_class_name>sysauto_script</sys_class_name>
         <sys_created_by>admin</sys_created_by>
-        <sys_created_on>2023-02-20 20:13:24</sys_created_on>
-        <sys_id>1c84a10f2f852110758993acf699b617</sys_id>
-        <sys_mod_count>7</sys_mod_count>
-        <sys_name>Daily Reminder Check</sys_name>
+        <sys_created_on>2023-11-29 15:10:50</sys_created_on>
+        <sys_id>a5907cb597f2f1108c1bf911f053afce</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>Expected Delivery Chase</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
-        <sys_update_name>sysauto_script_1c84a10f2f852110758993acf699b617</sys_update_name>
+        <sys_update_name>sysauto_script_a5907cb597f2f1108c1bf911f053afce</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-11-29 15:15:03</sys_updated_on>
+        <sys_updated_on>2023-11-29 15:29:28</sys_updated_on>
         <time_zone/>
         <upgrade_safe>false</upgrade_safe>
     </sysauto_script>

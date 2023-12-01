@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_push_action">
+    <sys_sg_push_action action="INSERT_OR_UPDATE">
+        <foreground>false</foreground>
+        <label>Cancel</label>
+        <name>cancel</name>
+        <order/>
+        <placeholder_text/>
+        <response_type>simple</response_type>
+        <sys_class_name>sys_sg_push_action</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-12-01 22:06:44</sys_created_on>
+        <sys_id>81f26c2e977671108c1bf911f053afdf</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Cancel</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_sg_push_action_81f26c2e977671108c1bf911f053afdf</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-12-01 22:06:44</sys_updated_on>
+    </sys_sg_push_action>
+</record_update>

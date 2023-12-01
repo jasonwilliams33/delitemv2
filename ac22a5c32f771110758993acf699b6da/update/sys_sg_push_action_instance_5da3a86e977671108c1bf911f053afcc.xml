@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_push_action_instance">
+    <sys_sg_push_action_instance action="INSERT_OR_UPDATE">
+        <button display_value="Cancel">2ac7d36597f6b1108c1bf911f053afd6</button>
+        <push_action display_value="Cancel">81f26c2e977671108c1bf911f053afdf</push_action>
+        <push_notification display_value="Expected Delivery Chase">a0116ce6977671108c1bf911f053af1c</push_notification>
+        <sys_class_name>sys_sg_push_action_instance</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-12-01 22:10:09</sys_created_on>
+        <sys_id>5da3a86e977671108c1bf911f053afcc</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>81f26c2e977671108c1bf911f053afdf</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_sg_push_action_instance_5da3a86e977671108c1bf911f053afcc</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-12-01 22:10:09</sys_updated_on>
+    </sys_sg_push_action_instance>
+</record_update>

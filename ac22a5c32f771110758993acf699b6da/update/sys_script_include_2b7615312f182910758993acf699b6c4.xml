@@ -280,22 +280,47 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 
 	},
 
-	lookupReminderDelivery : function(reminderDelivery) {
+	lookupDelivery : function(delivery) {
 
-		var reminderDeliveryObj = {};
+		var deliveryObj = {};
 
-		var reminderDeliveryGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_TABLE);
-		if(reminderDeliveryGRS.get(reminderDelivery)) {
+		var deliveryGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_TABLE);
+		if(deliveryGRS.get(delivery)) {
 
-			reminderDeliveryObj = {};
-			reminderDeliveryObj.recipient = reminderDeliveryGRS.recipient.getDisplayValue().toString();
-			reminderDeliveryObj.recipientSysId = reminderDeliveryGRS.recipient.toString();
-			reminderDeliveryObj.recipientFirstName = reminderDeliveryGRS.recipient.first_name.toString();
-			reminderDeliveryObj.outstanding_delivery_items = parseInt(reminderDeliveryGRS.delivery_items_awaiting_collection);
+			deliveryObj = {};
+			deliveryObj.recipient = deliveryGRS.recipient.getDisplayValue().toString();
+			deliveryObj.recipientSysId = deliveryGRS.recipient.toString();
+			deliveryObj.recipientFirstName = deliveryGRS.recipient.first_name.toString();
+			deliveryObj.outstanding_delivery_items = parseInt(deliveryGRS.delivery_items_awaiting_collection);
 
-			return reminderDeliveryObj;
+			return deliveryObj;
 
 		}		
+
+	},
+
+	lookupDeliveryItem : function(delivery) {
+gs.error("JW Debug lookupDeliveryItem reached: " + delivery);
+		
+		var deliveryItemArr = [];
+
+		var deliveryItemGA = new GlideAggregate(DelItemConstants.DELIVERY_ITEM_TABLE);
+		deliveryItemGA.addAggregate('COUNT', 'recipient');
+		deliveryItemGA.groupBy('recipient');
+		deliveryItemGA.addEncodedQuery("sys_idIN"+ delivery);
+		deliveryItemGA.query();
+		while (deliveryItemGA.next()){
+
+			var deliveryItemObj = {};
+			deliveryItemObj.recipient = deliveryItemGA.recipient.toString();
+			deliveryItemObj.count = parseInt(deliveryItemGA.getAggregate('COUNT','recipient'));
+			deliveryItemObj.recipientFirstName = deliveryItemGA.recipient.first_name.toString();
+		   //gs.print('Discovery Source: ' + ga.getDisplayValue('discovery_source') + ' Count: ' + ga.getAggregate('COUNT', 'discovery_source'));
+		   deliveryItemArr.push(deliveryItemObj);	   
+
+		}
+
+		return deliveryItemArr;
 
 	},
 
@@ -314,7 +339,7 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 
 			for (var i=0; i< reminderArr.length; i++) {
 				
-				var reminderObj = this.lookupReminderDelivery(reminderArr[i]);
+				var reminderObj = this.lookupDelivery(reminderArr[i]);
 
 				notificationBody = "Hi " + reminderObj.recipientFirstName + ',\nYou have ';
 
@@ -342,6 +367,46 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 
 	},
 
+	expectedChase : function(expectedStr) {
+		
+		try {
+
+			var groupedDeliveryItemArr = this.lookupDeliveryItem(expectedStr);
+			var notificationBody = "";
+			gs.error("JW Debug obj: " + JSON.stringify(groupedDeliveryItemArr));
+//gs.error("JW Debug function reached: " + expectedStr);
+// 			var expectedArr = expectedStr.split(",");
+// gs.error("JW Debug arr: " + JSON.stringify(expectedArr));
+			for (var i=0; i < groupedDeliveryItemArr.length; i++) {
+			 gs.error("JW Debug count: " + groupedDeliveryItemArr[i].count);
+			 gs.error("JW Debug count type: " + typeof(groupedDeliveryItemArr[i].count));
+				notificationBody = "Hi " + groupedDeliveryItemArr[i].recipientFirstName + ',\nYou have ';
+				
+				if(groupedDeliveryItemArr[i].count > 1) {
+
+					notificationBody += groupedDeliveryItemArr[i].count + " x expected delivery items yet to be received.\nAre you still expecting these Deliveries?";
+
+				} else {
+
+					notificationBody += "an expected delivery item  yet to be received.\nAre you still expecting this Delivery?";
+
+				}
+				
+				gs.error("JW Debug notificationBody: " + notificationBody);
+				gs.eventQueue('x_187394_delitem.expected.delivery.notif',current,groupedDeliveryItemArr[i].recipient,notificationBody);
+
+			}
+			
+			 
+
+		} catch(err) {
+
+			gs.error('['+gs.getCurrentScopeName()+']' + ': DelitemUtils: expectedChase - Caught error: \n'+err);
+
+		}
+
+	},
+
 	updateExpectedDelivery : function(deliveryItem) {
 		
 		try {
@@ -351,6 +416,7 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 
 				deliveryItemGRS.setValue('state',DelItemConstants.NEW);
 				deliveryItemGRS.setValue('collection_location',deliveryItem.collectionLocation);
+				deliveryItemGRS.setValue('notes',deliveryItem.notes);
 				deliveryItemGRS.setValue('date_received', new GlideDateTime());
 				deliveryItemGRS.update();
 
@@ -370,13 +436,13 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-01-10 15:13:14</sys_created_on>
         <sys_id>2b7615312f182910758993acf699b6c4</sys_id>
-        <sys_mod_count>20</sys_mod_count>
+        <sys_mod_count>60</sys_mod_count>
         <sys_name>DelitemUtils</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sys_script_include_2b7615312f182910758993acf699b6c4</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-11-28 21:27:32</sys_updated_on>
+        <sys_updated_on>2023-12-01 21:17:06</sys_updated_on>
     </sys_script_include>
 </record_update>
