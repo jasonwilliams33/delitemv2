@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_action_param_map">
+    <sys_sg_action_param_map action="INSERT_OR_UPDATE">
+        <button display_value="Expecting Tomorrow">8dccd462977671108c1bf911f053af41</button>
+        <item_parameter display_value="recipient">e239d53697baf1108c1bf911f053afdc</item_parameter>
+        <sys_class_name>sys_sg_action_param_map</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-12-02 20:42:57</sys_created_on>
+        <sys_id>6459993697baf1108c1bf911f053afc2</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>e239d53697baf1108c1bf911f053afdc</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_sg_action_param_map_6459993697baf1108c1bf911f053afc2</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-12-02 20:42:57</sys_updated_on>
+        <ui_parameter display_value="Recipient">b30999f297baf1108c1bf911f053af8c</ui_parameter>
+    </sys_sg_action_param_map>
+</record_update>

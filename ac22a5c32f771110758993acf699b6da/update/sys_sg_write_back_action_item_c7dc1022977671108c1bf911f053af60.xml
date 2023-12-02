@@ -3,7 +3,17 @@
         <description/>
         <execution_script><![CDATA[(function WriteBackAction(input) {
     //Type appropriate comment here, and begin script below
- gs.error("JW Debug input: " + JSON.stringify(input));
+	
+	try {
+		
+	gs.error("JW Debug: input " + input.recipient);
+		var expectingTomorrow = new DelitemUtils().expectingTomorrow(input.recipient);
+ 
+		} catch(err) {
+
+			gs.error('['+gs.getCurrentScopeName()+']' + ': Expecting Tomorrow Action Item - Caught error: \n'+err);
+
+		}
 })(input);]]></execution_script>
         <name>Expecting Tomorrow</name>
         <parameter_screen/>
@@ -12,14 +22,14 @@
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-12-01 21:52:23</sys_created_on>
         <sys_id>c7dc1022977671108c1bf911f053af60</sys_id>
-        <sys_mod_count>2</sys_mod_count>
+        <sys_mod_count>5</sys_mod_count>
         <sys_name>Expecting Tomorrow</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sys_sg_write_back_action_item_c7dc1022977671108c1bf911f053af60</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-12-01 23:40:37</sys_updated_on>
+        <sys_updated_on>2023-12-02 22:16:15</sys_updated_on>
         <table>x_187394_delitem_delivery_item</table>
         <template>date_expected=javascript:var gdt=new GlideDateTime();gdt.addDaysUTC(1);gdt.getDate();^EQ</template>
         <type>script</type>
