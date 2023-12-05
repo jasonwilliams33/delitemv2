@@ -433,6 +433,28 @@ gs.error("JW Debug found delitems: " + expectingTomorrowGRS.number);
 
 	},
 
+	cancelExpecting : function(recipient) {
+
+		try {
+			gs.error("JW Debug found recipient: " + recipient);
+		var cancelExpectingGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
+		cancelExpectingGRS.addEncodedQuery("state=" + DelItemConstants.EXPECTED + "^recipient=" + recipient);
+		cancelExpectingGRS.query();
+		while(cancelExpectingGRS.next()) {
+		
+			cancelExpectingGRS.setValue("state", DelItemConstants.CANCELLED);
+			cancelExpectingGRS.update();
+		
+		}
+		
+		} catch(err) {
+		
+			gs.error('['+gs.getCurrentScopeName()+']' + ': DelitemUtils: cancelExpecting - Caught error: \n'+err);
+		
+		}
+		
+			},
+
 	updateExpectedDelivery : function(deliveryItem) {
 		
 		try {
@@ -462,13 +484,13 @@ gs.error("JW Debug found delitems: " + expectingTomorrowGRS.number);
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-01-10 15:13:14</sys_created_on>
         <sys_id>2b7615312f182910758993acf699b6c4</sys_id>
-        <sys_mod_count>64</sys_mod_count>
+        <sys_mod_count>65</sys_mod_count>
         <sys_name>DelitemUtils</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sys_script_include_2b7615312f182910758993acf699b6c4</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-12-02 22:32:58</sys_updated_on>
+        <sys_updated_on>2023-12-05 08:40:13</sys_updated_on>
     </sys_script_include>
 </record_update>
