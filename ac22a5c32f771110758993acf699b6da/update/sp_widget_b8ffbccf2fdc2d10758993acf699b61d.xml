@@ -716,21 +716,21 @@ gs.error("JW Debug: widget " + JSON.stringify(data));
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-01-14 10:42:15</sys_created_on>
         <sys_id>b8ffbccf2fdc2d10758993acf699b61d</sys_id>
-        <sys_mod_count>218</sys_mod_count>
+        <sys_mod_count>221</sys_mod_count>
         <sys_name>Delivery Table Modal</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_b8ffbccf2fdc2d10758993acf699b61d</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-11-27 16:53:25</sys_updated_on>
+        <sys_updated_on>2023-12-06 22:08:21</sys_updated_on>
         <template><![CDATA[<div ng-show="!c.data.deliverySelected">
   <div ng-show="c.data.displayDataTable">
-  <widget id="widget-data-table" options='data.tableOptions'></widget>
+  <!--<widget id="data-table-from-url" options='data.tableOptions'></widget>-->
       <!--<div ng-include="'delitem-custom-data-table.html'"></div>-->
     
     <!------------------>
-    <table class="table table-striped table-primary table-responsive table-bordered">
+   <table class="table table-striped table-primary table-responsive table-bordered">
       <thead>
         <tr>
           <th class="itemData"

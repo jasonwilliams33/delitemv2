@@ -300,7 +300,6 @@ DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 	},
 
 	lookupDeliveryItem : function(delivery) {
-gs.error("JW Debug lookupDeliveryItem reached: " + delivery);
 		
 		var deliveryItemArr = [];
 
@@ -315,8 +314,7 @@ gs.error("JW Debug lookupDeliveryItem reached: " + delivery);
 			deliveryItemObj.recipient = deliveryItemGA.recipient.toString();
 			deliveryItemObj.count = parseInt(deliveryItemGA.getAggregate('COUNT','recipient'));
 			deliveryItemObj.recipientFirstName = deliveryItemGA.recipient.first_name.toString();
-		   //gs.print('Discovery Source: ' + ga.getDisplayValue('discovery_source') + ' Count: ' + ga.getAggregate('COUNT', 'discovery_source'));
-		   deliveryItemArr.push(deliveryItemObj);	   
+			deliveryItemArr.push(deliveryItemObj);	   
 
 		}
 
@@ -325,7 +323,7 @@ gs.error("JW Debug lookupDeliveryItem reached: " + delivery);
 	},
 
 	sendReminders : function(reminderArr) {
-		
+
 		try {
 
 			if(!Array.isArray(reminderArr)) {
@@ -338,7 +336,7 @@ gs.error("JW Debug lookupDeliveryItem reached: " + delivery);
 			var notificationBody = "";
 
 			for (var i=0; i< reminderArr.length; i++) {
-				
+
 				var reminderObj = this.lookupDelivery(reminderArr[i]);
 
 				notificationBody = "Hi " + reminderObj.recipientFirstName + ',\nYou have ';
@@ -358,7 +356,7 @@ gs.error("JW Debug lookupDeliveryItem reached: " + delivery);
 				gs.eventQueue('x_187394_delitem.delivery.reminder',current,reminderObj.recipientSysId,notificationBody);
 
 			}
-			
+
 		} catch(err) {
 
 			gs.error('['+gs.getCurrentScopeName()+']' + ': DelitemUtils: sendReminders - Caught error: \n'+err);
@@ -368,20 +366,16 @@ gs.error("JW Debug lookupDeliveryItem reached: " + delivery);
 	},
 
 	expectedChase : function(expectedStr) {
-		
+
 		try {
 
 			var groupedDeliveryItemArr = this.lookupDeliveryItem(expectedStr);
 			var notificationBody = "";
-			gs.error("JW Debug obj: " + JSON.stringify(groupedDeliveryItemArr));
-//gs.error("JW Debug function reached: " + expectedStr);
-// 			var expectedArr = expectedStr.split(",");
-// gs.error("JW Debug arr: " + JSON.stringify(expectedArr));
+	
 			for (var i=0; i < groupedDeliveryItemArr.length; i++) {
-			 gs.error("JW Debug count: " + groupedDeliveryItemArr[i].count);
-			 gs.error("JW Debug count type: " + typeof(groupedDeliveryItemArr[i].count));
+	
 				notificationBody = "Hi " + groupedDeliveryItemArr[i].recipientFirstName + ',\nYou have ';
-				
+
 				if(groupedDeliveryItemArr[i].count > 1) {
 
 					notificationBody += groupedDeliveryItemArr[i].count + " x expected delivery items yet to be received.\nAre you still expecting these Deliveries?";
@@ -391,13 +385,10 @@ gs.error("JW Debug lookupDeliveryItem reached: " + delivery);
 					notificationBody += "an expected delivery item  yet to be received.\nAre you still expecting this Delivery?";
 
 				}
-				
-				gs.error("JW Debug notificationBody: " + notificationBody);
+			
 				gs.eventQueue('x_187394_delitem.expected.delivery.notif',current,groupedDeliveryItemArr[i].recipient,notificationBody);
 
 			}
-			
-			 
 
 		} catch(err) {
 
@@ -409,54 +400,54 @@ gs.error("JW Debug lookupDeliveryItem reached: " + delivery);
 
 	expectingTomorrow : function(recipient) {
 
-try {
-	gs.error("JW Debug found recipient: " + recipient);
-var expectingTomorrowGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
-expectingTomorrowGRS.addEncodedQuery("state=" + DelItemConstants.EXPECTED + "^recipient=" + recipient);
-expectingTomorrowGRS.query();
-while(expectingTomorrowGRS.next()) {
-gs.error("JW Debug found delitems: " + expectingTomorrowGRS.number);
-	var tomorrow = new GlideDateTime();
-	tomorrow.addDaysUTC(1);
-	tomorrow.getDate();
+		try {
+			
+			var expectingTomorrowGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
+			expectingTomorrowGRS.addEncodedQuery("state=" + DelItemConstants.EXPECTED + "^recipient=" + recipient);
+			expectingTomorrowGRS.query();
+			while(expectingTomorrowGRS.next()) {
+				
+				var tomorrow = new GlideDateTime();
+				tomorrow.addDaysUTC(1);
+				tomorrow.getDate();
 
-	expectingTomorrowGRS.setValue("date_expected", tomorrow);
-	expectingTomorrowGRS.update();
+				expectingTomorrowGRS.setValue("date_expected", tomorrow);
+				expectingTomorrowGRS.update();
 
-}
+			}
 
-} catch(err) {
+		} catch(err) {
 
-	gs.error('['+gs.getCurrentScopeName()+']' + ': DelitemUtils: expectingTomorrow - Caught error: \n'+err);
+			gs.error('['+gs.getCurrentScopeName()+']' + ': DelitemUtils: expectingTomorrow - Caught error: \n'+err);
 
-}
+		}
 
 	},
 
 	cancelExpecting : function(recipient) {
 
 		try {
-			gs.error("JW Debug found recipient: " + recipient);
-		var cancelExpectingGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
-		cancelExpectingGRS.addEncodedQuery("state=" + DelItemConstants.EXPECTED + "^recipient=" + recipient);
-		cancelExpectingGRS.query();
-		while(cancelExpectingGRS.next()) {
-		
-			cancelExpectingGRS.setValue("state", DelItemConstants.CANCELLED);
-			cancelExpectingGRS.update();
-		
-		}
-		
+			
+			var cancelExpectingGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
+			cancelExpectingGRS.addEncodedQuery("state=" + DelItemConstants.EXPECTED + "^recipient=" + recipient);
+			cancelExpectingGRS.query();
+			while(cancelExpectingGRS.next()) {
+
+				cancelExpectingGRS.setValue("state", DelItemConstants.CANCELLED);
+				cancelExpectingGRS.update();
+
+			}
+
 		} catch(err) {
-		
+
 			gs.error('['+gs.getCurrentScopeName()+']' + ': DelitemUtils: cancelExpecting - Caught error: \n'+err);
-		
+
 		}
-		
-			},
+
+	},
 
 	updateExpectedDelivery : function(deliveryItem) {
-		
+
 		try {
 
 			var deliveryItemGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
@@ -464,7 +455,13 @@ gs.error("JW Debug found delitems: " + expectingTomorrowGRS.number);
 
 				deliveryItemGRS.setValue('state',DelItemConstants.NEW);
 				deliveryItemGRS.setValue('collection_location',deliveryItem.collectionLocation);
-				deliveryItemGRS.setValue('notes',deliveryItem.notes);
+				
+				if(deliveryItem.notes) {
+
+					deliveryItemGRS.setValue('notes',deliveryItem.notes);
+
+				}
+
 				deliveryItemGRS.setValue('date_received', new GlideDateTime());
 				deliveryItemGRS.update();
 
@@ -484,13 +481,13 @@ gs.error("JW Debug found delitems: " + expectingTomorrowGRS.number);
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-01-10 15:13:14</sys_created_on>
         <sys_id>2b7615312f182910758993acf699b6c4</sys_id>
-        <sys_mod_count>65</sys_mod_count>
+        <sys_mod_count>68</sys_mod_count>
         <sys_name>DelitemUtils</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sys_script_include_2b7615312f182910758993acf699b6c4</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-12-05 08:40:13</sys_updated_on>
+        <sys_updated_on>2023-12-06 21:28:47</sys_updated_on>
     </sys_script_include>
 </record_update>

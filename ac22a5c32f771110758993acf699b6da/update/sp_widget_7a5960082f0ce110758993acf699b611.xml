@@ -309,7 +309,7 @@ textarea {
 		try {
 
 			var todaysDeliveries = new GlideAggregate(data.delieveryItemTable);
-			todaysDeliveries.addEncodedQuery("date_receivedONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()^state!=" + DelItemConstants.EXPECTED);
+			todaysDeliveries.addEncodedQuery(data.todaysDeliveriesFilter);
 			todaysDeliveries.addAggregate('COUNT');
 			todaysDeliveries.query();
 			while(todaysDeliveries.next()) {
@@ -331,7 +331,7 @@ textarea {
 		try {
 
 			var expectedDeliveries = new GlideAggregate(data.delieveryItemTable);
-			expectedDeliveries.addEncodedQuery("state=" + DelItemConstants.EXPECTED);
+			expectedDeliveries.addEncodedQuery(data.expectedDeliveryItemsFilter);
 			expectedDeliveries.addAggregate('COUNT');
 			expectedDeliveries.query();
 			while(expectedDeliveries.next()) {
@@ -375,7 +375,7 @@ textarea {
 
 			data.todaysDeliveriesFilter = "date_receivedONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()^state!=" + DelItemConstants.EXPECTED;
 			data.outstandingDeliveryItemsFilter = "state!=" + DelItemConstants.COLLECTED;
-			data.expectedDeliveryItemsFilter = "state=" + DelItemConstants.EXPECTED;
+			data.expectedDeliveryItemsFilter = "date_expectedONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()^state=" + DelItemConstants.EXPECTED;
 			data.outstandingDeliveryFilter = "state!=" + DelItemConstants.COLLECTED;
 			data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
 			data.delieveryTable = DelItemConstants.DELIVERY_TABLE;
@@ -448,14 +448,14 @@ textarea {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-12-23 15:06:04</sys_created_on>
         <sys_id>7a5960082f0ce110758993acf699b611</sys_id>
-        <sys_mod_count>112</sys_mod_count>
+        <sys_mod_count>115</sys_mod_count>
         <sys_name>Delitem</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_7a5960082f0ce110758993acf699b611</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-11-29 08:33:02</sys_updated_on>
+        <sys_updated_on>2023-12-05 20:44:23</sys_updated_on>
         <template><![CDATA[<div class="panel panel-primary">
   <div class="panel-heading">
     Delitem

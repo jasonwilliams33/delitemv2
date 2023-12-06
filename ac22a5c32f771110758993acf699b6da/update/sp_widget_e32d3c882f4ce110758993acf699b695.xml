@@ -602,7 +602,8 @@ textarea {
 
 	queryNewDeliveries = function() {
 
-		data.newExpectedDeliveryFilter = "stateIN" + DelItemConstants.NEW + "," + DelItemConstants.EXPECTED;
+		data.newExpectedDeliveryFilter = "state=" + DelItemConstants.NEW + "^NQstate=" + DelItemConstants.EXPECTED + "^date_expectedONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()";
+		//data.newExpectedDeliveryFilter = "stateI=" + DelItemConstants.EXPECTED;
 		data.newDeliveryFilter = "stateIN" + DelItemConstants.NEW;
 		
 		var newDeliveryGRSObj = {};
@@ -610,12 +611,13 @@ textarea {
 		data.newDeliveryFieldsArr = [];
 		
 		var newDeliveryGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
-		newDeliveryGRS.addEncodedQuery(data.newExpectedDeliveryFilter);
+		newDeliveryGRS.addEncodedQuery(data.newExpectedDeliveryFilter);		
 		newDeliveryGRS.query();
 		while(newDeliveryGRS.next()) {
 			
 			newDeliveryGRSObj = {};
 			newDeliveryGRSObj.date_received = { "fieldName" : "Date Received" , "value" : newDeliveryGRS.date_received.toString() , "display" : true };
+			newDeliveryGRSObj.date_expected = { "fieldName" : "Date Expected" , "value" : newDeliveryGRS.date_expected.toString() , "display" : true };
 			newDeliveryGRSObj.recipient = { "fieldName" : "Recipient" , "value" : newDeliveryGRS.recipient.getDisplayValue() , "display" : true };
 			newDeliveryGRSObj.recipient_first_name = newDeliveryGRS.recipient.first_name.toString();
 			newDeliveryGRSObj.sender = { "fieldName" : "Sender" , "value" : newDeliveryGRS.sender.toString() || "N/A", "display" : true };
@@ -717,14 +719,14 @@ textarea {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-12-23 16:32:41</sys_created_on>
         <sys_id>e32d3c882f4ce110758993acf699b695</sys_id>
-        <sys_mod_count>116</sys_mod_count>
+        <sys_mod_count>135</sys_mod_count>
         <sys_name>New Delivery</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_e32d3c882f4ce110758993acf699b695</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-11-29 11:29:10</sys_updated_on>
+        <sys_updated_on>2023-12-06 16:04:45</sys_updated_on>
         <template><![CDATA[<div class="containerQRCode">
   <div class="qrcode" id="qrcode">
     <canvas id="canvas" width="200" height="200"></canvas>
@@ -740,8 +742,10 @@ textarea {
     <table class="table table-striped table-primary table-responsive">
       <thead>
         <tr>
-          <th class="itemData">Date Received</th> 
           <th class="itemData">Recipient</th>
+          <th class="itemData">Date Received/Expected</th>
+          <!--<th class="itemData"
+              ng-show="delivery.state.value == 'Expected'">Date Expected</th>-->
           <th class="itemData">Sender</th>
           <th class="itemData">Collection Location</th>
           <th class="itemData">Notes</th>
@@ -751,8 +755,11 @@ textarea {
       </thead>
       <tbody>
         <tr ng-repeat="delivery in c.data.newDeliveryGRSArr">
-          <td class="itemData">{{delivery.date_received.value}}</td>
           <td class="itemData">{{delivery.recipient.value}}</td>
+          <td class="itemData"
+              ng-show="delivery.state.value != 'Expected'">{{delivery.date_received.value}}</td>
+          <td class="itemData"
+              ng-show="delivery.state.value == 'Expected'">{{delivery.date_expected.value}}</td>
           <td class="itemData">{{delivery.sender.value}}</td>
           <td class="itemData">{{delivery.collection_location.value}}</td>
           <td class="itemData">{{delivery.notes.value}}</td>

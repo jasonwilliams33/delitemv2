@@ -6,9 +6,9 @@
         <condition/>
         <conditional>false</conditional>
         <entered_time/>
-        <ml_capability_definition display_value="EM ALert Clustering Solution">355041870f2300106c61e79ec4767eb1</ml_capability_definition>
+        <ml_capability_definition display_value="Closed alert similarity">f8d74bdddbc18850a6d183243996194d</ml_capability_definition>
         <ml_solution/>
-        <name>EM ALert Clustering Solution</name>
+        <name>Closed alert similarity</name>
         <offset/>
         <offset_type>0</offset_type>
         <run_as display_value="Jason Williams">6816f79cc0a8016401c5a33be04be441</run_as>
@@ -16,22 +16,22 @@
         <run_dayofmonth>1</run_dayofmonth>
         <run_dayofweek/>
         <run_period>1970-01-31 00:00:00</run_period>
-        <run_start>2023-12-05 08:23:48</run_start>
+        <run_start>2023-12-06 21:23:47</run_start>
         <run_time/>
         <run_type>periodically</run_type>
         <solution_definition/>
         <sys_class_name>ml_training_request_schedule</sys_class_name>
         <sys_created_by>admin</sys_created_by>
-        <sys_created_on>2023-12-05 08:23:48</sys_created_on>
-        <sys_id>21fccee7973231108c1bf911f053af42</sys_id>
+        <sys_created_on>2023-12-06 21:23:47</sys_created_on>
+        <sys_id>f4198e08970371108c1bf911f053af73</sys_id>
         <sys_mod_count>0</sys_mod_count>
-        <sys_name>EM ALert Clustering Solution</sys_name>
+        <sys_name>Closed alert similarity</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
-        <sys_update_name>ml_training_request_schedule_21fccee7973231108c1bf911f053af42</sys_update_name>
+        <sys_update_name>ml_training_request_schedule_f4198e08970371108c1bf911f053af73</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-12-05 08:23:48</sys_updated_on>
+        <sys_updated_on>2023-12-06 21:23:47</sys_updated_on>
         <time_zone/>
         <upgrade_safe>false</upgrade_safe>
     </ml_training_request_schedule>
