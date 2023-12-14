@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[api.controller=function($scope,delitemModalPubSub,spUtil,spAriaUtil) {
+        <client_script><![CDATA[api.controller=function($scope,delitemModalPubSub,spUtil,spAriaUtil,$uibModal) {
 	/* widget controller */
 	var c = this;
 
@@ -23,6 +23,45 @@
 
 	};
 
+	c.test = function(delivery) {
+		console.log(delivery);
+		var formOptions = {
+			
+			//"table" : c.data.options.table,
+			//"sys_id" : delivery.sys_id
+			
+			"sys_id": delivery.sys_id,
+			"table": c.data.options.table,
+			"view": "Portal",
+			"omitHeaderOptions": true,
+			"hideRelatedLists": true,
+			"disableUIActions": true,
+			
+		}
+		
+		c.modalInstance = $uibModal.open({
+
+			templateUrl: 'delitem-custom-form-overlay.html',
+			size: 'lg',
+			backdrop: 'static',
+			controllerAs: 'modalC',
+			controller: function() {
+
+				var modalC = this;
+				modalC.modalInstance = c.modalInstance;
+				modalC.title = "Edit Delivery Item";
+				spUtil.get("widget-form",formOptions).then(function(response) {
+
+					modalC.widget = response;
+
+				})
+
+			}	
+
+		})
+		
+	}
+	
 	c.collectDelivery = function() {
 
 		var modalReturnObj = {
@@ -362,6 +401,11 @@ console.log(rsp);
 .th-title {
   display: inline-block;
   color: $primary;
+}
+
+.vfd1f4ec347730200ba13a5554ee490c0 .attachment-button .glyphicon-paperclip {
+  color: red;
+  display: none; 
 }
 </css>
         <data_table>sp_instance</data_table>
@@ -716,14 +760,14 @@ gs.error("JW Debug: widget " + JSON.stringify(data));
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-01-14 10:42:15</sys_created_on>
         <sys_id>b8ffbccf2fdc2d10758993acf699b61d</sys_id>
-        <sys_mod_count>221</sys_mod_count>
+        <sys_mod_count>242</sys_mod_count>
         <sys_name>Delivery Table Modal</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_b8ffbccf2fdc2d10758993acf699b61d</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-12-06 22:08:21</sys_updated_on>
+        <sys_updated_on>2023-12-08 14:49:29</sys_updated_on>
         <template><![CDATA[<div ng-show="!c.data.deliverySelected">
   <div ng-show="c.data.displayDataTable">
   <!--<widget id="data-table-from-url" options='data.tableOptions'></widget>-->
@@ -742,8 +786,11 @@ gs.error("JW Debug: widget " + JSON.stringify(data));
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="delivery in c.data.list">
-          <td ng-repeat="field in data.fields_array">{{::delivery[field].display_value}}</td>      
+        <tr ng-repeat="delivery in c.data.list"
+            ng-click="c.test(delivery)">
+          <td ng-repeat="field in data.fields_array">
+            {{::delivery[field].display_value}}
+          </td>
         </tr>
     </table>
     <!------------------>
@@ -801,7 +848,7 @@ gs.error("JW Debug: widget " + JSON.stringify(data));
         <tr ng-repeat="item in data.list track by item.sys_id"
             ng-if="($index < ((currentPage+1) * rowsPerPage)) && ($index >= (((currentPage+1) * rowsPerPage) - rowsPerPage))"
             >
-          <td role="{{$first ? 'rowheader' : 'cell'}}" class="pointer sp-list-cell" ng-class="{selected: item.selected}" ng-click="go(item.targetTable, item)" ng-repeat="field in ::data.fields_array" data-field="{{::field}}" data-th="{{::data.column_labels[field]}}"><a href="javascript:void(0)" ng-if="$first" aria-label="${Open record}: {{::item[field].display_value}}">{{::item[field].display_value | limitTo : item[field].limit}}{{::item[field].display_value.length > item[field].limit ? '...' : ''}}</a><span ng-if="!$first">{{::item[field].display_value | limitTo : item[field].limit}}{{::item[field].display_value.length > item[field].limit ? '...' : ''}}</span>
+          <td role="{{$first ? 'rowheader' : 'cell'}}" class="pointer sp-list-cell" ng-class="{selected: item.selected}" ng-click="go()" ng-repeat="field in ::data.fields_array" data-field="{{::field}}" data-th="{{::data.column_labels[field]}}"><a href="javascript:void(0)" ng-if="$first" aria-label="${Open record}: {{::item[field].display_value}}">{{::item[field].display_value | limitTo : item[field].limit}}{{::item[field].display_value.length > item[field].limit ? '...' : ''}}</a><span ng-if="!$first">{{::item[field].display_value | limitTo : item[field].limit}}{{::item[field].display_value.length > item[field].limit ? '...' : ''}}</span>
           </td>
           <td class="itemData">
             <div class="btn-group"

@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[api.controller=function() {
+  /* widget controller */
+  var c = this;
+	
+		c.recipient = {
+		
+		displayValue: c.data.recipientDisplay,
+		value: c.data.recipientFilter,
+		name: 'Recipient'
+		
+	};
+	
+		c.state = {
+		
+		displayValue: c.data.stateAppDisplay,
+		value: c.data.stateFilter,
+		name: 'State'
+		
+	};
+	
+	c.data.missingFields = '';
+	c.missingFieldsError = '';
+	
+	c.generateErrorString = function(fullString) {
+		
+		var string = fullString.replace(/,\s*$/, "");
+		var return_string = '';
+		var split_string = string.split(',');
+		
+		if (split_string.length == 1) {
+			
+			return_string = string;
+			
+		} else {
+			
+			return_string = string.replace(/,/g, " & ");
+			
+		}
+		
+		return return_string;
+		
+	}
+	
+	
+	c.saveRecord = function() {
+
+		if(c.data.name == undefined || c.data.name == '') {
+		
+			c.data.missingFields += 'Name,';
+			
+		}
+		
+		if(c.data.label == undefined || c.data.label == '') {
+
+			c.data.missingFields += 'Label,';
+			
+		}
+
+		if(c.data.missingFields != '') {
+			
+			c.data.missingFieldsError = c.generateErrorString(c.data.missingFields);
+			c.data.missingFields = '';
+			c.data.showError = true;
+
+			$timeout(function() {
+				
+				c.data.showError = false;
+				c.data.missingFields = '';
+				c.data.missingFieldsError = '';
+				
+			},3000);
+
+			return;
+
+		}
+		
+	}
+	
+};]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.btn{
+  
+  margin: 5px;
+  
+}
+
+.glyphicon-paperclip{
+  
+  display: none;
+  
+}
+
+.panel-heading{
+  
+  color: #fff;
+  background-color: $brand-primary;
+  
+}
+
+.headingPanel{
+  
+  margin-bottom: 10px !important;
+  text-align: center;
+  
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id>edit_delivery_item</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Edit Delivery Item</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+	/* populate the 'data' object */
+	/* e.g., data.table = $sp.getValue('table'); */
+
+	data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
+	data.newState = DelItemConstants.NEW;
+	data.expectedState = DelItemConstants.EXPECTED;
+	data.awaitingCollectionState = DelItemConstants.AWAITING_COLLECTION;
+	data.collectedState = DelItemConstants.COLLECTED;
+	data.cancelledState = DelItemConstants.CANCELLED;
+
+	data.recipientFilter = "sys_id=6816f79cc0a8016401c5a33be04be441";
+	data.currentAppFilter = "sys_id=" + gs.getCurrentApplicationId();
+
+	data.recipientDisplay = "Me";	
+
+	var grSysApp = new GlideRecordSecure('sys_app');
+	grSysApp.addEncodedQuery("sys_id="+gs.getCurrentApplicationId());
+	grSysApp.query();
+	if (grSysApp.next()) {	
+
+		data.currentAppDisplay = grSysApp.name.toString();	
+
+	}
+
+	data.stateChoicesArr = [];
+	var stateChoicesObj = {};
+	
+	var grSysChoice = new GlideRecord('sys_choice');
+	grSysChoice.addEncodedQuery("name=" + data.delieveryItemTable);
+	grSysChoice.orderBy('value')
+	grSysChoice.query();
+	while (grSysChoice.next()) {
+
+		stateChoicesObj = {};
+		stateChoicesObj.label = grSysChoice.label.toString();
+		data.stateChoicesArr.push(stateChoicesObj);
+		
+	}
+
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-12-08 17:27:06</sys_created_on>
+        <sys_id>1d166be897c775108c1bf911f053af5c</sys_id>
+        <sys_mod_count>125</sys_mod_count>
+        <sys_name>Edit Delivery Item</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sp_widget_1d166be897c775108c1bf911f053af5c</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-12-14 21:54:01</sys_updated_on>
+        <template><![CDATA[<div class="panel panel-default">
+  <div class= panel-heading>
+    {{c.data.pushActionTitle}}
+  </div>
+  <div class="panel-body">    
+    <div class="alert alert-danger alert-dismissible"
+         ng-show="c.data.showError">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <i class="fa fa-exclamation-triangle"></i> {{c.data.incompleteFields}} {{c.data.missingFieldsError}}
+    </div>
+    <form>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="application">State</label>
+          <select id="responseType" name="responseType" ng-model="c.data.responseType" class="form-control">
+               <option ng-repeat="option in data.stateChoicesArr" value="{{option.label}}">{{option.label}}</option>
+            </select>          
+        </div>
+        <div class="form-group col-md-6">
+          <label for="application">Recipient</label>
+         <sn-record-picker field="c.recipient"
+                            table="sys_user" 
+                            display-field="'name'" 
+                            value-field="'sys_id'" 
+                            search-fields="'state'" 
+                            page-size="10"
+                            id="recipient"
+                            default-query="data.recipientFilter"
+                            >
+          </sn-record-picker>   
+        </div>
+        <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="application">Sender</label>
+          <input id="labelText" type="text" ng-model="c.data.label" class="form-control" autofocus>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="application">Collection Location</label>
+          <sn-record-picker field="c.recipient"
+                            table="sys_user" 
+                            display-field="'name'" 
+                            value-field="'sys_id'" 
+                            search-fields="'state'" 
+                            page-size="10"
+                            id="recipient"
+                            default-query="data.recipientFilter"
+                            >
+          </sn-record-picker>   
+        </div>
+       <!-- <div id="push_action_label" class="form-group col-md-6"><span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory"></span>
+          <label for="application">Recipient</label>
+          <sn-record-picker field="c.recipient"
+                            table="sys_user" 
+                            display-field="'name'" 
+                            value-field="'sys_id'" 
+                            search-fields="'state'" 
+                            page-size="10"
+                            id="recipient"
+                            default-query="data.recipientFilter"
+                            >
+          </sn-record-picker>          
+        </div>
+        <div class="form-group col-md-6"><span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory"></span>
+          <label for="labelText">Sender</label> 
+          <input id="labelText" type="text" ng-model="c.data.label" class="form-control" autofocus>
+        </div> -->
+      </div>
+        </div>
+      
+    <div class="form-row">
+         <div class="form-group col-md-12">
+      <button class="btn btn-default" ng-click="c.close()">
+        Cancel
+      </button>
+      <button class="btn btn-primary pull-right" ng-click="c.saveRecord()">
+        Save
+      </button>
+    </div>        
+      </div>        
+    </form>
+    
+<!--
+<div class="panel panel-default">
+  <div class= panel-heading>
+    Edit Delivery Item
+  </div>
+  <div class="panel-body">    
+    <div class="alert alert-danger alert-dismissible"
+         ng-show="c.data.showError">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <i class="fa fa-exclamation-triangle"></i> {{c.data.incompleteFields}} Name
+    </div>
+    <form name="edit_delivery_item" id="edit_delivery_item">
+      <div class="form-row">
+        <div class="form-group col-md-6"><span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory"></span>
+          <label for="application">Recipient</label>
+          <sn-record-picker field="c.recipient"
+                            table="sys_user" 
+                            display-field="'name'" 
+                            value-field="'sys_id'" 
+                            search-fields="'state'" 
+                            page-size="10"
+                            id="recipient"
+                            default-query="data.recipientFilter"
+                            >
+          </sn-record-picker>
+        </div> 
+        <div id="push_action_label" class="form-group col-md-6"><span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory"></span>
+          <label for="labelText">Sender</label> 
+          <input id="labelText" type="text" ng-model="c.data.label" class="form-control" autofocus>
+        </div>
+        
+      </div>
+       <!--<div class="form-row">
+        <div class="form-group col-md-6"><span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory"></span>
+          <label for="application">State</label>
+  <sn-record-picker field="c.currentApp"
+                            table="data.delieveryItemTable" 
+                            display-field="'state'" 
+                            value-field="'sys_id'" 
+                            search-fields="'name'" 
+                            page-size="100"
+                            id="state"
+                            sn-disabled="data.stateFilter"
+                            default-query="data.stateFilter"
+                            >
+          </sn-record-picker>
+        </div> 
+        <div id="push_action_label" class="form-group col-md-6"><span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory"></span>
+          <label for="labelText">Awaiting Collection</label> 
+          <input id="labelText" type="text" ng-model="c.data.label" class="form-control" autofocus>
+        </div>
+        
+      </div>-->
+      <!-- <div class="form-row">
+     
+        <div id="push_action_label" class="form-group col-md-12"><span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory"></span>
+          <label for="labelText">Notes</label> 
+          <input id="labelText" type="text" ng-model="c.data.label" class="form-control" autofocus>
+        </div>
+        
+      </div>-->
+      
+   <!-- </form>
+    <div>
+      <button class="btn btn-default" ng-click="c.close()">
+        Cancel
+      </button>
+      <button class="btn btn-primary pull-right" ng-click="c.saveRecord()">
+        Save
+      </button>
+    </div>
+    
+  </div>]]></template>
+    </sp_widget>
+</record_update>
