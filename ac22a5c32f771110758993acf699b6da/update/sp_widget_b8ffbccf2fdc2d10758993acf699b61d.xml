@@ -23,13 +23,14 @@
 
 	};
 
-	c.test = function(delivery) {
+	c.editForm = function(delivery) {
 		console.log(delivery);
 		var formOptions = {
 			
 			//"table" : c.data.options.table,
 			//"sys_id" : delivery.sys_id
 			
+			"delivery": delivery,
 			"sys_id": delivery.sys_id,
 			"table": c.data.options.table,
 			"view": "Portal",
@@ -50,7 +51,7 @@
 				var modalC = this;
 				modalC.modalInstance = c.modalInstance;
 				modalC.title = "Edit Delivery Item";
-				spUtil.get("widget-form",formOptions).then(function(response) {
+				spUtil.get("edit_delivery_item",formOptions).then(function(response) {
 
 					modalC.widget = response;
 
@@ -592,6 +593,7 @@ console.log(rsp);
 
 			$sp.getRecordElements(record, queryGRS, data.options.fields);
 			record.sys_id = queryGRS.getUniqueValue();
+			record.number = queryGRS.number.toString();
 			data.list.push(record);		
 
 		}
@@ -760,14 +762,14 @@ gs.error("JW Debug: widget " + JSON.stringify(data));
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-01-14 10:42:15</sys_created_on>
         <sys_id>b8ffbccf2fdc2d10758993acf699b61d</sys_id>
-        <sys_mod_count>242</sys_mod_count>
+        <sys_mod_count>246</sys_mod_count>
         <sys_name>Delivery Table Modal</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_b8ffbccf2fdc2d10758993acf699b61d</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-12-08 14:49:29</sys_updated_on>
+        <sys_updated_on>2023-12-15 17:37:08</sys_updated_on>
         <template><![CDATA[<div ng-show="!c.data.deliverySelected">
   <div ng-show="c.data.displayDataTable">
   <!--<widget id="data-table-from-url" options='data.tableOptions'></widget>-->
@@ -787,7 +789,7 @@ gs.error("JW Debug: widget " + JSON.stringify(data));
       </thead>
       <tbody>
         <tr ng-repeat="delivery in c.data.list"
-            ng-click="c.test(delivery)">
+            ng-click="c.editForm(delivery)">
           <td ng-repeat="field in data.fields_array">
             {{::delivery[field].display_value}}
           </td>

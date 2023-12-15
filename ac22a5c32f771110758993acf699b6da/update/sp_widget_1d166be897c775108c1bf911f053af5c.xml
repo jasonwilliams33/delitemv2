@@ -5,6 +5,8 @@
   /* widget controller */
   var c = this;
 	
+	console.log(c);
+	
 		c.recipient = {
 		
 		displayValue: c.data.recipientDisplay,
@@ -123,6 +125,8 @@
 	/* populate the 'data' object */
 	/* e.g., data.table = $sp.getValue('table'); */
 
+	data.options = input;
+	
 	data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
 	data.newState = DelItemConstants.NEW;
 	data.expectedState = DelItemConstants.EXPECTED;
@@ -130,10 +134,9 @@
 	data.collectedState = DelItemConstants.COLLECTED;
 	data.cancelledState = DelItemConstants.CANCELLED;
 
-	data.recipientFilter = "sys_id=6816f79cc0a8016401c5a33be04be441";
-	data.currentAppFilter = "sys_id=" + gs.getCurrentApplicationId();
-
-	data.recipientDisplay = "Me";	
+	data.recipientFilter = "sys_id=" + data.options.delivery.recipient.value;
+	
+	data.recipientDisplay = data.options.delivery.recipient.display_value;	
 
 	var grSysApp = new GlideRecordSecure('sys_app');
 	grSysApp.addEncodedQuery("sys_id="+gs.getCurrentApplicationId());
@@ -158,6 +161,9 @@
 		data.stateChoicesArr.push(stateChoicesObj);
 		
 	}
+	
+	var collectionLocationsStr = gs.getProperty("x_187394_delitem.collection.locations");
+	data.collectionLocationsArr = collectionLocationsStr.split(",");
 
 })();]]></script>
         <servicenow>false</servicenow>
@@ -165,17 +171,17 @@
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-12-08 17:27:06</sys_created_on>
         <sys_id>1d166be897c775108c1bf911f053af5c</sys_id>
-        <sys_mod_count>125</sys_mod_count>
+        <sys_mod_count>143</sys_mod_count>
         <sys_name>Edit Delivery Item</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_1d166be897c775108c1bf911f053af5c</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-12-14 21:54:01</sys_updated_on>
+        <sys_updated_on>2023-12-15 17:52:28</sys_updated_on>
         <template><![CDATA[<div class="panel panel-default">
   <div class= panel-heading>
-    {{c.data.pushActionTitle}}
+    {{c.data.options.delivery.number}}
   </div>
   <div class="panel-body">    
     <div class="alert alert-danger alert-dismissible"
@@ -188,41 +194,40 @@
         <div class="form-group col-md-6">
           <label for="application">State</label>
           <select id="responseType" name="responseType" ng-model="c.data.responseType" class="form-control">
-               <option ng-repeat="option in data.stateChoicesArr" value="{{option.label}}">{{option.label}}</option>
-            </select>          
+            <option ng-repeat="option in data.stateChoicesArr" value="{{option.label}}">{{option.label}}</option>
+          </select>          
         </div>
         <div class="form-group col-md-6">
           <label for="application">Recipient</label>
-         <sn-record-picker field="c.recipient"
+          <sn-record-picker field="c.recipient" 
+                            table="'sys_user'" 
+                            display-field="'name'" 
+                            value-field="'sys_id'" 
+                            search-fields="'name'" 
+                            page-size="100" ></sn-record-picker>
+<!--<sn-record-picker field="c.recipient"
                             table="sys_user" 
                             display-field="'name'" 
                             value-field="'sys_id'" 
-                            search-fields="'state'" 
+                            search-fields="'sys_id'" 
                             page-size="10"
                             id="recipient"
-                            default-query="data.recipientFilter"
+
                             >
-          </sn-record-picker>   
+          </sn-record-picker>   -->
         </div>
         <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="application">Sender</label>
-          <input id="labelText" type="text" ng-model="c.data.label" class="form-control" autofocus>
-        </div>
-        <div class="form-group col-md-6">
-          <label for="application">Collection Location</label>
-          <sn-record-picker field="c.recipient"
-                            table="sys_user" 
-                            display-field="'name'" 
-                            value-field="'sys_id'" 
-                            search-fields="'state'" 
-                            page-size="10"
-                            id="recipient"
-                            default-query="data.recipientFilter"
-                            >
-          </sn-record-picker>   
-        </div>
-       <!-- <div id="push_action_label" class="form-group col-md-6"><span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory"></span>
+          <div class="form-group col-md-6">
+            <label for="application">Sender</label>
+            <input id="labelText" type="text" ng-model="c.data.label" class="form-control" autofocus>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="application">Collection Location</label>
+            <select id="responseType" name="responseType" ng-model="c.data.responseType" class="form-control">
+              <option ng-repeat="option in data.collectionLocationsArr" value="{{option}}">{{option}}</option>
+            </select>
+          </div>
+          <!-- <div id="push_action_label" class="form-group col-md-6"><span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory"></span>
           <label for="application">Recipient</label>
           <sn-record-picker field="c.recipient"
                             table="sys_user" 
@@ -239,22 +244,22 @@
           <label for="labelText">Sender</label> 
           <input id="labelText" type="text" ng-model="c.data.label" class="form-control" autofocus>
         </div> -->
-      </div>
         </div>
-      
-    <div class="form-row">
-         <div class="form-group col-md-12">
-      <button class="btn btn-default" ng-click="c.close()">
-        Cancel
-      </button>
-      <button class="btn btn-primary pull-right" ng-click="c.saveRecord()">
-        Save
-      </button>
-    </div>        
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          <button class="btn btn-default" ng-click="c.close()">
+            Cancel
+          </button>
+          <button class="btn btn-primary pull-right" ng-click="c.saveRecord()">
+            Save
+          </button>
+        </div>        
       </div>        
     </form>
-    
-<!--
+
+    <!--
 <div class="panel panel-default">
   <div class= panel-heading>
     Edit Delivery Item
@@ -284,7 +289,7 @@
           <label for="labelText">Sender</label> 
           <input id="labelText" type="text" ng-model="c.data.label" class="form-control" autofocus>
         </div>
-        
+
       </div>
        <!--<div class="form-row">
         <div class="form-group col-md-6"><span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory"></span>
@@ -305,18 +310,18 @@
           <label for="labelText">Awaiting Collection</label> 
           <input id="labelText" type="text" ng-model="c.data.label" class="form-control" autofocus>
         </div>
-        
+
       </div>-->
-      <!-- <div class="form-row">
-     
+    <!-- <div class="form-row">
+
         <div id="push_action_label" class="form-group col-md-12"><span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory"></span>
           <label for="labelText">Notes</label> 
           <input id="labelText" type="text" ng-model="c.data.label" class="form-control" autofocus>
         </div>
-        
+
       </div>-->
-      
-   <!-- </form>
+
+    <!-- </form>
     <div>
       <button class="btn btn-default" ng-click="c.close()">
         Cancel
@@ -325,7 +330,7 @@
         Save
       </button>
     </div>
-    
+
   </div>]]></template>
     </sp_widget>
 </record_update>
