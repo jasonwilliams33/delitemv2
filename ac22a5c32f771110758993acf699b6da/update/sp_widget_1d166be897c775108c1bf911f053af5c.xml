@@ -1,86 +1,138 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[api.controller=function() {
-  /* widget controller */
-  var c = this;
-	
+        <client_script><![CDATA[api.controller=function($timeout,delitemModalPubSub) {
+	/* widget controller */
+	var c = this;
+
 	console.log(c);
-	
-		c.recipient = {
-		
+
+	c.data.recipient = {
+
 		displayValue: c.data.recipientDisplay,
 		value: c.data.recipientFilter,
 		name: 'Recipient'
-		
+
 	};
-	
+
+	c.data.selectedState = {
+		value: c.data.options.delivery.state.value
+	}
+
+	if(c.data.options.delivery.state.value != 2) {
+
+		c.data.selectedCollectionLocation = c.data.options.delivery.collection_location.value;
+
+	}
+
+
+	/*
 		c.state = {
-		
-		displayValue: c.data.stateAppDisplay,
+
+		displayValue: c.data.stateDisplay,
 		value: c.data.stateFilter,
 		name: 'State'
-		
-	};
-	
+
+	};*/
+
 	c.data.missingFields = '';
 	c.missingFieldsError = '';
-	
+
 	c.generateErrorString = function(fullString) {
-		
+
 		var string = fullString.replace(/,\s*$/, "");
 		var return_string = '';
 		var split_string = string.split(',');
-		
+
 		if (split_string.length == 1) {
-			
+
 			return_string = string;
-			
+
 		} else {
-			
+
 			return_string = string.replace(/,/g, " & ");
-			
+
 		}
-		
+
 		return return_string;
-		
-	}
-	
-	
-	c.saveRecord = function() {
 
-		if(c.data.name == undefined || c.data.name == '') {
+	}
+
+
+	c.saveRecord = function() {
 		
-			c.data.missingFields += 'Name,';
-			
+		console.log(c.data.recipient);
+		console.log(c.data.selectedState);
+		console.log(c.data.selectedCollectionLocation);
+
+		if(c.data.recipient.value == undefined || c.data.recipient.value == '') {
+
+			c.data.missingFields += 'Recipient,';
+
+		}
+
+		if(c.data.selectedState == undefined || c.data.selectedState == '') {
+
+			c.data.missingFields += 'State,';
+
 		}
 		
-		if(c.data.label == undefined || c.data.label == '') {
+		if(c.data.selectedCollectionLocation ==undefined || c.data.selectedCollectionLocation == '') {
 
-			c.data.missingFields += 'Label,';
-			
+			c.data.missingFields += 'Collection Location,';
+
 		}
 
 		if(c.data.missingFields != '') {
-			
+
 			c.data.missingFieldsError = c.generateErrorString(c.data.missingFields);
 			c.data.missingFields = '';
 			c.data.showError = true;
 
 			$timeout(function() {
-				
+
 				c.data.showError = false;
 				c.data.missingFields = '';
 				c.data.missingFieldsError = '';
-				
+
 			},3000);
 
 			return;
 
 		}
 		
+		var deliveryItemObj = {};
+		deliveryItemObj.recipient = c.data.recipient;
+		deliveryItemObj.state = c.data.selectedState;
+		deliveryItemObj.sender = c.data.sender;
+		deliveryItemObj.collectionLocation = c.data.selectedCollectionLocation;
+		
+		console.log(deliveryItemObj);
+		
+		delitemModalPubSub.publish(deliveryItemObj);
+		
+	/*	c.server.get({
+
+			action: "saveRecord",
+			newObj: actionObj
+
+		}).then(function(rsp) {
+
+			var newRecordObj = {};
+			var pushActionObj = [];
+
+			newRecordObj.newRecord = rsp.data.newRecord;
+			newRecordObj.newRecordName = c.data.name;
+			newRecordObj.type = 'push_action';
+			newRecordObj.responseType = c.data.responseType;
+			newRecordObj.textResponseCount = 0;
+
+			pnwModalPubSub.publish(newRecordObj);
+
+		})*/
+
 	}
-	
+
 };]]></client_script>
         <controller_as>c</controller_as>
         <css>.btn{
@@ -116,7 +168,9 @@
         <has_preview>true</has_preview>
         <id>edit_delivery_item</id>
         <internal>false</internal>
-        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <link><![CDATA[function link(scope, element, attrs, controller) {
+  
+}]]></link>
         <name>Edit Delivery Item</name>
         <option_schema/>
         <public>false</public>
@@ -126,7 +180,7 @@
 	/* e.g., data.table = $sp.getValue('table'); */
 
 	data.options = input;
-	
+
 	data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
 	data.newState = DelItemConstants.NEW;
 	data.expectedState = DelItemConstants.EXPECTED;
@@ -135,8 +189,16 @@
 	data.cancelledState = DelItemConstants.CANCELLED;
 
 	data.recipientFilter = "sys_id=" + data.options.delivery.recipient.value;
-	
 	data.recipientDisplay = data.options.delivery.recipient.display_value;	
+
+
+
+	//data.stateDefault = {value: '3', label: 'Option C'};//data.options.delivery.state.value;
+	data.stateDisplay = "Awaiting Collection";//data.options.delivery.state.value;
+	data.stateDefault = {
+		id: data.options.delivery.state.id, 
+		name: data.options.delivery.state.label
+	}
 
 	var grSysApp = new GlideRecordSecure('sys_app');
 	grSysApp.addEncodedQuery("sys_id="+gs.getCurrentApplicationId());
@@ -149,7 +211,7 @@
 
 	data.stateChoicesArr = [];
 	var stateChoicesObj = {};
-	
+
 	var grSysChoice = new GlideRecord('sys_choice');
 	grSysChoice.addEncodedQuery("name=" + data.delieveryItemTable);
 	grSysChoice.orderBy('value')
@@ -158,10 +220,11 @@
 
 		stateChoicesObj = {};
 		stateChoicesObj.label = grSysChoice.label.toString();
+		stateChoicesObj.value = grSysChoice.value.toString();
 		data.stateChoicesArr.push(stateChoicesObj);
-		
+
 	}
-	
+
 	var collectionLocationsStr = gs.getProperty("x_187394_delitem.collection.locations");
 	data.collectionLocationsArr = collectionLocationsStr.split(",");
 
@@ -171,14 +234,14 @@
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-12-08 17:27:06</sys_created_on>
         <sys_id>1d166be897c775108c1bf911f053af5c</sys_id>
-        <sys_mod_count>143</sys_mod_count>
+        <sys_mod_count>207</sys_mod_count>
         <sys_name>Edit Delivery Item</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_1d166be897c775108c1bf911f053af5c</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-12-15 17:52:28</sys_updated_on>
+        <sys_updated_on>2023-12-18 17:33:45</sys_updated_on>
         <template><![CDATA[<div class="panel panel-default">
   <div class= panel-heading>
     {{c.data.options.delivery.number}}
@@ -187,25 +250,31 @@
     <div class="alert alert-danger alert-dismissible"
          ng-show="c.data.showError">
       <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-      <i class="fa fa-exclamation-triangle"></i> {{c.data.incompleteFields}} {{c.data.missingFieldsError}}
+      <i class="fa fa-exclamation-triangle"></i> Some fields are incomplete: {{c.data.missingFieldsError}}
     </div>
     <form>
       <div class="form-row">
         <div class="form-group col-md-6">
           <label for="application">State</label>
-          <select id="responseType" name="responseType" ng-model="c.data.responseType" class="form-control">
-            <option ng-repeat="option in data.stateChoicesArr" value="{{option.label}}">{{option.label}}</option>
-          </select>          
+          <!-- <select id="responseType" name="responseType" class="form-control">
+            <option ng-repeat="option in data.stateChoicesArr" ng-selected="{{defaultvalue == 3}}">{{option.label}}</option>
+
+          </select> -->
+          <select name="stateSelect" id="stateSelect"
+                  ng-options="option.label for option in data.stateChoicesArr track by option.value"
+                  ng-model="data.selectedState"
+                  class="form-control"></select>
+
         </div>
         <div class="form-group col-md-6">
           <label for="application">Recipient</label>
-          <sn-record-picker field="c.recipient" 
+          <sn-record-picker field="c.data.recipient" 
                             table="'sys_user'" 
                             display-field="'name'" 
                             value-field="'sys_id'" 
                             search-fields="'name'" 
                             page-size="100" ></sn-record-picker>
-<!--<sn-record-picker field="c.recipient"
+          <!--<sn-record-picker field="c.recipient"
                             table="sys_user" 
                             display-field="'name'" 
                             value-field="'sys_id'" 
@@ -218,14 +287,15 @@
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="application">Sender</label>
-            <input id="labelText" type="text" ng-model="c.data.label" class="form-control" autofocus>
+            <label for="sender">Sender</label>
+            <input id="labelText" type="text" ng-model="c.data.sender" class="form-control" autofocus>
           </div>
           <div class="form-group col-md-6">
             <label for="application">Collection Location</label>
-            <select id="responseType" name="responseType" ng-model="c.data.responseType" class="form-control">
-              <option ng-repeat="option in data.collectionLocationsArr" value="{{option}}">{{option}}</option>
-            </select>
+            <select name="collectionLocationSelect" id="collectionLocationSelect"
+                  ng-options="option for option in data.collectionLocationsArr"
+                  ng-model="data.selectedCollectionLocation"
+                  class="form-control"></select>
           </div>
           <!-- <div id="push_action_label" class="form-group col-md-6"><span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory"></span>
           <label for="application">Recipient</label>
@@ -247,18 +317,15 @@
         </div>
       </div>
 
-      <div class="form-row">
-        <div class="form-group col-md-12">
-          <button class="btn btn-default" ng-click="c.close()">
-            Cancel
-          </button>
-          <button class="btn btn-primary pull-right" ng-click="c.saveRecord()">
-            Save
-          </button>
-        </div>        
-      </div>        
     </form>
-
+    <div>
+      <button class="btn btn-default" ng-click="c.close()">
+        Cancel
+      </button>
+      <button class="btn btn-primary pull-right" ng-click="c.saveRecord()">
+        Save
+      </button>
+    </div>        
     <!--
 <div class="panel panel-default">
   <div class= panel-heading>
