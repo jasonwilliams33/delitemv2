@@ -5,7 +5,17 @@
 	/* widget controller */
 	var c = this;
 
-	//console.log(c);
+	console.log(c);
+	
+	$scope.currentPage = 0;
+	$scope.rowsPerPage = 5;
+	$scope.siteSearchFilter = '';
+	$scope.filteredList = [];
+	$scope.numberOfPages = function() {
+
+		return Math.ceil(c.data.list.length/$scope.rowsPerPage);
+
+	};
 
 	c.data.deliverySelected = false;
 	c.data.delveryItemsSelected = false;
@@ -24,20 +34,23 @@
 	};
 
 	c.editForm = function(delivery) {
-		
-		var formOptions = {
 
-			"delivery": delivery,
-			"sys_id": delivery.sys_id,
+		var deliveryObj = {
+
+			"modalAction": "edit_delivery",
+			"delivery": delivery
+			/*"sys_id": delivery.sys_id,
 			"table": c.data.options.table,
 			"view": "Portal",
 			"omitHeaderOptions": true,
 			"hideRelatedLists": true,
-			"disableUIActions": true,
-			
+			"disableUIActions": true,*/
+
 		}
-		
-		c.modalInstance = $uibModal.open({
+
+		delitemModalPubSub.publish(deliveryObj);
+
+		/*	c.modalInstance = $uibModal.open({
 
 			templateUrl: 'delitem-custom-form-overlay.html',
 			size: 'lg',
@@ -48,7 +61,7 @@
 				var modalC = this;
 				modalC.modalInstance = c.modalInstance;
 				modalC.title = "Edit Delivery Item";
-				spUtil.get("edit_delivery_item",formOptions).then(function(response) {
+				spUtil.get("edit_delivery_item",deliveryObj).then(function(response) {
 
 					modalC.widget = response;
 
@@ -56,18 +69,18 @@
 
 			}	
 
-		})
-		
+		})*/
+
 	}
-	
-		delitemModalPubSub.subscribe($scope, function($event, data) {//Subscription to Angular Provider to retrieve data from Modal and update relevant variables
+
+	/*delitemModalPubSub.subscribe($scope, function($event, data) {//Subscription to Angular Provider to retrieve data from Modal and update relevant variables
 		//alert(data.modalAction);
 		console.log(data);
 		c.modalInstance.close();
 
 
-	})
-	
+	})*/
+
 	c.collectDelivery = function() {
 
 		var modalReturnObj = {
@@ -209,13 +222,13 @@ console.log(rsp);
 	c.sendReminders = function(action) {
 
 		if(action == "all") {
-			
+
 			var allReminderArr = [];
-			
+
 			for(var i = 0; i < c.data.list.length; i++) {
-				
+
 				allReminderArr.push(c.data.list[i].sys_id);
-				
+
 			}
 
 			c.data.selectedDeliveryArr = allReminderArr;
@@ -284,41 +297,50 @@ console.log(rsp);
 		console.log(c.data.selectedItem);
 	}
 
-	$scope.setOrderBy = function(field) {
-		//alert(field);
+c.setOrderBy = function(field) {
+		try{
+		console.log(field);
 		console.log(c.data);
-
-		try {
-			var d = "asc";
-			// descending default sort for date/time columns for UI consistency
-			var fieldType = c.data.column_types["recipient"];
-			console.log(fieldType);
-			if (fieldType == "glide_date_time" || fieldType == "glide_date") {
+		var d = "asc";
+		// descending default sort for date/time columns for UI consistency
+		var fieldType = c.data.column_types[field];
+		console.log(fieldType);
+		if (fieldType == "glide_date_time" || fieldType == "glide_date")
+			d = "desc";
+		if ($scope.data.o == field) {
+			if ($scope.data.d == "asc")
 				d = "desc";
-			}
-			if (c.data.o == field) {
-				if (c.data.d == "asc")
-					d = "desc";
-				else
-					d = "asc";
-			}
+			else
+				d = "asc";
+		}
 
-			if (d === "asc") {
+		console.log(d);
+		
+		if (d === "asc") {
 			spAriaUtil.sendLiveMessage($scope.data.msg.sortingByAsc);
 		} else if (d === "desc") {
 			spAriaUtil.sendLiveMessage($scope.data.msg.sortingByDesc);
 		}
 
-			c.data.o = field;
-			c.data.d = d;
-			c.data.setOrderUserPreferences = true;
-			//$scope.setSearch(true);
-
-		} catch (err){
-			console.log("JW Debug client: " + err);
-
+		$scope.propertyName = field + ".display_value";
+		$scope.reverse = d;
+			
+			console.log($scope.propertyName);
+			console.log($scope.reverse);
+		
+		//$scope.setSearch(true);
+		} catch(err) {
+			console.log(err);
 		}
 	}
+	
+/* $scope.propertyName = '';
+  $scope.reverse = true;
+  
+  c.setOrderBy = function(propertyName) {
+    $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
+    $scope.propertyName = propertyName+".display_value";
+  };*/
 
 };]]></client_script>
         <controller_as>c</controller_as>
@@ -767,41 +789,68 @@ gs.error("JW Debug: widget " + JSON.stringify(data));
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-01-14 10:42:15</sys_created_on>
         <sys_id>b8ffbccf2fdc2d10758993acf699b61d</sys_id>
-        <sys_mod_count>247</sys_mod_count>
+        <sys_mod_count>296</sys_mod_count>
         <sys_name>Delivery Table Modal</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_b8ffbccf2fdc2d10758993acf699b61d</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-12-18 17:28:00</sys_updated_on>
+        <sys_updated_on>2023-12-20 17:25:13</sys_updated_on>
         <template><![CDATA[<div ng-show="!c.data.deliverySelected">
   <div ng-show="c.data.displayDataTable">
   <!--<widget id="data-table-from-url" options='data.tableOptions'></widget>-->
       <!--<div ng-include="'delitem-custom-data-table.html'"></div>-->
     
     <!------------------>
-   <table class="table table-striped table-primary table-responsive table-bordered">
+    <div class="alert alert-info" ng-if="!data.list.length && !data.num_pages">
+        No Delivery Items expected/outstanding/today
+      </div>
+    
+   <table class="table table-striped table-primary table-responsive table-bordered"
+          ng-show="data.list.length">
       <thead>
         <tr>
           <th class="itemData"
-              ng-repeat="field in data.field_labels track by $index">
-            <div class="th-title">
+              ng-repeat="field in data.field_labels track by $index"
+              ng-click="c.setOrderBy(field)"
+              >
+            <div class="th-title"
+                 ng-class="{reverse: reverse}">
               {{field}}
             </div>  	
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="delivery in c.data.list"
-            ng-click="c.editForm(delivery)">
+        <tr ng-repeat="delivery in c.data.list |orderBy:propertyName:reverse"
+            ng-click="c.editForm(delivery)"
+            ng-if="($index < ((currentPage+1) * rowsPerPage)) && ($index >= (((currentPage+1) * rowsPerPage) - rowsPerPage))">
           <td ng-repeat="field in data.fields_array">
             {{::delivery[field].display_value}}
           </td>
         </tr>
     </table>
     <!------------------>
-    
+    <div class="panel-footer"
+         ng-show="c.data.list.length > rowsPerPage">
+        <div class="btn-toolbar m-r pull-left">
+          <div class="btn-group">
+            <a ng-disabled="currentPage == 0" href="javascript:void(0)" ng-click="currentPage=0" class="btn btn-default"  aria-label="${Previous page}"><i class="fa fa-angle-double-left"></i></a>
+          </div>     
+          <div class="btn-group">
+            <a ng-disabled="currentPage == 0" href="javascript:void(0)" ng-click="currentPage = currentPage-1" class="btn btn-default"  aria-label="${Previous page}"><i class="fa fa-angle-left"></i></a>
+          </div>     
+          <div class="btn-group">
+            <a ng-disabled="currentPage >= c.data.list.length/rowsPerPage - 1" href="javascript:void(0)" ng-click="currentPage = currentPage+1" class="btn btn-default" aria-label="${Next page}"><i class="fa fa-angle-right"></i></a>          
+          </div>
+          <div class="btn-group">
+            <a ng-disabled="currentPage >= c.data.list.length/rowsPerPage - 1" href="javascript:void(0)" ng-click="currentPage = numberOfPages()-1" class="btn btn-default" aria-label="${Next page}"><i class="fa fa-angle-double-right"></i></a>          
+          </div>       
+        </div>        
+        <div class="m-t-xs panel-title">Page {{currentPage+1}} of {{numberOfPages()}}<span class="m-t-xs panel-title pull-right"></span><span class="m-t-xs panel-title pull-right">{{c.data.list.length}} Row<span ng-if="c.data.list.length > 1">s</span></span></div>
+        <span class="clearfix"></span>
+      </div>
   </div>
   <div class="alert alert-info"
        ng-show="!c.data.displayDataTable && c.data.deliveriesArr.length == 0">

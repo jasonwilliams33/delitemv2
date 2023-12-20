@@ -60,10 +60,6 @@
 
 
 	c.saveRecord = function() {
-		
-		console.log(c.data.recipient);
-		console.log(c.data.selectedState);
-		console.log(c.data.selectedCollectionLocation);
 
 		if(c.data.recipient.value == undefined || c.data.recipient.value == '') {
 
@@ -76,7 +72,7 @@
 			c.data.missingFields += 'State,';
 
 		}
-		
+
 		if(c.data.selectedCollectionLocation ==undefined || c.data.selectedCollectionLocation == '') {
 
 			c.data.missingFields += 'Collection Location,';
@@ -100,36 +96,26 @@
 			return;
 
 		}
-		
+
 		var deliveryItemObj = {};
+
 		deliveryItemObj.recipient = c.data.recipient;
 		deliveryItemObj.state = c.data.selectedState;
 		deliveryItemObj.sender = c.data.sender;
 		deliveryItemObj.collectionLocation = c.data.selectedCollectionLocation;
-		
+		deliveryItemObj.notes = c.data.notes;
+
+		var deliveryObj = {
+
+			"modalAction": "update_delivery",
+			"deliveryItemSysId": c.data.options.delivery.sys_id,
+			"delivery": deliveryItemObj
+
+		}
+
 		console.log(deliveryItemObj);
-		
-		delitemModalPubSub.publish(deliveryItemObj);
-		
-	/*	c.server.get({
 
-			action: "saveRecord",
-			newObj: actionObj
-
-		}).then(function(rsp) {
-
-			var newRecordObj = {};
-			var pushActionObj = [];
-
-			newRecordObj.newRecord = rsp.data.newRecord;
-			newRecordObj.newRecordName = c.data.name;
-			newRecordObj.type = 'push_action';
-			newRecordObj.responseType = c.data.responseType;
-			newRecordObj.textResponseCount = 0;
-
-			pnwModalPubSub.publish(newRecordObj);
-
-		})*/
+		delitemModalPubSub.publish(deliveryObj);
 
 	}
 
@@ -159,7 +145,11 @@
   margin-bottom: 10px !important;
   text-align: center;
   
-}</css>
+}
+
+textarea {
+        resize: none;
+    }</css>
         <data_table>sp_instance</data_table>
         <demo_data/>
         <description/>
@@ -200,15 +190,6 @@
 		name: data.options.delivery.state.label
 	}
 
-	var grSysApp = new GlideRecordSecure('sys_app');
-	grSysApp.addEncodedQuery("sys_id="+gs.getCurrentApplicationId());
-	grSysApp.query();
-	if (grSysApp.next()) {	
-
-		data.currentAppDisplay = grSysApp.name.toString();	
-
-	}
-
 	data.stateChoicesArr = [];
 	var stateChoicesObj = {};
 
@@ -228,20 +209,21 @@
 	var collectionLocationsStr = gs.getProperty("x_187394_delitem.collection.locations");
 	data.collectionLocationsArr = collectionLocationsStr.split(",");
 
+
 })();]]></script>
         <servicenow>false</servicenow>
         <sys_class_name>sp_widget</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-12-08 17:27:06</sys_created_on>
         <sys_id>1d166be897c775108c1bf911f053af5c</sys_id>
-        <sys_mod_count>207</sys_mod_count>
+        <sys_mod_count>220</sys_mod_count>
         <sys_name>Edit Delivery Item</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_1d166be897c775108c1bf911f053af5c</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-12-18 17:33:45</sys_updated_on>
+        <sys_updated_on>2023-12-19 20:57:43</sys_updated_on>
         <template><![CDATA[<div class="panel panel-default">
   <div class= panel-heading>
     {{c.data.options.delivery.number}}
@@ -297,24 +279,16 @@
                   ng-model="data.selectedCollectionLocation"
                   class="form-control"></select>
           </div>
-          <!-- <div id="push_action_label" class="form-group col-md-6"><span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory"></span>
-          <label for="application">Recipient</label>
-          <sn-record-picker field="c.recipient"
-                            table="sys_user" 
-                            display-field="'name'" 
-                            value-field="'sys_id'" 
-                            search-fields="'state'" 
-                            page-size="10"
-                            id="recipient"
-                            default-query="data.recipientFilter"
-                            >
-          </sn-record-picker>          
+       
         </div>
-        <div class="form-group col-md-6"><span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory"></span>
-          <label for="labelText">Sender</label> 
-          <input id="labelText" type="text" ng-model="c.data.label" class="form-control" autofocus>
-        </div> -->
+        
+        <div class="form-row">
+        <div class="form-group col-md-12">
+          <label for="notes">Notes</label> 
+          <textarea id="notes" class="form-control" ng-model="c.data.notes" rows="2" autofocus></textarea>
         </div>
+      </div>
+        
       </div>
 
     </form>
