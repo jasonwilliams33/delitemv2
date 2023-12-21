@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[api.controller=function($timeout,delitemModalPubSub) {
+        <client_script><![CDATA[api.controller=function($timeout,delitemModalPubSub,$scope) {
 	/* widget controller */
 	var c = this;
 
 	console.log(c);
 
-	c.data.recipient = {
+	$scope.customDate = function () {
+		//$scope.data.funcName="OnDate";
+		//c.server.update().then(function(){})
+
+		alert(c.data.datePicker.value);
+
+
+	};
+
+
+
+	c.data.recipient = { 
 
 		displayValue: c.data.recipientDisplay,
 		value: c.data.recipientFilter,
@@ -15,8 +26,16 @@
 
 	};
 
+	c.data.notes = c.data.options.delivery.notes.value;
+
+	c.data.sender = c.data.options.delivery.sender.value;
+
 	c.data.selectedState = {
 		value: c.data.options.delivery.state.value
+	}
+	
+		c.data.dateExpected = {
+		value: c.data.options.delivery.date_expected
 	}
 
 	if(c.data.options.delivery.state.value != 2) {
@@ -58,6 +77,13 @@
 
 	}
 
+	c.close = function() {
+
+		var closeObj = {};
+		closeObj.type = 'close';
+		delitemModalPubSub.publish(closeObj);
+
+	}
 
 	c.saveRecord = function() {
 
@@ -73,9 +99,23 @@
 
 		}
 
-		if(c.data.selectedCollectionLocation ==undefined || c.data.selectedCollectionLocation == '') {
+		if(c.data.selectedState.value != 2) {
 
-			c.data.missingFields += 'Collection Location,';
+			if(c.data.selectedCollectionLocation == undefined || c.data.selectedCollectionLocation == '') {
+
+				c.data.missingFields += 'Collection Location,';
+
+			}
+
+		}
+		
+		if(c.data.selectedState.value == 2) {
+
+			if(c.data.dateExpected.value == undefined || c.data.dateExpected.value == '') {
+
+				c.data.missingFields += 'Date Expected,';
+
+			}
 
 		}
 
@@ -104,6 +144,7 @@
 		deliveryItemObj.sender = c.data.sender;
 		deliveryItemObj.collectionLocation = c.data.selectedCollectionLocation;
 		deliveryItemObj.notes = c.data.notes;
+		deliveryItemObj.date_expected = c.data.dateExpected;
 
 		var deliveryObj = {
 
@@ -123,13 +164,7 @@
         <controller_as>c</controller_as>
         <css>.btn{
   
-  margin: 5px;
-  
-}
-
-.glyphicon-paperclip{
-  
-  display: none;
+  //margin: 5px;
   
 }
 
@@ -170,6 +205,10 @@ textarea {
 	/* e.g., data.table = $sp.getValue('table'); */
 
 	data.options = input;
+	
+
+
+	
 
 	data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
 	data.newState = DelItemConstants.NEW;
@@ -198,11 +237,15 @@ textarea {
 	grSysChoice.orderBy('value')
 	grSysChoice.query();
 	while (grSysChoice.next()) {
+		
+		if(grSysChoice.value != 1) {
 
 		stateChoicesObj = {};
 		stateChoicesObj.label = grSysChoice.label.toString();
 		stateChoicesObj.value = grSysChoice.value.toString();
 		data.stateChoicesArr.push(stateChoicesObj);
+			
+		}
 
 	}
 
@@ -216,14 +259,14 @@ textarea {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-12-08 17:27:06</sys_created_on>
         <sys_id>1d166be897c775108c1bf911f053af5c</sys_id>
-        <sys_mod_count>220</sys_mod_count>
+        <sys_mod_count>277</sys_mod_count>
         <sys_name>Edit Delivery Item</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_1d166be897c775108c1bf911f053af5c</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-12-19 20:57:43</sys_updated_on>
+        <sys_updated_on>2023-12-21 17:18:43</sys_updated_on>
         <template><![CDATA[<div class="panel panel-default">
   <div class= panel-heading>
     {{c.data.options.delivery.number}}
@@ -236,7 +279,7 @@ textarea {
     </div>
     <form>
       <div class="form-row">
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-6"><span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory"></span>
           <label for="application">State</label>
           <!-- <select id="responseType" name="responseType" class="form-control">
             <option ng-repeat="option in data.stateChoicesArr" ng-selected="{{defaultvalue == 3}}">{{option.label}}</option>
@@ -248,14 +291,15 @@ textarea {
                   class="form-control"></select>
 
         </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-6"><span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory"></span>
           <label for="application">Recipient</label>
           <sn-record-picker field="c.data.recipient" 
                             table="'sys_user'" 
                             display-field="'name'" 
                             value-field="'sys_id'" 
                             search-fields="'name'" 
-                            page-size="100" ></sn-record-picker>
+                            page-size="100" 
+                            sn-disabled=true></sn-record-picker>
           <!--<sn-record-picker field="c.recipient"
                             table="sys_user" 
                             display-field="'name'" 
@@ -267,17 +311,45 @@ textarea {
                             >
           </sn-record-picker>   -->
         </div>
+        
+         <!--<div class="form-row"
+             ng-show="c.data.selectedState.value == 2">
+       <div class="form-group col-md-12">
+          <label for="notes">Date Expected</label>          
+          <sp-date-picker field="c.data.dateExpected"></sp-date-picker>
+        </div>
+      </div>-->
+               
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="sender">Sender</label>
             <input id="labelText" type="text" ng-model="c.data.sender" class="form-control" autofocus>
           </div>
-          <div class="form-group col-md-6">
+          <div class="form-group col-md-6"
+               ng-show="c.data.selectedState.value != 2">
+            <span style="padding-right: .25em" 
+                  title="Mandatory" 
+                  class="fa fa-asterisk mandatory"
+                  ng-show="c.data.selectedState.value != 2"
+                  >
+            </span>
             <label for="application">Collection Location</label>
             <select name="collectionLocationSelect" id="collectionLocationSelect"
                   ng-options="option for option in data.collectionLocationsArr"
                   ng-model="data.selectedCollectionLocation"
                   class="form-control"></select>
+            
+          </div>
+          <div class="form-group col-md-6"
+               ng-show="c.data.selectedState.value == 2">
+            <span style="padding-right: .25em" 
+                  title="Mandatory" 
+                  class="fa fa-asterisk mandatory"                  
+                  >
+            </span>
+            <label for="notes">Date Expected</label>          
+          <sp-date-picker field="c.data.dateExpected"></sp-date-picker>
+            
           </div>
        
         </div>
@@ -288,6 +360,8 @@ textarea {
           <textarea id="notes" class="form-control" ng-model="c.data.notes" rows="2" autofocus></textarea>
         </div>
       </div>
+        
+        
         
       </div>
 

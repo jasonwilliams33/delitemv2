@@ -6,7 +6,7 @@
 	var c = this;
 
 	console.log(c);
-	
+
 	$scope.currentPage = 0;
 	$scope.rowsPerPage = 5;
 	$scope.siteSearchFilter = '';
@@ -297,50 +297,41 @@ console.log(rsp);
 		console.log(c.data.selectedItem);
 	}
 
-c.setOrderBy = function(field) {
-		try{
-		console.log(field);
+	$scope.setOrderBy = function(field) {
+		//alert(field);
 		console.log(c.data);
-		var d = "asc";
-		// descending default sort for date/time columns for UI consistency
-		var fieldType = c.data.column_types[field];
-		console.log(fieldType);
-		if (fieldType == "glide_date_time" || fieldType == "glide_date")
-			d = "desc";
-		if ($scope.data.o == field) {
-			if ($scope.data.d == "asc")
+
+		try {
+			var d = "asc";
+			// descending default sort for date/time columns for UI consistency
+			var fieldType = c.data.column_types["recipient"];
+			console.log(fieldType);
+			if (fieldType == "glide_date_time" || fieldType == "glide_date") {
 				d = "desc";
-			else
-				d = "asc";
-		}
+			}
+			if (c.data.o == field) {
+				if (c.data.d == "asc")
+					d = "desc";
+				else
+					d = "asc";
+			}
 
-		console.log(d);
-		
-		if (d === "asc") {
-			spAriaUtil.sendLiveMessage($scope.data.msg.sortingByAsc);
-		} else if (d === "desc") {
-			spAriaUtil.sendLiveMessage($scope.data.msg.sortingByDesc);
-		}
+			if (d === "asc") {
+				spAriaUtil.sendLiveMessage($scope.data.msg.sortingByAsc);
+			} else if (d === "desc") {
+				spAriaUtil.sendLiveMessage($scope.data.msg.sortingByDesc);
+			}
 
-		$scope.propertyName = field + ".display_value";
-		$scope.reverse = d;
-			
-			console.log($scope.propertyName);
-			console.log($scope.reverse);
-		
-		//$scope.setSearch(true);
-		} catch(err) {
-			console.log(err);
+			c.data.o = field;
+			c.data.d = d;
+			c.data.setOrderUserPreferences = true;
+			//$scope.setSearch(true);
+
+		} catch (err){
+			console.log("JW Debug client: " + err);
+
 		}
 	}
-	
-/* $scope.propertyName = '';
-  $scope.reverse = true;
-  
-  c.setOrderBy = function(propertyName) {
-    $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
-    $scope.propertyName = propertyName+".display_value";
-  };*/
 
 };]]></client_script>
         <controller_as>c</controller_as>
@@ -592,11 +583,11 @@ c.setOrderBy = function(field) {
 		//optCopy(input);
 
 		//optCopy(data.options);
-		
-		
-	data.msg = {};
-	data.msg.sortingByAsc = gs.getMessage("Sorting by ascending");
-	data.msg.sortingByDesc = gs.getMessage("Sorting by descending");
+
+
+		data.msg = {};
+		data.msg.sortingByAsc = gs.getMessage("Sorting by ascending");
+		data.msg.sortingByDesc = gs.getMessage("Sorting by descending");
 
 		var fieldLabelGRS = new GlideRecordSecure(data.options.table);
 		for (var i in data.fields_array) {
@@ -621,6 +612,13 @@ c.setOrderBy = function(field) {
 			$sp.getRecordElements(record, queryGRS, data.options.fields);
 			record.sys_id = queryGRS.getUniqueValue();
 			record.number = queryGRS.number.toString();
+
+			if(queryGRS.date_expected) {
+
+				record.date_expected = queryGRS.date_expected.toString();
+
+			}
+
 			data.list.push(record);		
 
 		}
@@ -671,7 +669,7 @@ c.setOrderBy = function(field) {
 	///data.newDeliveryFilter = "date_receivedONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()";
 	//data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
 */
-	
+
 
 	if(data.options.action == "todays" || data.options.action == "outstanding" || data.options.action == "expected") {
 
@@ -731,7 +729,7 @@ gs.error("JW Debug: widget " + JSON.stringify(data));
 	}*/
 
 	if(input && input.action == "sendReminders") {
-		
+
 		var sendReminders = new DelitemUtils().sendReminders(input.selectedDeliveryArr);
 
 	}
@@ -789,17 +787,17 @@ gs.error("JW Debug: widget " + JSON.stringify(data));
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-01-14 10:42:15</sys_created_on>
         <sys_id>b8ffbccf2fdc2d10758993acf699b61d</sys_id>
-        <sys_mod_count>296</sys_mod_count>
+        <sys_mod_count>269</sys_mod_count>
         <sys_name>Delivery Table Modal</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_b8ffbccf2fdc2d10758993acf699b61d</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-12-20 17:25:13</sys_updated_on>
+        <sys_updated_on>2023-12-21 17:34:15</sys_updated_on>
         <template><![CDATA[<div ng-show="!c.data.deliverySelected">
   <div ng-show="c.data.displayDataTable">
-  <!--<widget id="data-table-from-url" options='data.tableOptions'></widget>-->
+  <!--<widget id="widget-data-table" options='data.tableOptions'></widget>-->
       <!--<div ng-include="'delitem-custom-data-table.html'"></div>-->
     
     <!------------------>
@@ -807,23 +805,20 @@ gs.error("JW Debug: widget " + JSON.stringify(data));
         No Delivery Items expected/outstanding/today
       </div>
     
-   <table class="table table-striped table-primary table-responsive table-bordered"
+   <table class="table table-striped table-primary table-responsive"
           ng-show="data.list.length">
       <thead>
         <tr>
           <th class="itemData"
-              ng-repeat="field in data.field_labels track by $index"
-              ng-click="c.setOrderBy(field)"
-              >
-            <div class="th-title"
-                 ng-class="{reverse: reverse}">
+              ng-repeat="field in data.field_labels track by $index">
+            <div class="th-title">
               {{field}}
             </div>  	
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="delivery in c.data.list |orderBy:propertyName:reverse"
+        <tr ng-repeat="delivery in c.data.list"
             ng-click="c.editForm(delivery)"
             ng-if="($index < ((currentPage+1) * rowsPerPage)) && ($index >= (((currentPage+1) * rowsPerPage) - rowsPerPage))">
           <td ng-repeat="field in data.fields_array">

@@ -12,11 +12,11 @@
         <element attributes="edge_encryption_enabled=true" label="Sender" max_length="120" name="sender" type="string"/>
         <element attributes="edge_encryption_enabled=true" choice="3" default="1" label="State" max_length="40" name="state" type="choice">
             <choice>
-                <element inactive_on_update="false" label="Awaiting Collection" value="3"/>
-                <element inactive_on_update="false" label="Cancelled" value="6"/>
-                <element inactive_on_update="false" label="Collected" value="4"/>
-                <element inactive_on_update="false" label="Expected" value="2"/>
-                <element inactive_on_update="false" label="New" value="1"/>
+                <element inactive_on_update="false" label="New" sequence="1" value="1"/>
+                <element inactive_on_update="false" label="Expected" sequence="2" value="2"/>
+                <element inactive_on_update="false" label="Awaiting Collection" sequence="3" value="3"/>
+                <element inactive_on_update="false" label="Collected" sequence="4" value="4"/>
+                <element inactive_on_update="false" label="Cancelled" sequence="5" value="6"/>
             </choice>
         </element>
         <index name="index">
