@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[api.controller=function($scope,delitemModalPubSub,spUtil,spAriaUtil,$uibModal) {
+        <client_script><![CDATA[api.controller=function($scope, delitemModalPubSub, spUtil, spAriaUtil, $uibModal, $rootScope) {
 	/* widget controller */
 	var c = this;
 
-	console.log(c);
+	var count = 0;
+	console.log(c.data);
+	
+	$scope.$on('data_table.click', function(event,obj) {
+		console.log(obj);
+		//ert("Clicked " + count++);
+		
+		event.stopPropagation();
+		event.preventDefault();
+		c.editForm(obj.record);		
+		
+	});
 
 	$scope.currentPage = 0;
 	$scope.rowsPerPage = 5;
@@ -34,11 +45,17 @@
 	};
 
 	c.editForm = function(delivery) {
+		
+		console.log("This is the record: " + _.find(c.data.list, {sys_id:delivery.sys_id}));
 
 		var deliveryObj = {
 
 			"modalAction": "edit_delivery",
-			"delivery": delivery
+			"delivery": _.find(c.data.list, {sys_id:delivery.sys_id})
+			/*"additionalFields": {
+				"delivery": "Test Value"
+			
+		}*/
 			/*"sys_id": delivery.sys_id,
 			"table": c.data.options.table,
 			"view": "Portal",
@@ -606,12 +623,18 @@ console.log(rsp);
 		queryGRS.query();
 		data.list = [];
 
-		while (queryGRS._next()) {
+		while (queryGRS._next()) { 
 			var record = {};
 
 			$sp.getRecordElements(record, queryGRS, data.options.fields);
 			record.sys_id = queryGRS.getUniqueValue();
 			record.number = queryGRS.number.toString();
+
+			if(queryGRS.delivery) {
+
+				record.delivery = queryGRS.delivery.getDisplayValue();
+
+			}
 
 			if(queryGRS.date_expected) {
 
@@ -787,21 +810,21 @@ gs.error("JW Debug: widget " + JSON.stringify(data));
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-01-14 10:42:15</sys_created_on>
         <sys_id>b8ffbccf2fdc2d10758993acf699b61d</sys_id>
-        <sys_mod_count>269</sys_mod_count>
+        <sys_mod_count>301</sys_mod_count>
         <sys_name>Delivery Table Modal</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_b8ffbccf2fdc2d10758993acf699b61d</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-12-21 17:34:15</sys_updated_on>
+        <sys_updated_on>2023-12-22 17:04:15</sys_updated_on>
         <template><![CDATA[<div ng-show="!c.data.deliverySelected">
   <div ng-show="c.data.displayDataTable">
-  <!--<widget id="widget-data-table" options='data.tableOptions'></widget>-->
+  <widget id="widget-data-table" options='data.tableOptions'></widget>
       <!--<div ng-include="'delitem-custom-data-table.html'"></div>-->
     
     <!------------------>
-    <div class="alert alert-info" ng-if="!data.list.length && !data.num_pages">
+   <!-- <div class="alert alert-info" ng-if="!data.list.length && !data.num_pages">
         No Delivery Items expected/outstanding/today
       </div>
     
@@ -826,7 +849,7 @@ gs.error("JW Debug: widget " + JSON.stringify(data));
           </td>
         </tr>
     </table>
-    <!------------------>
+    
     <div class="panel-footer"
          ng-show="c.data.list.length > rowsPerPage">
         <div class="btn-toolbar m-r pull-left">
@@ -846,7 +869,7 @@ gs.error("JW Debug: widget " + JSON.stringify(data));
         <div class="m-t-xs panel-title">Page {{currentPage+1}} of {{numberOfPages()}}<span class="m-t-xs panel-title pull-right"></span><span class="m-t-xs panel-title pull-right">{{c.data.list.length}} Row<span ng-if="c.data.list.length > 1">s</span></span></div>
         <span class="clearfix"></span>
       </div>
-  </div>
+  </div>-->
   <div class="alert alert-info"
        ng-show="!c.data.displayDataTable && c.data.deliveriesArr.length == 0">
     There are currently Deliveries awaiting collection

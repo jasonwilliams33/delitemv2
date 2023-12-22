@@ -25,9 +25,13 @@
 
 	delitemModalPubSub.subscribe($scope, function($event, data) {//Subscription to Angular Provider to retrieve data from Modal and update relevant variables
 
+		
+		c.data.searchDisabled = true;
+		
 		if(data.modalAction == "signatureAccepted") {
-
+		
 			c.modalInstance.close();
+			
 			c.data.manualSearch = false;
 			c.data.recipient = {
 				
@@ -35,24 +39,25 @@
 				"displaYValue" : ""
 				
 			}
-			
 
-		} else {
+		} else if (data.modalAction == "qrCodeScaned") {
 
 			c.modalInstance.close();
 
 			c.server.get({
 
 				action: "lookupDelivery",
-				deliveryFilter: "sys_id=" + data.sys_id + "^state!=" + c.data.collected,
+				deliveryFilter: "sys_id=" + data.sys_id,// + "^state!=" + c.data.collected,
 				recipient: c.data.recipient
 
 			}).then(function(rsp) {
+				
+				if(rsp.data.deliveryStatus != "delivery_found") {
 
-				if(rsp.data.deliveryNotFound) {
-
-					spModal.alert("No outstanding deliveries were located for you " + rsp.data.userFirstName + ", please speak to reception if you need any further assistance");
-
+					spModal.alert(rsp.data.deliveryMessage);
+					c.data.recipient.value = "";
+					c.data.searchDisabled = true;
+					
 				} else {
 
 					c.openModal("delitem_delivery_summary","Outstanding Deliveries",rsp.data.deliverySummaryOptions);
@@ -62,6 +67,7 @@
 			})
 
 		}
+		
 		/*data.deliverySummaryOptions = {
 
 			"deliverySysId": "fbd68d252f302910758993acf699b665",
@@ -90,9 +96,11 @@
 
 		}).then(function(rsp) {
 
-			if(rsp.data.deliveryNotFound) {
+			if(rsp.data.deliveryStatus != "delivery_found") {
 
-				spModal.alert("No outstanding deliveries were located for you " + rsp.data.userFirstName + ", please speak to reception if you need any further assistance");
+				spModal.alert(rsp.data.deliveryMessage);
+				c.data.recipient.value = "";
+				c.data.searchDisabled = true;
 
 			} else {
 
@@ -206,8 +214,9 @@ textarea {
 	/* populate the 'data' object */
 	/* e.g., data.table = $sp.getValue('table'); */
 
-	data.deliveryNotFound = false;
+	//data.deliveryNotFound = false;
 	data.collected = DelItemConstants.COLLECTED;
+	data.selfService = gs.getProperty("x_187394_delitem.self.service");
 
 	if(input && input.action == "lookupDelivery") {
 
@@ -218,13 +227,25 @@ textarea {
 			lookupDeliveryGRS.query();
 			if(lookupDeliveryGRS.next()) {
 
-				data.deliverySummaryOptions = {
+				if(lookupDeliveryGRS.state != data.collected) {
 
-					"sys_id": lookupDeliveryGRS.getUniqueValue(),
-					"delivery_items_awaiting_collection": lookupDeliveryGRS.delivery_items_awaiting_collection.toString(),
-					"recipientFirstName": lookupDeliveryGRS.recipient.first_name.toString()
+					data.deliverySummaryOptions = {
 
-				};
+						"sys_id": lookupDeliveryGRS.getUniqueValue(),
+						"delivery_items_awaiting_collection": lookupDeliveryGRS.delivery_items_awaiting_collection.toString(),
+						"recipientFirstName": lookupDeliveryGRS.recipient.first_name.toString()
+
+					};
+
+					data.deliveryStatus = "delivery_found";
+
+				} else {
+
+					data.userFirstName = lookupDeliveryGRS.recipient.first_name.toString();
+					data.deliveryStatus = "delivery_collected";
+
+				}
+
 
 			} else {
 
@@ -235,7 +256,17 @@ textarea {
 
 				}
 
-				data.deliveryNotFound = true;
+				data.deliveryStatus = "delivery_not_found";
+
+			}
+
+			if(data.deliveryStatus == "delivery_not_found") {
+
+				data.deliveryMessage = "No outstanding Deliveries were located for you " + data.userFirstName + ", please speak to reception if you need any further assistance";
+
+			} else if (data.deliveryStatus == "delivery_collected") {
+
+				data.deliveryMessage = "The Delivery has no remaining Delivery Items to be collected " + data.userFirstName + ", please speak to reception if you need any further assistance";
 
 			}
 
@@ -253,62 +284,70 @@ textarea {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-02-04 15:35:31</sys_created_on>
         <sys_id>b17c06f92fb06910758993acf699b6c6</sys_id>
-        <sys_mod_count>13</sys_mod_count>
+        <sys_mod_count>62</sys_mod_count>
         <sys_name>Delitem Self Service</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_b17c06f92fb06910758993acf699b6c6</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-11-25 13:44:07</sys_updated_on>
+        <sys_updated_on>2023-12-22 17:10:13</sys_updated_on>
         <template><![CDATA[<div class="panel panel-primary">
   <div class="panel-heading">
     Delitem
   </div>
-  <div class="panel-body">
-    <div class="wrap row">
-      <div class="cardCount"
-           ng-click="c.scanQRCode()">
-        <h5 class="docTitle">
-          <span>
-            <img class="img-circle pointer selfServiceImgs" ng-src="sp-qr-reader-icon.png">
-          </span>
-          Scan QR Code
-        </h5>
+  <div class="panel-body"> 
+    <div class="wrap row"
+         ng-show="c.data.selfService == 'false'">
+      <h4>
+        Please speak to your ServiceNow Administrator in order to activate Self Service
+      </h4>
+    </div>
+    <div ng-show="c.data.selfService == 'true'">
+      <div class="wrap row">
+        <div class="cardCount"
+             ng-click="c.scanQRCode()">
+          <h5 class="docTitle">
+            <span>
+              <img class="img-circle pointer selfServiceImgs" ng-src="sp-qr-reader-icon.png">
+            </span>
+            Scan QR Code
+          </h5>
+        </div>
+        <div class="cardCount"
+             ng-click="c.manualSearch()">
+          <h5 class="docTitle">
+            <span>
+              <img class="img-circle pointer selfServiceImgs" ng-src="delitem_search_img.png">
+            </span>
+            Search Deliveries
+          </h5>
+        </div> 
       </div>
-      <div class="cardCount"
-           ng-click="c.manualSearch()">
-        <h5 class="docTitle">
-          <span>
-            <img class="img-circle pointer selfServiceImgs" ng-src="hawt_search_img.png">
-          </span>
-          Search Deliveries
-        </h5>
-      </div> 
-    </div>    
-    <div class="form-group"
-         ng-show="c.data.manualSearch">
-      <span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory" ng-class="{'mandatory-filled': recipient.displayValue != undefined}"></span>
-      <label for="formGroupExampleInput">Name</label>
-      <sn-record-picker field="c.data.recipient"
-                        name="recordPickerSingle"
-                        table="'sys_user'" 
-                        display-field="'name'" 
-                        value-field="'sys_id'" 
-                        search-fields="'name'" 
-                        page-size="100"
-                        id="recordPickerSingle"
-                        autofocus
-                        >
-      </sn-record-picker>
-      <div class="text-right">
-        <button class="btn btn-primary searchBtn"
-                ng-click="c.executeManualSearch()"
-                ng-class="{ 'disabled' : c.data.searchDisabled }">
-          Search
-        </button>
-      </div>
-    </div>      
+      <div class="form-group"
+           ng-show="c.data.manualSearch">
+        <span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory" ng-class="{'mandatory-filled': recipient.displayValue != undefined}"></span>
+        <label for="formGroupExampleInput">Name</label>
+        <sn-record-picker field="c.data.recipient"
+                          name="recordPickerSingle"
+                          table="'sys_user'" 
+                          display-field="'name'" 
+                          value-field="'sys_id'" 
+                          search-fields="'name'" 
+                          page-size="100"
+                          id="recordPickerSingle"
+                          autofocus
+                          >
+        </sn-record-picker>
+        <div class="text-right">
+          <button class="btn btn-primary searchBtn"
+                  ng-click="c.executeManualSearch()"
+                  ng-class="{ 'disabled' : c.data.searchDisabled }">
+            Search
+          </button>
+        </div>
+      </div>      
+    </div>
   </div>    
 </div>
 ]]></template>
