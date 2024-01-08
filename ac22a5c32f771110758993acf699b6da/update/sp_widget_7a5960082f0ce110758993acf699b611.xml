@@ -222,7 +222,22 @@
 
 };]]></client_script>
         <controller_as>c</controller_as>
-        <css>.wrap {
+        <css>/*** Variables declaration **/
+
+$border-radius: 6px;
+$shadow: 0px 2px 10px rgba(23, 40, 52, 0.08);
+$normal-img-size: 56px;
+$small-img-size: 32px;
+$rm: 10px;
+$text-primary: #181a1f !default;
+$color-sp-separator: #eaeaea !default;
+$headings-font-weight: 600 !default;
+$border-primary: #8790a1 !default;
+$border-secondary: #acb2be !default;
+$border-tertiary: #dadde2 !default;
+$sp-panel-box-shadow: 0 4px 8px 0 rgba(23, 40, 52, 0.08) !default;
+
+.wrap {
   justify-content: center;
   flex-wrap: wrap;
   display: flex;
@@ -277,17 +292,24 @@ textarea {
 // ESC Styling
 $text-primary: #181a1f !default;
 
+
+
 .panel-primary &gt; .panel-heading {
   background-color: transparent;
   color: $text-primary;
+  	border-bottom: 1px solid $color-sp-separator;
+  color: $text-primary;
+  font-family: "Lato", sans-serif;
 }
 
 .b {
   border: 0;
+    
 }
 
 .panel {
   box-shadow: $sp-panel-box-shadow;
+
 }
 
 
@@ -403,7 +425,7 @@ $text-primary: #181a1f !default;
 		data.todaysDeliveriesFilter = "date_receivedONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()^stateNOT IN" + DelItemConstants.EXPECTED + "," + DelItemConstants.CANCELLED;
 		data.outstandingDeliveryItemsFilter = "state=" + DelItemConstants.AWAITING_COLLECTION;
 		data.expectedDeliveryItemsFilter = "date_expectedONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()^state=" + DelItemConstants.EXPECTED;
-		data.outstandingDeliveryFilter = "state!=" + DelItemConstants.COLLECTED;
+		data.outstandingDeliveryFilter = "stateNOT IN=" + DelItemConstants.COLLECTED + "," + DelItemConstants.CANCELLED;
 		data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
 		data.delieveryTable = DelItemConstants.DELIVERY_TABLE;
 		data.newDeliveryItem = DelItemConstants.NEW;
@@ -509,14 +531,14 @@ $text-primary: #181a1f !default;
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-12-23 15:06:04</sys_created_on>
         <sys_id>7a5960082f0ce110758993acf699b611</sys_id>
-        <sys_mod_count>162</sys_mod_count>
+        <sys_mod_count>173</sys_mod_count>
         <sys_name>Delitem</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_7a5960082f0ce110758993acf699b611</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-12-21 17:23:57</sys_updated_on>
+        <sys_updated_on>2024-01-06 15:20:32</sys_updated_on>
         <template><![CDATA[<div class="panel panel-primary b">
   <div class="panel-heading">
     Delitem
