@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <ignore_in_now_experience>false</ignore_in_now_experience>
+        <name>x_187394_delitem.big-int-fix.js</name>
+        <script><![CDATA[/* global BigInt */
+if (typeof (BigInt) === 'undefined') {
+  window.BigInt = bigInt;
+}]]></script>
+        <script_name>big-int-fix.js</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-01-25 21:16:48</sys_created_on>
+        <sys_id>def6ab8897cc82108c1bf911f053af35</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_187394_delitem.big-int-fix.js</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_ui_script_def6ab8897cc82108c1bf911f053af35</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-01-25 21:16:48</sys_updated_on>
+        <ui_type>10</ui_type>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>
