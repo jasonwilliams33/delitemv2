@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_fix">
+    <sys_script_fix action="INSERT_OR_UPDATE">
+        <before>false</before>
+        <description/>
+        <name>Delete Al Deliveries</name>
+        <record_for_rollback>true</record_for_rollback>
+        <script><![CDATA[var listDeliveries = new GlideRecord("x_187394_delitem_delivery");
+listDeliveries.deleteMultiple();
+
+var listDeliveryItems = new GlideRecord("x_187394_delitem_delivery_item");
+listDeliveryItems.deleteMultiple();]]></script>
+        <sys_class_name>sys_script_fix</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-02-17 11:20:30</sys_created_on>
+        <sys_id>9ddaf797971002108c1bf911f053af40</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>Delete Al Deliveries</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_script_fix_9ddaf797971002108c1bf911f053af40</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-02-17 13:41:28</sys_updated_on>
+        <unloadable>false</unloadable>
+    </sys_script_fix>
+</record_update>

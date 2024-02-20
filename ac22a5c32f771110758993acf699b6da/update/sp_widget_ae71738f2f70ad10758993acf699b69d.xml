@@ -6,62 +6,102 @@
 	var c = this;
 
 	//var code = generateQR(c.data.sys_id);
-	
-	
-	
-		setTimeout(
-   function(){		
-			//$scope.$parent.$parent.buttonClicked({ label: "OK", primary: true });  
-		 var code = generateQR(c.data.sys_id);
-   },
-   3000
-);
-	
-	
+
+
+
+	//setTimeout(
+	//function(){		
+	//$scope.$parent.$parent.buttonClicked({ label: "OK", primary: true });  
+	//var code = generateQR(c.data.sys_id);
+	//},
+	//3000
+	//);
+
+var code = generateQR(c.data.sys_id);
+
+
 	//delitemModalPubSub.publish(c.data.sys_id);
 
 	function generateQR(sys_id) {
-console.log("This is from QR Code: " + sys_id);
-		qrcode = new QRCode(document.getElementById('qrcode'), {
-			text: sys_id,
-			width: 128,
-			height: 128,
-			colorDark : "#000000",
-			colorLight : "#ffffff",
-			correctLevel : QRCode.CorrectLevel.H
+		
+			qrcode = new QRCode(document.getElementById('qrcode'), {
+				text: sys_id,
+				width: 128,
+				height: 128,
+				colorDark : "#000000",
+				colorLight : "#ffffff",
+				correctLevel : QRCode.CorrectLevel.H
 
-		});
+			});
 
-		img = qrcode._el.children[1];
+			img = qrcode._el.children[1];
+			//imgs.push(img);
 
-		var canvas = document.createElement("canvas");
-		canvas.width = img.width;
-		canvas.height = img.height;
+			var canvas = document.createElement("canvas");
+			canvas.width = img.width;
+			canvas.height = img.height;
 
-		// Copy the image contents to the canvas
-		var ctx = canvas.getContext("2d");
-		ctx.drawImage(img, 0, 0);
+			// Copy the image contents to the canvas
+			var ctx = canvas.getContext("2d");
+			ctx.drawImage(img, 0, 0);
 
-		dataURL = canvas.toDataURL("image/png");
-console.log(dataURL);
+			dataURL = canvas.toDataURL("image/png");
+
+			console.log(dataURL);
+
+			
+
 		c.server.get({
 
 			action: "updateDeliveryItem",
-			delivery: c.data.sys_id,
+			delivery: sys_id,
 			download: dataURL
 
 		}).then(function(rsp) {
 
 		})
-	
+
+	}
+
+// 	function generateDataUrl (sys_id,callback) {
+// 		alert(sys_id);
+
+// 		qrcode = new QRCode(document.getElementById('qrcode'), {
+			
+// 			text: sys_id,
+// 			width: 128,
+// 			height: 128,
+// 			colorDark : "#000000",
+// 			colorLight : "#ffffff",
+// 			correctLevel : QRCode.CorrectLevel.H
+
+// 		});
+
+// 		img = qrcode._el.children[1];
+// 		//imgs.push(img);
+
+// 		var canvas = document.createElement("canvas");
+// 		canvas.width = img.width;
+// 		canvas.height = img.height;
+
+// 		// Copy the image contents to the canvas
+// 		var ctx = canvas.getContext("2d");
+// 		ctx.drawImage(img, 0, 0);
+
+// 				//console.log(dataURL);
+// 		response = canvas;
+
+// 		setTimeout(function() {
+// 		callback(null,response);	
+// 		},5000);
 		
-//$scope.$parent.$parent.buttonClicked({ label: "OK", primary: true }); 
-	}	
+
+// 	}
 
 }]]></client_script>
         <controller_as>c</controller_as>
         <css>.qrcode{
-	display: none;
+	//display: none;
 }
 
 .containerQRCode,.containerLoader, .message{
@@ -143,6 +183,8 @@ console.log(dataURL);
 	data.sys_id = input.sys_id;
 
 	if(input && input.action == "updateDeliveryItem") {
+		
+		gs.error("JW Debug, Del Sys ID: " + JSON.stringify(input));
 
 		var attach = new GlideRecordSecure(DelItemConstants.DELIVERY_TABLE);
 		attach.get(input.delivery);
@@ -164,14 +206,14 @@ console.log(dataURL);
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-02-08 20:09:15</sys_created_on>
         <sys_id>ae71738f2f70ad10758993acf699b69d</sys_id>
-        <sys_mod_count>6</sys_mod_count>
+        <sys_mod_count>45</sys_mod_count>
         <sys_name>Delitem Generate QR Code</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_ae71738f2f70ad10758993acf699b69d</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-02-10 12:10:14</sys_updated_on>
+        <sys_updated_on>2024-02-20 21:00:47</sys_updated_on>
         <template><![CDATA[<div class="containerLoader">
   <div>
     <span class="message">

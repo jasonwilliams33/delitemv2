@@ -143,17 +143,20 @@
 		}).then(function(rsp) {
 
 			console.log(rsp.data.sendNotificationArr);
+			
+			var deliveryArr = rsp.data.sendNotificationArr;
+			c.generateQRCode(deliveryArr,0);
 			//for (var i=0; i< rsp.data.sendNotificationArr.length; i++) {
 
 			
 			//c.generateQRCode(rsp.data.sendNotificationArr);
 			
-			for (var i=0; i< rsp.data.sendNotificationArr.length; i++) {
+			//for (var i=0; i< rsp.data.sendNotificationArr.length; i++) {
 
-			//		c.generateQRCode(rsp.data.sendNotificationArr);
-			c.generateQRCode(rsp.data.sendNotificationArr[i]);
+					//c.generateQRCode(rsp.data.sendNotificationArr);
+			//c.generateQRCode(rsp.data.sendNotificationArr[i]);
 
-			}
+			//}
 
 			//}
 
@@ -167,13 +170,13 @@
 
 			}*/
 
-			var modalReturnObj = {
+			/*var modalReturnObj = {
 
 				"modalAction" : "sendNotifications"
 
 			}
 
-			delitemModalPubSub.publish(modalReturnObj);
+			delitemModalPubSub.publish(modalReturnObj);*/
 
 		})
 
@@ -187,8 +190,38 @@
 
 	})*/
 
-	c.generateQRCode = function(sys_id) {	
-		console.log("this is from new del: " + sys_id);
+	// Define a function to process each item with a callback when done
+function processItem(sys_id, callback) {
+    // Simulate async processing (e.g., fetching data from an API)
+    	spModal.open({
+			widget: 'delitem_generate_qr_code', 
+			widgetInput: {
+				sys_id: sys_id
+			}
+		}).then(function () {
+							
+			callback(); // Call the callback when processing is done
+						
+		})
+        console.log('Processed item:', sys_id);
+      
+    
+}
+	
+	c.generateQRCode = function(sys_ids, index) {
+		
+	// Define a function to iterate through items sequentially
+    if (index < sys_ids.length) {
+        processItem(sys_ids[index], function () {
+            c.generateQRCode(sys_ids, index + 1); // Recursively call with the next index
+        });
+    } else {
+        console.log('All items processed.');
+    }
+
+
+	
+		/*console.log("this is from new del: " + sys_id);
 		spModal.open({
 			widget: 'delitem_generate_qr_code', 
 			widgetInput: {
@@ -196,7 +229,9 @@
 			}
 		}).then(function () {
 			
-		})
+			alert("Test");
+						
+		})*/
 
 		//modalObj = {
 			//	sys_id: sys_id
@@ -727,14 +762,14 @@ textarea {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-12-23 16:32:41</sys_created_on>
         <sys_id>e32d3c882f4ce110758993acf699b695</sys_id>
-        <sys_mod_count>155</sys_mod_count>
+        <sys_mod_count>162</sys_mod_count>
         <sys_name>New Delivery</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_e32d3c882f4ce110758993acf699b695</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2024-02-07 20:39:12</sys_updated_on>
+        <sys_updated_on>2024-02-20 21:08:21</sys_updated_on>
         <template><![CDATA[<div class="containerQRCode">
   <div class="qrcode" id="qrcode">
     <canvas id="canvas" width="200" height="200"></canvas>
