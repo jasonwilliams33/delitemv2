@@ -23,6 +23,21 @@
 
 	}
 
+	c.editForm = function(delivery) {
+console.log(delivery);
+		//console.log("This is the record: " + _.find(c.data.list, {sys_id:delivery.sys_id}));
+
+		var deliveryObj = {
+
+			"modalAction": "edit_delivery",
+			"delivery": _.find(c.data.list, {sys_id:delivery.sys_id})
+
+		}
+
+		delitemModalPubSub.publish(deliveryObj);
+
+	}
+
 	c.insertItems = function(saveAction) {
 		console.log(c.data.recipient.value.split(','));
 		c.data.itemCount = c.data.recipient.value.split(',').length;
@@ -143,17 +158,18 @@
 		}).then(function(rsp) {
 
 			console.log(rsp.data.sendNotificationArr);
-			
+
 			var deliveryArr = rsp.data.sendNotificationArr;
+			//c.generateQRCode(deliveryArr);
 			c.generateQRCode(deliveryArr,0);
 			//for (var i=0; i< rsp.data.sendNotificationArr.length; i++) {
 
-			
+
 			//c.generateQRCode(rsp.data.sendNotificationArr);
-			
+
 			//for (var i=0; i< rsp.data.sendNotificationArr.length; i++) {
 
-					//c.generateQRCode(rsp.data.sendNotificationArr);
+			//c.generateQRCode(rsp.data.sendNotificationArr);
 			//c.generateQRCode(rsp.data.sendNotificationArr[i]);
 
 			//}
@@ -190,37 +206,84 @@
 
 	})*/
 
+	/*c.generateQRCode = function(sys_ids) {
+
+		spModal.open({
+			widget: 'delitem_generate_qr_code', 
+			widgetInput: {
+				sys_id: sys_ids
+			}
+		}).then(function () {
+
+			alert("Test");
+
+		})*/
+
+	delitemModalPubSub.subscribe($scope, function($event, data) {//Subscription to Angular Provider to retrieve data from Modal and update relevant variables
+
+		c.modalInstance.close();
+
+	});
+
+
+	// - Working 2 functions!
 	// Define a function to process each item with a callback when done
-function processItem(sys_id, callback) {
-    // Simulate async processing (e.g., fetching data from an API)
-    	spModal.open({
+	function processItem(sys_id, callback) {
+		// Simulate async processing (e.g., fetching data from an API)
+
+		/*	widgetInput = {
+				sys_id: sys_id
+			};
+
+		c.modalInstance = $uibModal.open({
+
+			templateUrl: 'delitem-new-delivery-custom-form-overlay.html',
+			size: 'lg',
+			backdrop: 'static',
+			controllerAs: 'modalC',
+			controller: function() {
+
+				var modalC = this;
+				modalC.modalInstance = c.modalInstance;
+				modalC.title = 'title';
+				spUtil.get('delitem_generate_qr_code',widgetInput).then(function(response) {
+
+					modalC.widget = response;
+
+				})
+
+			}	
+
+		})*/
+
+		spModal.open({
 			widget: 'delitem_generate_qr_code', 
 			widgetInput: {
 				sys_id: sys_id
 			}
 		}).then(function () {
-							
+
 			callback(); // Call the callback when processing is done
-						
+
 		})
-        console.log('Processed item:', sys_id);
-      
-    
-}
-	
+		console.log('Processed item:', sys_id);
+
+
+	}
+
 	c.generateQRCode = function(sys_ids, index) {
-		
-	// Define a function to iterate through items sequentially
-    if (index < sys_ids.length) {
-        processItem(sys_ids[index], function () {
-            c.generateQRCode(sys_ids, index + 1); // Recursively call with the next index
-        });
-    } else {
-        console.log('All items processed.');
-    }
+
+		// Define a function to iterate through items sequentially
+		if (index < sys_ids.length) {
+			processItem(sys_ids[index], function () {
+				c.generateQRCode(sys_ids, index + 1); // Recursively call with the next index
+			});
+		} else {
+			console.log('All items processed.');
+		}
 
 
-	
+
 		/*console.log("this is from new del: " + sys_id);
 		spModal.open({
 			widget: 'delitem_generate_qr_code', 
@@ -228,32 +291,32 @@ function processItem(sys_id, callback) {
 				sys_id: sys_id
 			}
 		}).then(function () {
-			
+
 			alert("Test");
-						
+
 		})*/
 
 		//modalObj = {
-			//	sys_id: sys_id
-			//}
+		//	sys_id: sys_id
+		//}
 
 		//c.modalInstance = $uibModal.open({
 
-			//templateUrl: 'delitem-new-delivery-custom-form-overlay.html',
-			//size: 'lg',
-			//controllerAs: 'modalC',
-			//controller: function() {
+		//templateUrl: 'delitem-new-delivery-custom-form-overlay.html',
+		//size: 'lg',
+		//controllerAs: 'modalC',
+		//controller: function() {
 
-				//var modalC = this;
-				//modalC.modalInstance = c.modalInstance;
-				//modalC.title = 'Generating QR Code';
-				//spUtil.get('delitem_generate_qr_code',modalObj).then(function(response) {
+		//var modalC = this;
+		//modalC.modalInstance = c.modalInstance;
+		//modalC.title = 'Generating QR Code';
+		//spUtil.get('delitem_generate_qr_code',modalObj).then(function(response) {
 
-					//modalC.widget = response;
+		//modalC.widget = response;
 
-				//})
+		//})
 
-			//}	
+		//}	
 
 		//})
 
@@ -354,7 +417,7 @@ function processItem(sys_id, callback) {
 	}
 
 	c.confirmCollectionLocation = function(delivery) {
-
+		console.log(delivery);
 		c.data.showLocationUpdate = true;
 		c.data.deliveryItemSysId = delivery.sys_id;
 		c.data.expectedItemRecipient = delivery.recipient_first_name
@@ -762,14 +825,14 @@ textarea {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-12-23 16:32:41</sys_created_on>
         <sys_id>e32d3c882f4ce110758993acf699b695</sys_id>
-        <sys_mod_count>162</sys_mod_count>
+        <sys_mod_count>186</sys_mod_count>
         <sys_name>New Delivery</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_e32d3c882f4ce110758993acf699b695</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2024-02-20 21:08:21</sys_updated_on>
+        <sys_updated_on>2024-02-29 11:08:13</sys_updated_on>
         <template><![CDATA[<div class="containerQRCode">
   <div class="qrcode" id="qrcode">
     <canvas id="canvas" width="200" height="200"></canvas>
@@ -810,9 +873,21 @@ textarea {
           <td class="itemData">
             <div class="btn-group"
                  ng-show="delivery.state.value == 'Expected'"
-                 ng-click="c.confirmCollectionLocation(delivery)">			
-              <button class="btn btn-primary">
+                 ng-click="c.confirmCollectionLocation(delivery)">
+              <button class="btn btn-sm btn-primary">
                 Received
+              </button>
+            </div>
+            <div class="btn-group"
+                 ng-click="c.editForm(delivery)">			
+              <button class="btn btn-sm">
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="btn-group"
+                 ng-click="c.confirmCollectionLocation(delivery)">			
+              <button class="btn btn-sm btn-danger">
+                <i class="fa fa-trash" aria-hidden="true"></i>
               </button>
             </div>
           </td>
