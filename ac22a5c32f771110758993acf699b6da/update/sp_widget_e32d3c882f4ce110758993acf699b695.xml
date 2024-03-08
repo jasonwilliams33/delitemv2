@@ -24,7 +24,7 @@
 	}
 
 	c.editForm = function(delivery) {
-console.log(c.data.newDeliveryGRSArr);
+//console.log(c.data.newDeliveryGRSArr);
 		//console.log("This is the record: " + _.find(c.data.list, {sys_id:delivery.sys_id}));
 
 		var deliveryObj = {
@@ -33,7 +33,7 @@ console.log(c.data.newDeliveryGRSArr);
 			"delivery": _.find(c.data.newDeliveryGRSArr, {sys_id:delivery.sys_id})
 
 		}
-console.log(deliveryObj);
+//console.log(deliveryObj.delivery);
 		delitemModalPubSub.publish(deliveryObj);
 
 	}
@@ -825,14 +825,14 @@ textarea {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-12-23 16:32:41</sys_created_on>
         <sys_id>e32d3c882f4ce110758993acf699b695</sys_id>
-        <sys_mod_count>191</sys_mod_count>
+        <sys_mod_count>193</sys_mod_count>
         <sys_name>New Delivery</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_e32d3c882f4ce110758993acf699b695</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2024-02-29 11:25:26</sys_updated_on>
+        <sys_updated_on>2024-03-08 12:05:16</sys_updated_on>
         <template><![CDATA[<div class="containerQRCode">
   <div class="qrcode" id="qrcode">
     <canvas id="canvas" width="200" height="200"></canvas>
