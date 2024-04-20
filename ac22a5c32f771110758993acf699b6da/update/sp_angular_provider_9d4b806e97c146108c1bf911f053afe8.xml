@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_angular_provider">
+    <sp_angular_provider action="INSERT_OR_UPDATE">
+        <name>delitemDataTablePubSub</name>
+        <script><![CDATA[function delitemDataTablePubSub($rootScope) {
+	
+	var delitemDataTableEvent = 'dataTableCompleted';
+	
+	return {
+		
+		subscribe: function(scope, callback) {
+			
+			var deregister = $rootScope.$on(delitemDataTableEvent, callback);
+			scope.$on('$destroy', deregister);
+			
+		},
+		
+		publish: function(data) {
+			$rootScope.$emit(delitemDataTableEvent, data);
+			
+		}
+		
+	};
+	
+}]]></script>
+        <sys_class_name>sp_angular_provider</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-03-22 16:44:32</sys_created_on>
+        <sys_id>9d4b806e97c146108c1bf911f053afe8</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>delitemDataTablePubSub</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sp_angular_provider_9d4b806e97c146108c1bf911f053afe8</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-03-22 16:44:32</sys_updated_on>
+        <type>service</type>
+    </sp_angular_provider>
+</record_update>

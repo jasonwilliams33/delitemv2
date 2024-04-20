@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[api.controller=function($scope, delitemModalPubSub, spUtil, spAriaUtil, $uibModal, $rootScope) {
+        <client_script><![CDATA[api.controller=function($scope, delitemModalPubSub, spUtil, spAriaUtil, $uibModal, $rootScope,delitemDataTablePubSub) {
 	/* widget controller */
 	var c = this;
 //console.log(c);
@@ -18,11 +18,11 @@
 		
 	});
 	
-	delitemModalPubSub.subscribe($scope, function($event, data) {//Subscription to Angular Provider to retrieve data from Modal and update relevant variables
+	delitemDataTablePubSub.subscribe($scope, function($event, data) {//Subscription to Angular Provider to retrieve data from Modal and update relevant variables
 		
 		c.data.collectDeliveryDisabled = false;
 		c.data.selectedItem = data;
-		console.log(data);
+		//console.log(data);
 		
 	})
 		
@@ -112,7 +112,8 @@
 		var modalReturnObj = {
 
 			"modalAction" : "collectDelivery",
-			"selectedDelivery" : c.data.selectedItem
+			"selectedDelivery" : c.data.selectedItem,
+			"closeModal" : true
 
 		}
 
@@ -824,14 +825,14 @@ gs.error("JW Debug: widget " + JSON.stringify(data));
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-01-14 10:42:15</sys_created_on>
         <sys_id>b8ffbccf2fdc2d10758993acf699b61d</sys_id>
-        <sys_mod_count>335</sys_mod_count>
+        <sys_mod_count>346</sys_mod_count>
         <sys_name>Delivery Table Modal</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_b8ffbccf2fdc2d10758993acf699b61d</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2024-03-20 17:35:16</sys_updated_on>
+        <sys_updated_on>2024-03-23 11:56:48</sys_updated_on>
         <template><![CDATA[<div ng-show="!c.data.deliverySelected">
   <div ng-show="c.data.displayDataTable">
     <widget id="delitem_custom_data_table" options='data.tableOptions'></widget>
