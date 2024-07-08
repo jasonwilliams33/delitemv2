@@ -28,6 +28,7 @@
         <jump_to_screen>false</jump_to_screen>
         <link_label/>
         <link_url/>
+        <location_tracking/>
         <mail_address/>
         <mail_content/>
         <mail_subject/>
@@ -70,6 +71,7 @@
         <sys_updated_on>2023-11-29 08:47:43</sys_updated_on>
         <table>x_187394_delitem_delivery_item</table>
         <take_value_from_field>false</take_value_from_field>
+        <tracking_action/>
         <type>write_back</type>
         <unhighlighted_icons/>
         <use_overlay>false</use_overlay>

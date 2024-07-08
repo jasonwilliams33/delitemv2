@@ -26,6 +26,7 @@
         <jump_to_screen>false</jump_to_screen>
         <link_label/>
         <link_url/>
+        <location_tracking/>
         <mail_address/>
         <mail_content/>
         <mail_subject/>
@@ -68,6 +69,7 @@
         <sys_updated_on>2023-12-05 08:49:31</sys_updated_on>
         <table/>
         <take_value_from_field>false</take_value_from_field>
+        <tracking_action/>
         <type>write_back</type>
         <unhighlighted_icons/>
         <use_overlay>false</use_overlay>
