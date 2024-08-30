@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_button_instance">
+    <sys_sg_button_instance action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <button display_value="Send Notifications">6c0f41d68390561039c8ac80ceaad360</button>
+        <color_theme>positive</color_theme>
+        <description/>
+        <disable_offline>false</disable_offline>
+        <field_name/>
+        <icon/>
+        <label>Send Notifications</label>
+        <location>top</location>
+        <name>Send Notifications</name>
+        <order>10</order>
+        <parent>2d7b3cde83dc161039c8ac80ceaad355</parent>
+        <parent_table>sys_sg_list_screen</parent_table>
+        <sys_class_name>sys_sg_button_instance</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-08-30 16:26:03</sys_created_on>
+        <sys_id>600f41d68390561039c8ac80ceaad364</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Send Notifications</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_sg_button_instance_600f41d68390561039c8ac80ceaad364</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-08-30 16:26:03</sys_updated_on>
+        <table/>
+    </sys_sg_button_instance>
+    <sys_translated_text action="delete_multiple" query="documentkey=600f41d68390561039c8ac80ceaad364"/>
+</record_update>

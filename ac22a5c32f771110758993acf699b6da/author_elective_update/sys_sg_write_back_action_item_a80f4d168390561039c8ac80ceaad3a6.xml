@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_write_back_action_item">
+    <sys_sg_write_back_action_item action="DELETE">
+        <description/>
+        <execution_script><![CDATA[(function WriteBackAction(input) {
+	// Type appropriate comment here, and begin script below
+
+gs.error("JW Debug - action fired!");
+
+})(input);]]></execution_script>
+        <name>Send Notifications</name>
+        <parameter_screen/>
+        <query_condition/>
+        <sys_class_name>sys_sg_write_back_action_item</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-08-30 16:26:03</sys_created_on>
+        <sys_id>a80f4d168390561039c8ac80ceaad3a6</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Send Notifications</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_sg_write_back_action_item_a80f4d168390561039c8ac80ceaad3a6</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-08-30 16:26:03</sys_updated_on>
+        <table>x_187394_delitem_delivery_item</table>
+        <template/>
+        <type>script</type>
+        <use_current_record_as_condition>false</use_current_record_as_condition>
+        <use_fields_for_ref_lookup>false</use_fields_for_ref_lookup>
+    </sys_sg_write_back_action_item>
+    <sys_translated_text action="DELETE" query="documentkey=a80f4d168390561039c8ac80ceaad3a6"/>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Delitem">ac22a5c32f771110758993acf699b6da</application>
+        <file_path/>
+        <instance_id>e0277b491b1af95c19254089bd4bcb9f</instance_id>
+        <instance_name>dev201900</instance_name>
+        <name>sys_sg_write_back_action_item_a80f4d168390561039c8ac80ceaad3a6</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_sg_write_back_action_item"&gt;&lt;sys_sg_write_back_action_item action="INSERT_OR_UPDATE"&gt;&lt;description/&gt;&lt;execution_script&gt;&lt;![CDATA[(function WriteBackAction(input) {
+	// Type appropriate comment here, and begin script below
+
+gs.error("JW Debug - action fired!");
+
+})(input);]]&gt;&lt;/execution_script&gt;&lt;name&gt;Send Notifications&lt;/name&gt;&lt;parameter_screen/&gt;&lt;query_condition/&gt;&lt;sys_class_name&gt;sys_sg_write_back_action_item&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2024-08-30 16:26:03&lt;/sys_created_on&gt;&lt;sys_id&gt;a80f4d168390561039c8ac80ceaad3a6&lt;/sys_id&gt;&lt;sys_mod_count&gt;0&lt;/sys_mod_count&gt;&lt;sys_name&gt;Send Notifications&lt;/sys_name&gt;&lt;sys_package display_value="Delitem" source="x_187394_delitem"&gt;ac22a5c32f771110758993acf699b6da&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_scope display_value="Delitem"&gt;ac22a5c32f771110758993acf699b6da&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_sg_write_back_action_item_a80f4d168390561039c8ac80ceaad3a6&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2024-08-30 16:26:03&lt;/sys_updated_on&gt;&lt;table&gt;x_187394_delitem_delivery_item&lt;/table&gt;&lt;template/&gt;&lt;type&gt;script&lt;/type&gt;&lt;use_current_record_as_condition&gt;false&lt;/use_current_record_as_condition&gt;&lt;use_fields_for_ref_lookup&gt;false&lt;/use_fields_for_ref_lookup&gt;&lt;/sys_sg_write_back_action_item&gt;&lt;sys_translated_text action="delete_multiple" query="documentkey=a80f4d168390561039c8ac80ceaad3a6"/&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>-2008721083</payload_hash>
+        <record_name>Send Notifications</record_name>
+        <reverted_from/>
+        <source>0420ed148333c61039c8ac80ceaad370</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-08-30 16:26:03</sys_created_on>
+        <sys_id>a40f41d68390561039c8ac80ceaad360</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>191a41bafde0000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-08-30 16:26:03</sys_updated_on>
+        <type>Action item</type>
+        <update_guid>a80f41d6a7905610f52fcf041237be5f</update_guid>
+        <update_guid_history>a80f41d6a7905610f52fcf041237be5f:-2008721083</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-08-30 16:27:19</sys_created_on>
+        <sys_db_object display_value="" name="sys_sg_write_back_action_item">sys_sg_write_back_action_item</sys_db_object>
+        <sys_id>03706719ffad4a14876829ef745183a4</sys_id>
+        <sys_metadata>a80f4d168390561039c8ac80ceaad3a6</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Send Notifications</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_scope_delete display_value="">21fda69da1294409862944902732aaa1</sys_scope_delete>
+        <sys_update_name>sys_sg_write_back_action_item_a80f4d168390561039c8ac80ceaad3a6</sys_update_name>
+        <sys_update_version display_value="sys_sg_write_back_action_item_a80f4d168390561039c8ac80ceaad3a6">a40f41d68390561039c8ac80ceaad360</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-08-30 16:27:19</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>
