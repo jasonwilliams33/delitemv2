@@ -4,7 +4,6 @@
         <applet_launcher display_value="Delitem">e4b83e5c976361108c1bf911f053af12</applet_launcher>
         <icon display_value="Cart">b7a35ffbb70300108223e126de11a991</icon>
         <label>Delitem</label>
-        <roles/>
         <sys_class_name>sys_sg_applet_launcher_tab</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-06-16 20:06:00</sys_created_on>

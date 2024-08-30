@@ -18,4 +18,5 @@
         <value>sender</value>
         <view_config_element display_value="text_04_element">4087a35d97ba31108c1bf911f053af45</view_config_element>
     </sys_sg_view_config_element_attribute>
+    <sys_translated_text action="delete_multiple" query="documentkey=00b93f9d973e31108c1bf911f053af8b"/>
 </record_update>

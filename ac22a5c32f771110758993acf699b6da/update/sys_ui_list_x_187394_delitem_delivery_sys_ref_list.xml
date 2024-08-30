@@ -3,7 +3,7 @@
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>number</element>
-            <list_id display_value="x_187394_delitem_delivery" element="NULL" name="x_187394_delitem_delivery" parent="NULL" relationship="NULL" sys_domain="global" view="ab3e0171db010010b3859c66db9619cd">cb7148622fdca910758993acf699b67b</list_id>
+            <list_id display_value="x_187394_delitem_delivery" element="NULL" name="x_187394_delitem_delivery" parent="NULL" relationship="NULL" sys_domain="global" view="28c0c1738d020210d0ad51af41866353">cb7148622fdca910758993acf699b67b</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>0</position>
@@ -40,7 +40,7 @@
             <sys_updated_by>admin</sys_updated_by>
             <sys_updated_on>2023-01-14 10:51:12</sys_updated_on>
             <sys_user/>
-            <view display_value="Reference List" name="sys_ref_list">ab3e0171db010010b3859c66db9619cd</view>
+            <view display_value="Reference List" name="sys_ref_list">28c0c1738d020210d0ad51af41866353</view>
             <view_name/>
         </sys_ui_list>
     </sys_ui_list>

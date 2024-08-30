@@ -18,4 +18,5 @@
         <value>notes</value>
         <view_config_element display_value="text_07_element">8c56d7ed97b6b1108c1bf911f053af3c</view_config_element>
     </sys_sg_view_config_element_attribute>
+    <sys_translated_text action="delete_multiple" query="documentkey=cc56d7ed97b6b1108c1bf911f053af3e"/>
 </record_update>

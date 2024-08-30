@@ -18,4 +18,5 @@
         <value>date_expected</value>
         <view_config_element display_value="text_03_element">4456d7ed97b6b1108c1bf911f053af1d</view_config_element>
     </sys_sg_view_config_element_attribute>
+    <sys_translated_text action="delete_multiple" query="documentkey=4c56d7ed97b6b1108c1bf911f053af2b"/>
 </record_update>

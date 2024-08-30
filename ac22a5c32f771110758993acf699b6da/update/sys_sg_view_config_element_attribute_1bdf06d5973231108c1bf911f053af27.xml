@@ -18,4 +18,5 @@
         <value>state</value>
         <view_config_element display_value="text_01_element">d7df06d5973231108c1bf911f053af25</view_config_element>
     </sys_sg_view_config_element_attribute>
+    <sys_translated_text action="delete_multiple" query="documentkey=1bdf06d5973231108c1bf911f053af27"/>
 </record_update>

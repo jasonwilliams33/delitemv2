@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_ng_pro_sp_widget">
     <m2m_sp_ng_pro_sp_widget action="INSERT_OR_UPDATE">
-        <sp_angular_provider display_value="scratchPad">860823081311ba007e94fc5ed144b0cc</sp_angular_provider>
+        <sp_angular_provider display_value="">860823081311ba007e94fc5ed144b0cc</sp_angular_provider>
         <sp_widget display_value="Delitem Scratch Pad">f3f768422fe8a110758993acf699b60a</sp_widget>
         <sys_class_name>m2m_sp_ng_pro_sp_widget</sys_class_name>
         <sys_created_by>admin</sys_created_by>

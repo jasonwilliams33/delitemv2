@@ -2,6 +2,7 @@
     <sp_row action="INSERT_OR_UPDATE">
         <class_name/>
         <order>1</order>
+        <semantic_tag/>
         <sp_column/>
         <sp_container display_value="Delitem Test Page 1 - Container 1">b382589c97fab1108c1bf911f053af07</sp_container>
         <sys_class_name>sp_row</sys_class_name>

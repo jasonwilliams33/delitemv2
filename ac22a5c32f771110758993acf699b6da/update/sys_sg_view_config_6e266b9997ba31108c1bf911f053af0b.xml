@@ -20,4 +20,5 @@
         <table>x_187394_delitem_delivery_item</table>
         <template display_value="Template 01">6bb0be5c41a71010f877183fc9b8be0c</template>
     </sys_sg_view_config>
+    <sys_translated_text action="delete_multiple" query="documentkey=6e266b9997ba31108c1bf911f053af0b"/>
 </record_update>

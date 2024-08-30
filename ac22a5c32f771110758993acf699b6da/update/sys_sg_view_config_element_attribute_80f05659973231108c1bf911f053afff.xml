@@ -18,4 +18,5 @@
         <value>delivery_items_awaiting_collection</value>
         <view_config_element display_value="text_06_element">80f05659973231108c1bf911f053affd</view_config_element>
     </sys_sg_view_config_element_attribute>
+    <sys_translated_text action="delete_multiple" query="documentkey=80f05659973231108c1bf911f053afff"/>
 </record_update>

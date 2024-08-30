@@ -8,6 +8,7 @@
         <container_class_name/>
         <name>Delitem Test Page 1 - Container 1</name>
         <order>1</order>
+        <semantic_tag/>
         <sp_page display_value="delitem_test_page_1">e78250d897fab1108c1bf911f053af6f</sp_page>
         <subheader>false</subheader>
         <sys_class_name>sp_container</sys_class_name>

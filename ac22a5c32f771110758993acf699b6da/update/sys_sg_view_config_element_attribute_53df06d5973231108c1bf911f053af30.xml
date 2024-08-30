@@ -18,4 +18,5 @@
         <value>sys_created_on</value>
         <view_config_element display_value="text_03_element">13df06d5973231108c1bf911f053af2e</view_config_element>
     </sys_sg_view_config_element_attribute>
+    <sys_translated_text action="delete_multiple" query="documentkey=53df06d5973231108c1bf911f053af30"/>
 </record_update>

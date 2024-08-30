@@ -18,4 +18,5 @@
         <value>delivery_items</value>
         <view_config_element display_value="text_04_element">17df06d5973231108c1bf911f053af32</view_config_element>
     </sys_sg_view_config_element_attribute>
+    <sys_translated_text action="delete_multiple" query="documentkey=57df06d5973231108c1bf911f053af34"/>
 </record_update>
