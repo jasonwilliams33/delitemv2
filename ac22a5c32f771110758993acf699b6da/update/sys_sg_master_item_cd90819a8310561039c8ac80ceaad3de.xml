@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_master_item">
+    <sys_sg_master_item action="INSERT_OR_UPDATE">
+        <condition_order/>
+        <datasource_table>x_187394_delitem_delivery_item</datasource_table>
+        <datasource_table_condition/>
+        <embedded_screen display_value="New Deliveries record screen">0d90055a8310561039c8ac80ceaad383</embedded_screen>
+        <item_view/>
+        <name>New Delivery Item list item config</name>
+        <sys_class_name>sys_sg_master_item</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-08-30 15:23:00</sys_created_on>
+        <sys_id>cd90819a8310561039c8ac80ceaad3de</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>New Delivery Item list item config</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_sg_master_item_cd90819a8310561039c8ac80ceaad3de</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-08-30 15:23:00</sys_updated_on>
+        <use_view_config>true</use_view_config>
+        <view_config display_value="New Deliveries Card">4590819a8310561039c8ac80ceaad3dc</view_config>
+    </sys_sg_master_item>
+</record_update>
