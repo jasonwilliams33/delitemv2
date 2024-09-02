@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_embedded_help_role">
+    <sys_embedded_help_role action="INSERT_OR_UPDATE">
+        <order>1000</order>
+        <role display_value="x_187394_delitem.collection_location_user" name="x_187394_delitem.collection_location_user">242540138318121039c8ac80ceaad3f8</role>
+        <sys_class_name>sys_embedded_help_role</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-09-02 13:37:12</sys_created_on>
+        <sys_id>2c2540138318121039c8ac80ceaad3f9</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>242540138318121039c8ac80ceaad3f8</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_embedded_help_role_2c2540138318121039c8ac80ceaad3f9</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-09-02 13:37:12</sys_updated_on>
+    </sys_embedded_help_role>
+</record_update>

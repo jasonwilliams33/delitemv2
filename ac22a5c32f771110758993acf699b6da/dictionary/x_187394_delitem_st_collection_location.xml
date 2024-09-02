@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="8115c01f83d4121039c8ac80ceaad383" label="Collection Location" max_length="40" name="x_187394_delitem_st_collection_location" type="collection">
+        <element display="true" label="Collection Location" max_length="40" name="collection_location" type="string"/>
+    </element>
+</database>

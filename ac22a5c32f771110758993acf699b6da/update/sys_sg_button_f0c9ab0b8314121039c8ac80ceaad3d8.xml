@@ -6,17 +6,15 @@
         <auto_redirection>false</auto_redirection>
         <button_table_field_name/>
         <cancel_label/>
-        <condition table="x_187394_delitem_delivery_item">state=2^EQ<item display_value="Expected" endquery="false" field="state" goto="false" newquery="false" operator="=" or="false" value="2"/>
-            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
-        </condition>
+        <condition/>
         <condition_script/>
         <condition_type>declarative</condition_type>
         <confirm_label/>
         <confirmation_message/>
-        <context>global</context>
+        <context>record</context>
         <description/>
         <destination_alp/>
-        <destination_screen display_value="Confirm Collection Location">bda4678f83d0121039c8ac80ceaad3aa</destination_screen>
+        <destination_screen/>
         <destination_type>screen</destination_type>
         <external_browser>false</external_browser>
         <failure_message/>
@@ -31,7 +29,7 @@
         <mail_address/>
         <mail_content/>
         <mail_subject/>
-        <name>Received Expected Delivery</name>
+        <name>Set Collection Location</name>
         <offline>false</offline>
         <offline_condition/>
         <offline_condition_script/>
@@ -58,23 +56,23 @@
         <success_message/>
         <sys_class_name>sys_sg_button</sys_class_name>
         <sys_created_by>admin</sys_created_by>
-        <sys_created_on>2024-08-30 16:21:10</sys_created_on>
-        <sys_id>01edcdd28390561039c8ac80ceaad369</sys_id>
-        <sys_mod_count>4</sys_mod_count>
-        <sys_name>Received Expected Delivery</sys_name>
+        <sys_created_on>2024-09-02 11:37:37</sys_created_on>
+        <sys_id>f0c9ab0b8314121039c8ac80ceaad3d8</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>Set Collection Location</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
-        <sys_update_name>sys_sg_button_01edcdd28390561039c8ac80ceaad369</sys_update_name>
+        <sys_update_name>sys_sg_button_f0c9ab0b8314121039c8ac80ceaad3d8</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2024-09-02 11:58:39</sys_updated_on>
+        <sys_updated_on>2024-09-02 11:52:30</sys_updated_on>
         <table>x_187394_delitem_delivery_item</table>
         <take_value_from_field>false</take_value_from_field>
-        <type>redirection</type>
+        <type>write_back</type>
         <unhighlighted_icons/>
         <use_overlay>false</use_overlay>
-        <write_back_action_item display_value="Update Expected Delivery">70edcdd28390561039c8ac80ceaad364</write_back_action_item>
+        <write_back_action_item display_value="Set Collection Location Action Item">b4c9ab0b8314121039c8ac80ceaad3d4</write_back_action_item>
         <zombified_screens/>
     </sys_sg_button>
-    <sys_translated_text action="delete_multiple" query="documentkey=01edcdd28390561039c8ac80ceaad369"/>
+    <sys_translated_text action="delete_multiple" query="documentkey=f0c9ab0b8314121039c8ac80ceaad3d8"/>
 </record_update>

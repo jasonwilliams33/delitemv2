@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script_vtable">
+    <sys_script_vtable action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <advanced>false</advanced>
+        <cache_isolation_level>USER</cache_isolation_level>
+        <cache_strategy>CACHE_BY_QUERY</cache_strategy>
+        <cache_ttl>0</cache_ttl>
+        <name>Collection Location Definition</name>
+        <script><![CDATA[(function executeQuery(v_table, v_query) {
+    // Main API:
+    //    v_table.addRow({ ... }) - adds a row to the result set
+
+    // There are also query helper methods
+    //    v_query.getEncodedQuery() - returns encoded querystring
+    //    v_query.getCondition(field) - returns encoded querystring for the given field (includes field name, operator, and value)
+    //    v_query.getParameter(field) - returns parameter for the given field (only includes value for equality conditions)
+    //    v_query.isGet() - returns whether the query is a single get by sys_id
+    //    v_query.getSysId() - returns parameter for sys_id field
+    //    v_query.isTextSearch() - returns whether the query contains a text query parameter
+    //    v_query.getTextSearch() - returns text search query parameter (internal field name 123TEXTQUERY321)
+    //    v_query.getFirstRowWanted() - returns the first row to include
+    //    v_query.getLastRowWanted() - returns the last row to include
+
+    // Note: You must define sys_id for each row so that forms and lists for this table work properly
+
+    // Your code goes here
+
+    try {
+
+        var collectionLocations = gs.getProperty("x_187394_delitem.collection.locations");
+        var collectionLocationsArr = collectionLocations.split(",");
+
+        for (var i = 0; i < collectionLocationsArr.length; i++) {
+
+            v_table.addRow({
+
+                sys_id: "remote_" + collectionLocationsArr[i],
+                collection_location: collectionLocationsArr[i]
+
+            });
+
+        }
+
+    } catch (err) {
+
+        gs.error('[' + gs.getCurrentScopeName() + ']' + ': Collection Location Definition - Caught error: \n' + err);
+
+    }
+
+})(v_table, v_query);]]></script>
+        <sys_class_name>sys_script_vtable</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-09-02 13:42:21</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>1536cc538318121039c8ac80ceaad349</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>Collection Location Definition</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_script_vtable_1536cc538318121039c8ac80ceaad349</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-09-02 14:41:59</sys_updated_on>
+        <table>x_187394_delitem_st_collection_location</table>
+    </sys_script_vtable>
+</record_update>
