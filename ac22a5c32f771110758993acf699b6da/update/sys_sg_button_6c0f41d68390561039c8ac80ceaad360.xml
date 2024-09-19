@@ -7,8 +7,8 @@
         <button_table_field_name/>
         <cancel_label/>
         <condition/>
-        <condition_script/>
-        <condition_type>declarative</condition_type>
+        <condition_script>javascript:new x_187394_delitem.DelitemUtils().sendNotificationCondition();</condition_script>
+        <condition_type>script</condition_type>
         <confirm_label/>
         <confirmation_message/>
         <context>global</context>
@@ -58,14 +58,14 @@
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2024-08-30 16:26:03</sys_created_on>
         <sys_id>6c0f41d68390561039c8ac80ceaad360</sys_id>
-        <sys_mod_count>2</sys_mod_count>
+        <sys_mod_count>11</sys_mod_count>
         <sys_name>Send Notifications</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sys_sg_button_6c0f41d68390561039c8ac80ceaad360</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2024-08-30 16:29:12</sys_updated_on>
+        <sys_updated_on>2024-09-19 10:58:33</sys_updated_on>
         <table>x_187394_delitem_delivery_item</table>
         <take_value_from_field>false</take_value_from_field>
         <type>write_back</type>

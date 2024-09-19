@@ -6,8 +6,6 @@
 
 	var c = this;
 
-	console.log(c.data.newDeliveryGRSArr);
-
 	c.data.singleItem = false;
 	c.data.multipleItems = false;
 	c.data.showItemForm = false;
@@ -125,14 +123,14 @@
 
 	c.saveItem = function(saveAction) {
 
-		console.log(c.data.collectionLocation.value);
+		console.log(c.data.collectionLocation);
 		if((c.data.recipient.value == undefined || c.data.recipient.value == '') && saveAction != "confirmLocation") {
 
 			c.data.missingFields += 'Recipient,';
 
 		}
 
-		if(c.data.collectionLocation.value == undefined || c.data.collectionLocation.value == '') {
+		if(c.data.collectionLocation == undefined || c.data.collectionLocation == '') {
 
 			c.data.missingFields += 'Collection Location,';
 
@@ -737,20 +735,20 @@ textarea {
 	/* e.g., data.table = $sp.getValue('table'); */
 
 	queryNewDeliveries = function() {
-		
+
 		data.newExpectedDeliveryFilter = "state=" + DelItemConstants.NEW + "^NQstate=" + DelItemConstants.EXPECTED + "^date_expectedONToday@javascript:gs.beginningOfToday()@javascript:gs.endOfToday()";
 		//data.newExpectedDeliveryFilter = "stateI=" + DelItemConstants.EXPECTED;
 		data.newDeliveryFilter = "stateIN" + DelItemConstants.NEW;
-		
+
 		var newDeliveryGRSObj = {};
 		data.newDeliveryGRSArr = [];
 		data.newDeliveryFieldsArr = [];
-		
+
 		var newDeliveryGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
 		newDeliveryGRS.addEncodedQuery(data.newExpectedDeliveryFilter);		
 		newDeliveryGRS.query();
 		while(newDeliveryGRS.next()) {
-			
+
 			newDeliveryGRSObj = {};
 			newDeliveryGRSObj.date_received = { "fieldName" : "Date Received" , "value" : newDeliveryGRS.date_received.toString() , "display" : true };
 			newDeliveryGRSObj.date_expected = { "fieldName" : "Date Expected" , "value" : newDeliveryGRS.date_expected.toString() , "display" : true };
@@ -762,29 +760,51 @@ textarea {
 			newDeliveryGRSObj.state = { "fieldName" : "State" , "value" : newDeliveryGRS.state.getDisplayValue() , "display" : true };
 			newDeliveryGRSObj.sys_id = newDeliveryGRS.getUniqueValue();
 			data.newDeliveryGRSArr.push(newDeliveryGRSObj);			
-	
+
 			data.newDeliveryFieldsArr = [newDeliveryGRS.date_received.getLabel(),newDeliveryGRS.recipient.getLabel(),newDeliveryGRS.sender.getLabel(),newDeliveryGRS.collection_location.getLabel(),newDeliveryGRS.notes.getLabel(),newDeliveryGRS.state.getLabel()];
-				
+
 		}
-				
+
 	}
-	
-	
+
+
 	if(!input) {
-		
+
 		queryNewDeliveries();
-		
+
 	}
-	
+
 	if(input && input.action == "refreshNewDeliveries") {
 
 		queryNewDeliveries();
-		
+
 	}
 
 	data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
 	data.collectionLocations = gs.getProperty("x_187394_delitem.collection.locations");
-	data.collectionLocationsArr = data.collectionLocations.split(",");
+	//data.collectionLocationsArr = data.collectionLocations.split(",");
+	data.collectionLocationsArr = [];
+	var collectionLocationsObj = {};
+	
+	var collectionLocationGRS = new GlideRecordSecure('sys_choice');
+	collectionLocationGRS.addEncodedQuery("name=" + DelItemConstants.DELIVERY_ITEM_TABLE +  "^element=collection_location");
+	collectionLocationGRS.query();
+	while (collectionLocationGRS.next()) {
+
+		collectionLocationsObj = {};
+		collectionLocationsObj.display = collectionLocationGRS.label.toString();
+		collectionLocationsObj.value = collectionLocationGRS.value.toString();
+		data.collectionLocationsArr.push(collectionLocationsObj);
+
+	}
+	
+	  data.choiceListOption = {};
+
+  data.choiceListOption.hideSearch = true;
+
+  data.choiceListOption.placeholder = "Collection Location";
+
+  
 	
 	/*data.tableOptions = {
 
@@ -834,24 +854,24 @@ textarea {
 		var newDeliveryItems = new x_187394_delitem.DelitemUtils().addMultipleDeliveryItem(input);
 
 	}
-	
+
 	if(input && input.action == "itemReceived") {
-		
+
 		var updateExpectedDelivery = new x_187394_delitem.DelitemUtils().updateExpectedDelivery(input);
-		
+
 	}
-	
+
 	if(input && input.action == "sendNotifications") {
 
 		data.sendNotificationArr = new x_187394_delitem.DelitemUtils().sendNotifications();
 		gs.error("JW Debug sendNotificationArr: " + JSON.stringify(data.sendNotificationArr));
 
 	}
-	
+
 	if(input && input.action == "cancelDelivery") {
-		
+
 		var cancelExpectedDelivery = new x_187394_delitem.DelitemUtils().cancelDelivery(input.deliveryItem);
-				queryNewDeliveries();
+		queryNewDeliveries();
 	}
 
 
@@ -861,14 +881,14 @@ textarea {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-12-23 16:32:41</sys_created_on>
         <sys_id>e32d3c882f4ce110758993acf699b695</sys_id>
-        <sys_mod_count>227</sys_mod_count>
+        <sys_mod_count>243</sys_mod_count>
         <sys_name>New Delivery</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_e32d3c882f4ce110758993acf699b695</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2024-09-02 16:07:26</sys_updated_on>
+        <sys_updated_on>2024-09-03 13:51:09</sys_updated_on>
         <template><![CDATA[<div class="containerQRCode">
   <div class="qrcode" id="qrcode">
     <canvas id="canvas" width="200" height="200"></canvas>
@@ -1010,7 +1030,7 @@ textarea {
         <!--<span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory" ng-class="{'mandatory-filled': collectionLocation.displayValue != undefined}"></span>
         <label for="formGroupExampleInput">Collection Location</label> 
         <select class="form-control" ng-model="c.data.collectionLocation" ng-options="item for item in c.data.collectionLocationsArr"></select>
-      -->
+      
         
         <span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory" ng-class="{'mandatory-filled': recipient.displayValue != undefined}"></span>
         <label for="formGroupExampleInput">Collection Location</label>
@@ -1021,7 +1041,10 @@ textarea {
                           search-fields="'collection_location'" 
                           page-size="100"
                           autofocus>
-        </sn-record-picker>
+        </sn-record-picker>-->
+        <span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory" ng-class="{'mandatory-filled': collectionLocation.displayValue != undefined}"></span>
+        <label for="formGroupExampleInput">Collection Location</label> 
+         <sn-choice-list sn-model="c.data.collectionLocation" sn-options="c.data.choiceListOption" sn-value-field="value" sn-text-field="display" sn-items="c.data.collectionLocationsArr"></sn-choice-list>
         </div>
       
       <div class="form-group" ng-if="!c.data.multipleItems">

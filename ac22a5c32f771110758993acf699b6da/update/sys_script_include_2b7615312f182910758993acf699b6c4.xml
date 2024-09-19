@@ -10,58 +10,60 @@
         <script><![CDATA[var DelitemUtils = Class.create();
 DelitemUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 
-addDeliveryItem : function(itemObj) {
+addDeliveryItem: function(itemObj) {
 
 	try {
 
 		var newDeliveryItemGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
 		newDeliveryItemGRS.initialize();
-		newDeliveryItemGRS.setValue('recipient',itemObj.recipient.value);
+		newDeliveryItemGRS.setValue('recipient', itemObj.recipient.value);
 
-		if(itemObj.collection_location != undefined) {
+		if (itemObj.collection_location != undefined) {
 
-			newDeliveryItemGRS.setValue('collection_location',itemObj.collection_location.value);
-
-		}
-
-		if(itemObj.notes != undefined) {
-
-			newDeliveryItemGRS.setValue('notes',itemObj.notes);
+			newDeliveryItemGRS.setValue('collection_location', itemObj.collection_location);
 
 		}
 
-		if(itemObj.sender != undefined) {
+		if (itemObj.notes != undefined) {
 
-			newDeliveryItemGRS.setValue('sender',itemObj.sender);
+			newDeliveryItemGRS.setValue('notes', itemObj.notes);
 
 		}
 
-		newDeliveryItemGRS.setValue('date_received',new GlideDateTime());
+		if (itemObj.sender != undefined) {
+
+			newDeliveryItemGRS.setValue('sender', itemObj.sender);
+
+		}
+
+		newDeliveryItemGRS.setValue('date_received', new GlideDateTime());
 
 		newDeliveryItem = newDeliveryItemGRS.insert();
 
 		return newDeliveryItem;
 
-	} catch(err) {
+	} catch (err) {
 
-		gs.error('['+gs.getCurrentScopeName()+']' + ': DelitemUtils: addDeliveryItem - Caught error: \n'+err);
+		gs.error('[' + gs.getCurrentScopeName() + ']' + ': DelitemUtils: addDeliveryItem - Caught error: \n' + err);
 
 	}
 
 },
 
-addMultipleDeliveryItem : function(itemObj) {
+addMultipleDeliveryItem: function(itemObj) {
 
 	try {
 
 		var multipleDeliveryItemArr = itemObj.recipient.value.split(",");
 
-		for (var i=0; i< multipleDeliveryItemArr.length; i++) {
+		for (var i = 0; i < multipleDeliveryItemArr.length; i++) {
 
 			var multipleItemObj = {
 
-				"recipient": {"value": multipleDeliveryItemArr[i]},
-				"collection_location": itemObj.collection_location.value
+				"recipient": {
+					"value": multipleDeliveryItemArr[i]
+				},
+				"collection_location": itemObj.collection_location
 
 			};
 
@@ -69,29 +71,29 @@ addMultipleDeliveryItem : function(itemObj) {
 
 		}
 
-	} catch(err) {
+	} catch (err) {
 
-		gs.error('['+gs.getCurrentScopeName()+']' + ': DelitemUtils: addMultipleDeliveryItem - Caught error: \n'+err);
+		gs.error('[' + gs.getCurrentScopeName() + ']' + ': DelitemUtils: addMultipleDeliveryItem - Caught error: \n' + err);
 
 	}
 
 },
 
-sendNotifications : function(delSysId) {
+sendNotifications: function(delSysId) {
 
 	try {
 
 		var newDeliveryItemArr = [];
-		var	newDeliveryItemObj = {};
+		var newDeliveryItemObj = {};
 		var deliveryArr = [];
 
 		var newDeliveryItems = new GlideAggregate(DelItemConstants.DELIVERY_ITEM_TABLE);
-		newDeliveryItems.addEncodedQuery('state='+ DelItemConstants.NEW +'^delivery=NULL^ORdelivery=undefined');
+		newDeliveryItems.addEncodedQuery('state=' + DelItemConstants.NEW + '^delivery=NULL^ORdelivery=undefined');
 		newDeliveryItems.groupBy('recipient');
 		// 			newDeliveryItems.groupBy('sys_id');
 		newDeliveryItems.addAggregate('COUNT');
 		newDeliveryItems.query();
-		while(newDeliveryItems.next()) {
+		while (newDeliveryItems.next()) {
 
 			newDeliveryItemObj = {};
 			newDeliveryItemObj.recipient = newDeliveryItems.recipient.getDisplayValue().toString();
@@ -106,9 +108,9 @@ sendNotifications : function(delSysId) {
 
 		var existingDeliveryArr = this.checkAndUpdateExistingDelivery(newDeliveryItemArr);
 
-		for (var i=0; i< existingDeliveryArr.length; i++) {
+		for (var i = 0; i < existingDeliveryArr.length; i++) {
 
-			if(!existingDeliveryArr[i].existingDelivery) {
+			if (!existingDeliveryArr[i].existingDelivery) {
 
 				existingDeliveryArr[i].deliveryRecord = this.createNewDelivery(existingDeliveryArr[i]);
 
@@ -120,9 +122,9 @@ sendNotifications : function(delSysId) {
 
 		}
 
-		for (var j=0; j< existingDeliveryArr.length; j++) {
+		for (var j = 0; j < existingDeliveryArr.length; j++) {
 
-			if(existingDeliveryArr[j].existingDelivery) {
+			if (existingDeliveryArr[j].existingDelivery) {
 
 				deliveryArr.push(existingDeliveryArr[j].deliveryRecord);
 
@@ -140,30 +142,30 @@ sendNotifications : function(delSysId) {
 
 		return deliveryArr;
 
-	} catch(err) {
+	} catch (err) {
 
-		gs.error('['+gs.getCurrentScopeName()+']' + ': DelitemUtils: sendNotifications - Caught error: \n'+err);
+		gs.error('[' + gs.getCurrentScopeName() + ']' + ': DelitemUtils: sendNotifications - Caught error: \n' + err);
 
 	}
 
 },
 
-checkAndUpdateExistingDelivery : function(deliveryItemArr) {
+checkAndUpdateExistingDelivery: function(deliveryItemArr) {
 	//gs.error("JW Debug deliveryItemArr: " + typeof(deliveryItemArr));
 	//global.JSUtil.logObject(deliveryItemArr,"JW Debug");
 	try {
 
-		for (var i=0; i< deliveryItemArr.length; i++) {
+		for (var i = 0; i < deliveryItemArr.length; i++) {
 
 			var exisitingDeliveryGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_TABLE);
 			exisitingDeliveryGRS.addEncodedQuery('state!=' + DelItemConstants.COLLECTED + '^recipient=' + deliveryItemArr[i].recipientSysId);
 			exisitingDeliveryGRS.query();
-			if(exisitingDeliveryGRS.next()){
+			if (exisitingDeliveryGRS.next()) {
 
 				deliveryItemArr[i].existingDelivery = true;
 				deliveryItemArr[i].deliveryRecord = exisitingDeliveryGRS.getUniqueValue();
-				exisitingDeliveryGRS.setValue('delivery_items',parseInt(exisitingDeliveryGRS.delivery_items) + parseInt(deliveryItemArr[i].count));
-				exisitingDeliveryGRS.setValue('delivery_items_awaiting_collection',parseInt(exisitingDeliveryGRS.delivery_items_awaiting_collection) + parseInt(deliveryItemArr[i].count));
+				exisitingDeliveryGRS.setValue('delivery_items', parseInt(exisitingDeliveryGRS.delivery_items) + parseInt(deliveryItemArr[i].count));
+				exisitingDeliveryGRS.setValue('delivery_items_awaiting_collection', parseInt(exisitingDeliveryGRS.delivery_items_awaiting_collection) + parseInt(deliveryItemArr[i].count));
 				exisitingDeliveryGRS.update();
 
 			} else {
@@ -176,45 +178,45 @@ checkAndUpdateExistingDelivery : function(deliveryItemArr) {
 
 		return deliveryItemArr;
 
-	} catch(err) {
+	} catch (err) {
 
-		gs.error('['+gs.getCurrentScopeName()+']' + ': DelitemUtils: checkExistingDelivery - Caught error: \n'+err);
+		gs.error('[' + gs.getCurrentScopeName() + ']' + ': DelitemUtils: checkExistingDelivery - Caught error: \n' + err);
 
 	}
 
 },
 
-createNewDelivery : function(newDelivery) {
+createNewDelivery: function(newDelivery) {
 
 	try {
 
 		var createNewDeliveryGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_TABLE);
 		createNewDeliveryGRS.initialize();
-		createNewDeliveryGRS.setValue('delivery_items',parseInt(newDelivery.count));
-		createNewDeliveryGRS.setValue('delivery_items_awaiting_collection',parseInt(newDelivery.count));
-		createNewDeliveryGRS.setValue('recipient',newDelivery.recipientSysId);
+		createNewDeliveryGRS.setValue('delivery_items', parseInt(newDelivery.count));
+		createNewDeliveryGRS.setValue('delivery_items_awaiting_collection', parseInt(newDelivery.count));
+		createNewDeliveryGRS.setValue('recipient', newDelivery.recipientSysId);
 
 		newDelivery.newDeliveryRecord = createNewDeliveryGRS.insert();
 
 		return newDelivery;
 
-	} catch(err) {
+	} catch (err) {
 
-		gs.error('['+gs.getCurrentScopeName()+']' + ': DelitemUtils: createNewDelivery - Caught error: \n'+err);
+		gs.error('[' + gs.getCurrentScopeName() + ']' + ': DelitemUtils: createNewDelivery - Caught error: \n' + err);
 
 	}
 
 },
 
-updateDeliveryItems : function(existingDeliveryArr) {
+updateDeliveryItems: function(existingDeliveryArr) {
 
 	try {
 
-		for (var i=0; i< existingDeliveryArr.length; i++) {
+		for (var i = 0; i < existingDeliveryArr.length; i++) {
 
 			var deliverySysId = existingDeliveryArr[i].deliveryRecord;
 
-			if(!existingDeliveryArr[i].existingDelivery) {
+			if (!existingDeliveryArr[i].existingDelivery) {
 
 				deliverySysId = existingDeliveryArr[i].deliveryRecord.newDeliveryRecord;
 
@@ -225,48 +227,48 @@ updateDeliveryItems : function(existingDeliveryArr) {
 			var updatingDeliveryItemGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
 			updatingDeliveryItemGRS.addEncodedQuery("recipient=" + existingDeliveryArr[i].recipientSysId + "^delivery=NULL^ORdelivery=undefined^state=" + DelItemConstants.NEW);
 			updatingDeliveryItemGRS.query();
-			while(updatingDeliveryItemGRS.next()) {
+			while (updatingDeliveryItemGRS.next()) {
 
-				if(updatingDeliveryItemGRS.sender != '' && updatingDeliveryItemGRS.sender != undefined) {
+				if (updatingDeliveryItemGRS.sender != '' && updatingDeliveryItemGRS.sender != undefined) {
 
 					existingDeliveryArr[i].senderStr += updatingDeliveryItemGRS.sender.toString() + ',';
 
 
 				}
 
-				updatingDeliveryItemGRS.setValue('delivery',deliverySysId);
-				updatingDeliveryItemGRS.setValue('state',DelItemConstants.AWAITING_COLLECTION);
+				updatingDeliveryItemGRS.setValue('delivery', deliverySysId);
+				updatingDeliveryItemGRS.setValue('state', DelItemConstants.AWAITING_COLLECTION);
 				updatingDeliveryItemGRS.update();
 
 			}
 
 		}
 
-	} catch(err) {
+	} catch (err) {
 
-		gs.error('['+gs.getCurrentScopeName()+']' + ': DelitemUtils: updateDeliveryItems - Caught error: \n'+err);
+		gs.error('[' + gs.getCurrentScopeName() + ']' + ': DelitemUtils: updateDeliveryItems - Caught error: \n' + err);
 
 	}
 
 },
 
-generateNotificationEvents : function(existingDeliveryArr) {
+generateNotificationEvents: function(existingDeliveryArr) {
 
-	for (var i=0; i< existingDeliveryArr.length; i++) {
+	for (var i = 0; i < existingDeliveryArr.length; i++) {
 
 		existingDeliveryArr[i].senderStr = existingDeliveryArr[i].senderStr.replace(/,\s*$/, "");
 
 		var body = "Hi " + existingDeliveryArr[i].recipientFirstName + ",\nYou have a new delivery";
 
-		if(existingDeliveryArr[i].senderStr != '' && existingDeliveryArr[i].count == 1) {
+		if (existingDeliveryArr[i].senderStr != '' && existingDeliveryArr[i].count == 1) {
 
-			body += " from " + existingDeliveryArr[i].senderStr;//.replace(/,\s*$/, "");
+			body += " from " + existingDeliveryArr[i].senderStr; //.replace(/,\s*$/, "");
 
-		} else if(existingDeliveryArr[i].senderStr != '' && existingDeliveryArr[i].count > 1 && existingDeliveryArr[i].senderStr.split(",").length == 1) {
+		} else if (existingDeliveryArr[i].senderStr != '' && existingDeliveryArr[i].count > 1 && existingDeliveryArr[i].senderStr.split(",").length == 1) {
 
 			body += " including items from " + existingDeliveryArr[i].senderStr.split(",")[0];
 
-		} else if(existingDeliveryArr[i].senderStr != '' && existingDeliveryArr[i].count > 1 && existingDeliveryArr[i].senderStr.split(",").length > 1) {
+		} else if (existingDeliveryArr[i].senderStr != '' && existingDeliveryArr[i].count > 1 && existingDeliveryArr[i].senderStr.split(",").length > 1) {
 
 			body += " including items from " + existingDeliveryArr[i].senderStr.split(",")[0] + " & " + existingDeliveryArr[i].senderStr.split(",")[1];
 
@@ -274,18 +276,18 @@ generateNotificationEvents : function(existingDeliveryArr) {
 
 		body += ".\nPlease collect from Reception at your earliest convenience.";
 
-		gs.eventQueue('x_187394_delitem.delivery.notification',current,existingDeliveryArr[i].recipientSysId,body);
+		gs.eventQueue('x_187394_delitem.delivery.notification', current, existingDeliveryArr[i].recipientSysId, body);
 
-	}		 
+	}
 
 },
 
-lookupDelivery : function(delivery) {
+lookupDelivery: function(delivery) {
 
 	var deliveryObj = {};
 
 	var deliveryGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_TABLE);
-	if(deliveryGRS.get(delivery)) {
+	if (deliveryGRS.get(delivery)) {
 
 		deliveryObj = {};
 		deliveryObj.recipient = deliveryGRS.recipient.getDisplayValue().toString();
@@ -295,26 +297,26 @@ lookupDelivery : function(delivery) {
 
 		return deliveryObj;
 
-	}		
+	}
 
 },
 
-lookupDeliveryItem : function(delivery) {
-	
+lookupDeliveryItem: function(delivery) {
+
 	var deliveryItemArr = [];
 
 	var deliveryItemGA = new GlideAggregate(DelItemConstants.DELIVERY_ITEM_TABLE);
 	deliveryItemGA.addAggregate('COUNT', 'recipient');
 	deliveryItemGA.groupBy('recipient');
-	deliveryItemGA.addEncodedQuery("sys_idIN"+ delivery);
+	deliveryItemGA.addEncodedQuery("sys_idIN" + delivery);
 	deliveryItemGA.query();
-	while (deliveryItemGA.next()){
+	while (deliveryItemGA.next()) {
 
 		var deliveryItemObj = {};
 		deliveryItemObj.recipient = deliveryItemGA.recipient.toString();
-		deliveryItemObj.count = parseInt(deliveryItemGA.getAggregate('COUNT','recipient'));
+		deliveryItemObj.count = parseInt(deliveryItemGA.getAggregate('COUNT', 'recipient'));
 		deliveryItemObj.recipientFirstName = deliveryItemGA.recipient.first_name.toString();
-		deliveryItemArr.push(deliveryItemObj);	   
+		deliveryItemArr.push(deliveryItemObj);
 
 	}
 
@@ -322,11 +324,11 @@ lookupDeliveryItem : function(delivery) {
 
 },
 
-sendReminders : function(reminderArr) {
+sendReminders: function(reminderArr) {
 
 	try {
 
-		if(!Array.isArray(reminderArr)) {
+		if (!Array.isArray(reminderArr)) {
 
 			reminderArr = reminderArr.split(',');
 
@@ -335,13 +337,13 @@ sendReminders : function(reminderArr) {
 		var sendReminderArr = [];
 		var notificationBody = "";
 
-		for (var i=0; i< reminderArr.length; i++) {
+		for (var i = 0; i < reminderArr.length; i++) {
 
 			var reminderObj = this.lookupDelivery(reminderArr[i]);
 
 			notificationBody = "Hi " + reminderObj.recipientFirstName + ',\nYou have ';
 
-			if(reminderObj.outstanding_delivery_items > 1) {
+			if (reminderObj.outstanding_delivery_items > 1) {
 
 				notificationBody += reminderObj.outstanding_delivery_items + " x delivery items ";
 
@@ -353,30 +355,30 @@ sendReminders : function(reminderArr) {
 
 			notificationBody += "awaiting collection.\nPlease collect from Reception at your earliest convenience.";
 
-			gs.eventQueue('x_187394_delitem.delivery.reminder',current,reminderObj.recipientSysId,notificationBody);
+			gs.eventQueue('x_187394_delitem.delivery.reminder', current, reminderObj.recipientSysId, notificationBody);
 
 		}
 
-	} catch(err) {
+	} catch (err) {
 
-		gs.error('['+gs.getCurrentScopeName()+']' + ': DelitemUtils: sendReminders - Caught error: \n'+err);
+		gs.error('[' + gs.getCurrentScopeName() + ']' + ': DelitemUtils: sendReminders - Caught error: \n' + err);
 
-	}		 
+	}
 
 },
 
-expectedChase : function(expectedStr) {
+expectedChase: function(expectedStr) {
 
 	try {
 
 		var groupedDeliveryItemArr = this.lookupDeliveryItem(expectedStr);
 		var notificationBody = "";
 
-		for (var i=0; i < groupedDeliveryItemArr.length; i++) {
+		for (var i = 0; i < groupedDeliveryItemArr.length; i++) {
 
 			notificationBody = "Hi " + groupedDeliveryItemArr[i].recipientFirstName + ',\nYou have ';
 
-			if(groupedDeliveryItemArr[i].count > 1) {
+			if (groupedDeliveryItemArr[i].count > 1) {
 
 				notificationBody += groupedDeliveryItemArr[i].count + " x expected delivery items yet to be received.\nAre you still expecting these Deliveries?";
 
@@ -385,28 +387,28 @@ expectedChase : function(expectedStr) {
 				notificationBody += "an expected delivery item  yet to be received.\nAre you still expecting this Delivery?";
 
 			}
-		
-			gs.eventQueue('x_187394_delitem.expected.delivery.notif',current,groupedDeliveryItemArr[i].recipient,notificationBody);
+
+			gs.eventQueue('x_187394_delitem.expected.delivery.notif', current, groupedDeliveryItemArr[i].recipient, notificationBody);
 
 		}
 
-	} catch(err) {
+	} catch (err) {
 
-		gs.error('['+gs.getCurrentScopeName()+']' + ': DelitemUtils: expectedChase - Caught error: \n'+err);
+		gs.error('[' + gs.getCurrentScopeName() + ']' + ': DelitemUtils: expectedChase - Caught error: \n' + err);
 
 	}
 
 },
 
-expectingTomorrow : function(recipient) {
+expectingTomorrow: function(recipient) {
 
 	try {
-		
+
 		var expectingTomorrowGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
 		expectingTomorrowGRS.addEncodedQuery("state=" + DelItemConstants.EXPECTED + "^recipient=" + recipient);
 		expectingTomorrowGRS.query();
-		while(expectingTomorrowGRS.next()) {
-			
+		while (expectingTomorrowGRS.next()) {
+
 			var tomorrow = new GlideDateTime();
 			tomorrow.addDaysUTC(1);
 			tomorrow.getDate();
@@ -416,70 +418,70 @@ expectingTomorrow : function(recipient) {
 
 		}
 
-	} catch(err) {
+	} catch (err) {
 
-		gs.error('['+gs.getCurrentScopeName()+']' + ': DelitemUtils: expectingTomorrow - Caught error: \n'+err);
+		gs.error('[' + gs.getCurrentScopeName() + ']' + ': DelitemUtils: expectingTomorrow - Caught error: \n' + err);
 
 	}
 
 },
 
-cancelExpecting : function(recipient) {
+cancelExpecting: function(recipient) {
 
 	try {
-		
+
 		var cancelExpectingGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
 		cancelExpectingGRS.addEncodedQuery("state=" + DelItemConstants.EXPECTED + "^recipient=" + recipient);
 		cancelExpectingGRS.query();
-		while(cancelExpectingGRS.next()) {
+		while (cancelExpectingGRS.next()) {
 
 			cancelExpectingGRS.setValue("state", DelItemConstants.CANCELLED);
 			cancelExpectingGRS.update();
 
 		}
 
-	} catch(err) {
+	} catch (err) {
 
-		gs.error('['+gs.getCurrentScopeName()+']' + ': DelitemUtils: cancelExpecting - Caught error: \n'+err);
+		gs.error('[' + gs.getCurrentScopeName() + ']' + ': DelitemUtils: cancelExpecting - Caught error: \n' + err);
 
 	}
 
 },
 
-cancelDelivery : function(deliveryItem) {
+cancelDelivery: function(deliveryItem) {
 
 	try {
 		gs.error("JW Debug, inside loop: " + deliveryItem.sys_id);
 		var cancelDeliveryGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
 
-		if(cancelDeliveryGRS.get(deliveryItem.sys_id)) {
-gs.error("JW Debug, record found");
-			cancelDeliveryGRS.setValue("state",DelItemConstants.CANCELLED);
+		if (cancelDeliveryGRS.get(deliveryItem.sys_id)) {
+			gs.error("JW Debug, record found");
+			cancelDeliveryGRS.setValue("state", DelItemConstants.CANCELLED);
 			cancelDeliveryGRS.update();
 
 		}
-		
-	} catch(err) {
 
-		gs.error('['+gs.getCurrentScopeName()+']' + ': DelitemUtils: cancelDelivery - Caught error: \n'+err);
+	} catch (err) {
+
+		gs.error('[' + gs.getCurrentScopeName() + ']' + ': DelitemUtils: cancelDelivery - Caught error: \n' + err);
 
 	}
 
 },
 
-updateExpectedDelivery : function(deliveryItem) {
+updateExpectedDelivery: function(deliveryItem) {
 
 	try {
 
 		var deliveryItemGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
-		if(deliveryItemGRS.get(deliveryItem.item)) {
+		if (deliveryItemGRS.get(deliveryItem.item)) {
 
-			deliveryItemGRS.setValue('state',DelItemConstants.NEW);
-			deliveryItemGRS.setValue('collection_location',deliveryItem.collectionLocation);
-			
-			if(deliveryItem.notes) {
+			deliveryItemGRS.setValue('state', DelItemConstants.NEW);
+			deliveryItemGRS.setValue('collection_location', deliveryItem.collectionLocation);
 
-				deliveryItemGRS.setValue('notes',deliveryItem.notes);
+			if (deliveryItem.notes) {
+
+				deliveryItemGRS.setValue('notes', deliveryItem.notes);
 
 			}
 
@@ -488,12 +490,29 @@ updateExpectedDelivery : function(deliveryItem) {
 
 		}
 
-	} catch(err) {
+	} catch (err) {
 
-		gs.error('['+gs.getCurrentScopeName()+']' + ': DelitemUtils: updateExpectedDelivery - Caught error: \n'+err);
+		gs.error('[' + gs.getCurrentScopeName() + ']' + ': DelitemUtils: updateExpectedDelivery - Caught error: \n' + err);
 
 	}
 
+},
+
+sendNotificationsCondition: function() {
+
+	/*var newDeliveriesGRS = new GlideRecordSecure(DelItemConstants.DELIVERY_ITEM_TABLE);
+	newDeliveriesGRS.addQuery("state=1");
+	list.query();
+	if (list.next()) {
+		
+		return true;
+
+	} else {
+
+	return false;
+
+	}*/
+return false;
 },
 
 type: 'DelitemUtils'
@@ -502,13 +521,13 @@ type: 'DelitemUtils'
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-01-10 15:13:14</sys_created_on>
         <sys_id>2b7615312f182910758993acf699b6c4</sys_id>
-        <sys_mod_count>81</sys_mod_count>
+        <sys_mod_count>86</sys_mod_count>
         <sys_name>DelitemUtils</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sys_script_include_2b7615312f182910758993acf699b6c4</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2024-09-02 15:38:32</sys_updated_on>
+        <sys_updated_on>2024-09-19 10:54:48</sys_updated_on>
     </sys_script_include>
 </record_update>

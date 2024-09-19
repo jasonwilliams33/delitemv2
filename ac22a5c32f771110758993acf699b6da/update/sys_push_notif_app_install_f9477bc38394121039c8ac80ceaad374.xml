@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sys_push_notif_app_install">
     <sys_push_notif_app_install action="INSERT_OR_UPDATE">
         <active>true</active>
-        <last_registered_on>2024-09-02 12:36:40</last_registered_on>
-        <send_badge_count>true</send_badge_count>
+        <last_registered_on>2024-09-19 10:00:54</last_registered_on>
+        <send_badge_count>false</send_badge_count>
         <sys_class_name>sys_push_notif_app_install</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2024-09-02 12:36:40</sys_created_on>
         <sys_id>f9477bc38394121039c8ac80ceaad374</sys_id>
-        <sys_mod_count>0</sys_mod_count>
+        <sys_mod_count>7</sys_mod_count>
         <sys_name>eMXkPcnvR_SC_IueSkXEd0:APA91bHmPETyir_UV8EBTDWzrjYFcT0TopPzYnhkaung5dMuwn_skLEWzJ6GK8VwiQO9Sv5d4IQTOwfk5qn0bCFd5iX0GmB72Y9X0JB3RDd53WXtf7GjNKTtpchVsviZgtwNdD84I6dx</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
@@ -16,7 +16,7 @@
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sys_push_notif_app_install_f9477bc38394121039c8ac80ceaad374</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2024-09-02 12:36:40</sys_updated_on>
+        <sys_updated_on>2024-09-19 10:00:54</sys_updated_on>
         <sys_user_id display_value="Jason Williams">6816f79cc0a8016401c5a33be04be441</sys_user_id>
         <token>eMXkPcnvR_SC_IueSkXEd0:APA91bHmPETyir_UV8EBTDWzrjYFcT0TopPzYnhkaung5dMuwn_skLEWzJ6GK8VwiQO9Sv5d4IQTOwfk5qn0bCFd5iX0GmB72Y9X0JB3RDd53WXtf7GjNKTtpchVsviZgtwNdD84I6dx</token>
     </sys_push_notif_app_install>

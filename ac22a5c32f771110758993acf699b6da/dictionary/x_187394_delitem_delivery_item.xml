@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
     <element db_object_id="9e44ed472f771110758993acf699b638" label="Delivery Item" max_length="40" name="x_187394_delitem_delivery_item" type="collection">
-        <element attributes="edge_encryption_enabled=true" label="Collection Location" max_length="40" name="collection_location" reference="x_187394_delitem_st_collection_location" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" choice="1" label="Collection Location" mandatory="true" max_length="40" name="collection_location" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Reception Desk" sequence="10" value="reception_desk"/>
+                <element inactive_on_update="false" label="Storage Cupboard" sequence="20" value="storage_cupboard"/>
+                <element inactive_on_update="false" label="Post Room" sequence="30" value="post_room"/>
+            </choice>
+        </element>
         <element attributes="edge_encryption_enabled=true" label="Date Collected" max_length="40" name="date_collected" type="glide_date_time"/>
         <element label="Date Expected" max_length="40" name="date_expected" type="glide_date"/>
         <element attributes="edge_encryption_enabled=true" label="Date Received" max_length="40" name="date_received" type="glide_date_time"/>
