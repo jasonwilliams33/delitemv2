@@ -7,8 +7,8 @@
         <button_table_field_name/>
         <cancel_label/>
         <condition/>
-        <condition_script>javascript:new x_187394_delitem.DelitemUtils().sendNotificationsCondition();</condition_script>
-        <condition_type>script</condition_type>
+        <condition_script/>
+        <condition_type>declarative</condition_type>
         <confirm_label/>
         <confirmation_message/>
         <context>global</context>
@@ -22,14 +22,14 @@
         <hide_buttons/>
         <hide_fields/>
         <highlighted_icons/>
-        <jump_to_previous>true</jump_to_previous>
+        <jump_to_previous>false</jump_to_previous>
         <jump_to_screen>false</jump_to_screen>
         <link_label/>
         <link_url/>
         <mail_address/>
         <mail_content/>
         <mail_subject/>
-        <name>Send Notifications</name>
+        <name>Add New Delivery</name>
         <offline>false</offline>
         <offline_condition/>
         <offline_condition_script/>
@@ -56,23 +56,23 @@
         <success_message/>
         <sys_class_name>sys_sg_button</sys_class_name>
         <sys_created_by>admin</sys_created_by>
-        <sys_created_on>2024-08-30 16:26:03</sys_created_on>
-        <sys_id>6c0f41d68390561039c8ac80ceaad360</sys_id>
-        <sys_mod_count>13</sys_mod_count>
-        <sys_name>Send Notifications</sys_name>
+        <sys_created_on>2024-09-19 15:51:02</sys_created_on>
+        <sys_id>7ec64c3083781a1039c8ac80ceaad376</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>Add New Delivery</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
-        <sys_update_name>sys_sg_button_6c0f41d68390561039c8ac80ceaad360</sys_update_name>
+        <sys_update_name>sys_sg_button_7ec64c3083781a1039c8ac80ceaad376</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2024-09-20 14:23:44</sys_updated_on>
+        <sys_updated_on>2024-09-19 16:14:53</sys_updated_on>
         <table>x_187394_delitem_delivery_item</table>
         <take_value_from_field>false</take_value_from_field>
         <type>write_back</type>
         <unhighlighted_icons/>
         <use_overlay>false</use_overlay>
-        <write_back_action_item display_value="Send Notifications">2ebf0dd68390561039c8ac80ceaad345</write_back_action_item>
+        <write_back_action_item display_value="Add New Delivery action item">e2c6443c83381a1039c8ac80ceaad3c9</write_back_action_item>
         <zombified_screens/>
     </sys_sg_button>
-    <sys_translated_text action="delete_multiple" query="documentkey=6c0f41d68390561039c8ac80ceaad360"/>
+    <sys_translated_text action="delete_multiple" query="documentkey=7ec64c3083781a1039c8ac80ceaad376"/>
 </record_update>

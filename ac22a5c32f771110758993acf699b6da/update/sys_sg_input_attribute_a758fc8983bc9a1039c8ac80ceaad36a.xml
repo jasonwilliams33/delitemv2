@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_input_attribute">
+    <sys_sg_input_attribute action="INSERT_OR_UPDATE">
+        <input display_value="Sender">ff4870c983bc9a1039c8ac80ceaad312</input>
+        <name>MaxLength</name>
+        <sys_class_name>sys_sg_input_attribute</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-09-20 14:06:07</sys_created_on>
+        <sys_id>a758fc8983bc9a1039c8ac80ceaad36a</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>MaxLength</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_sg_input_attribute_a758fc8983bc9a1039c8ac80ceaad36a</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-09-20 14:06:07</sys_updated_on>
+        <value>40</value>
+    </sys_sg_input_attribute>
+</record_update>

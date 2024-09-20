@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_item_parameter">
+    <sys_sg_item_parameter action="DELETE">
+        <default_value>test</default_value>
+        <name>new_recipient</name>
+        <parent>e2c6443c83381a1039c8ac80ceaad3c9</parent>
+        <parent_table>sys_sg_write_back_action_item</parent_table>
+        <sys_class_name>sys_sg_item_parameter</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-09-19 16:09:36</sys_created_on>
+        <sys_id>2e0b843883781a1039c8ac80ceaad36a</sys_id>
+        <sys_mod_count>3</sys_mod_count>
+        <sys_name>new_recipient</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_sg_item_parameter_2e0b843883781a1039c8ac80ceaad36a</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-09-20 11:48:36</sys_updated_on>
+        <type>string</type>
+    </sys_sg_item_parameter>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Delitem">ac22a5c32f771110758993acf699b6da</application>
+        <file_path/>
+        <instance_id>e0277b491b1af95c19254089bd4bcb9f</instance_id>
+        <instance_name>dev201900</instance_name>
+        <name>sys_sg_item_parameter_2e0b843883781a1039c8ac80ceaad36a</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_item_parameter"><sys_sg_item_parameter action="INSERT_OR_UPDATE"><default_value>test</default_value><name>new_recipient</name><parent>e2c6443c83381a1039c8ac80ceaad3c9</parent><parent_table>sys_sg_write_back_action_item</parent_table><sys_class_name>sys_sg_item_parameter</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2024-09-19 16:09:36</sys_created_on><sys_id>2e0b843883781a1039c8ac80ceaad36a</sys_id><sys_mod_count>3</sys_mod_count><sys_name>new_recipient</sys_name><sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package><sys_policy/><sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope><sys_update_name>sys_sg_item_parameter_2e0b843883781a1039c8ac80ceaad36a</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2024-09-20 11:48:36</sys_updated_on><type>string</type></sys_sg_item_parameter></record_update>]]></payload>
+        <payload_hash>-80036642</payload_hash>
+        <record_name>new_recipient</record_name>
+        <reverted_from/>
+        <source>a87a07078310121039c8ac80ceaad316</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-09-20 11:48:36</sys_created_on>
+        <sys_id>55e8948983b89a1039c8ac80ceaad339</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>1920f4338dd0000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-09-20 11:48:36</sys_updated_on>
+        <type>Data parameter</type>
+        <update_guid>99e8948999b89a10fd7f7fd7c5080c38</update_guid>
+        <update_guid_history>99e8948999b89a10fd7f7fd7c5080c38:-80036642,c70054f004b81a101da305bada3e7ebd:1192059467,027f04b059b81a10201d4cf05be10795:-743398933,a60b8438f2781a10d06b25c8d64d626d:664548843</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-09-20 13:51:08</sys_created_on>
+        <sys_db_object display_value="" name="sys_sg_item_parameter">sys_sg_item_parameter</sys_db_object>
+        <sys_id>0b76868a7548473888020aca9191ab10</sys_id>
+        <sys_metadata>2e0b843883781a1039c8ac80ceaad36a</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>new_recipient</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_scope_delete display_value="">21fda69da1294409862944902732aaa1</sys_scope_delete>
+        <sys_update_name>sys_sg_item_parameter_2e0b843883781a1039c8ac80ceaad36a</sys_update_name>
+        <sys_update_version display_value="sys_sg_item_parameter_2e0b843883781a1039c8ac80ceaad36a">55e8948983b89a1039c8ac80ceaad339</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-09-20 13:51:08</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

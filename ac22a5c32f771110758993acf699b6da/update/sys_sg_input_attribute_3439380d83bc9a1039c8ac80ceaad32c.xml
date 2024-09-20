@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_input_attribute">
+    <sys_sg_input_attribute action="INSERT_OR_UPDATE">
+        <input display_value="Collection Location">7839380d83bc9a1039c8ac80ceaad329</input>
+        <name>Table</name>
+        <sys_class_name>sys_sg_input_attribute</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-09-20 14:09:45</sys_created_on>
+        <sys_id>3439380d83bc9a1039c8ac80ceaad32c</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Table</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_sg_input_attribute_3439380d83bc9a1039c8ac80ceaad32c</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-09-20 14:09:45</sys_updated_on>
+        <value>x_187394_delitem_delivery_item</value>
+    </sys_sg_input_attribute>
+</record_update>

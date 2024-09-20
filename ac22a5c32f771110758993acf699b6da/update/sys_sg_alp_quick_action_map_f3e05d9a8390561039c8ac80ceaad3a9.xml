@@ -2,7 +2,7 @@
     <sys_sg_alp_quick_action_map action="INSERT_OR_UPDATE">
         <applet_launcher display_value="Delitem">e4b83e5c976361108c1bf911f053af12</applet_launcher>
         <order>20</order>
-        <quick_action_button display_value="Add Multiple Deliveries">bfe05d9a8390561039c8ac80ceaad3a4</quick_action_button>
+        <quick_action_button display_value="Add New Deliveries">bfe05d9a8390561039c8ac80ceaad3a4</quick_action_button>
         <sys_class_name>sys_sg_alp_quick_action_map</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2024-08-30 16:34:28</sys_created_on>

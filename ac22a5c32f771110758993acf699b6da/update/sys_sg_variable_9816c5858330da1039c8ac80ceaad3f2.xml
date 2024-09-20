@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_variable">
+    <sys_sg_variable action="INSERT_OR_UPDATE">
+        <name>New_variable</name>
+        <parameter_screen display_value="Add New Deliveries input form screen">1bad784583fc9a1039c8ac80ceaad3c5</parameter_screen>
+        <parameter_section/>
+        <sys_class_name>sys_sg_variable</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-09-20 15:05:58</sys_created_on>
+        <sys_id>9816c5858330da1039c8ac80ceaad3f2</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>New_variable</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_sg_variable_9816c5858330da1039c8ac80ceaad3f2</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-09-20 15:07:23</sys_updated_on>
+        <type>db_field</type>
+    </sys_sg_variable>
+</record_update>

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_button_instance">
     <sys_sg_button_instance action="INSERT_OR_UPDATE">
         <active>true</active>
-        <button display_value="Add Expected Delivery">463a3a5097a361108c1bf911f053af27</button>
+        <button display_value="Add New Deliveries">abad784583fc9a1039c8ac80ceaad3cd</button>
         <color_theme/>
         <description/>
         <disable_offline>false</disable_offline>
         <field_name/>
         <icon/>
-        <label>Add Multiple Deliveries</label>
+        <label>Add New Deliveries</label>
         <location>quick_action</location>
-        <name>Add Multiple Deliveries</name>
+        <name>Add New Deliveries</name>
         <order>15</order>
         <parent>e4b83e5c976361108c1bf911f053af12</parent>
         <parent_table>sys_sg_applet_launcher</parent_table>
@@ -17,14 +17,14 @@
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2024-08-30 16:34:28</sys_created_on>
         <sys_id>bfe05d9a8390561039c8ac80ceaad3a4</sys_id>
-        <sys_mod_count>3</sys_mod_count>
-        <sys_name>Add Multiple Deliveries</sys_name>
+        <sys_mod_count>5</sys_mod_count>
+        <sys_name>Add New Deliveries</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sys_sg_button_instance_bfe05d9a8390561039c8ac80ceaad3a4</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2024-09-02 11:56:20</sys_updated_on>
+        <sys_updated_on>2024-09-20 14:31:30</sys_updated_on>
         <table/>
     </sys_sg_button_instance>
     <sys_translated_text action="delete_multiple" query="documentkey=bfe05d9a8390561039c8ac80ceaad3a4"/>
