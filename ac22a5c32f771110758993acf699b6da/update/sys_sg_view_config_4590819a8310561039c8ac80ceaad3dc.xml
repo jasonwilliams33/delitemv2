@@ -9,16 +9,16 @@
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2024-08-30 15:23:00</sys_created_on>
         <sys_id>4590819a8310561039c8ac80ceaad3dc</sys_id>
-        <sys_mod_count>1</sys_mod_count>
+        <sys_mod_count>2</sys_mod_count>
         <sys_name>New Deliveries Card</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sys_sg_view_config_4590819a8310561039c8ac80ceaad3dc</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2024-08-30 15:47:58</sys_updated_on>
+        <sys_updated_on>2024-09-24 10:51:18</sys_updated_on>
         <table>x_187394_delitem_delivery_item</table>
-        <template display_value="Template 01">6bb0be5c41a71010f877183fc9b8be0c</template>
+        <template display_value="New Delivery Template">3de0b41683f8165039c8ac80ceaad3c1</template>
     </sys_sg_view_config>
     <sys_translated_text action="delete_multiple" query="documentkey=4590819a8310561039c8ac80ceaad3dc"/>
 </record_update>

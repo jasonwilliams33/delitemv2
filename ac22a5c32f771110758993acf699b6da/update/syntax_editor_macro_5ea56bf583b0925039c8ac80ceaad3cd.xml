@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="syntax_editor_macro">
+    <syntax_editor_macro action="INSERT_OR_UPDATE">
+        <comments/>
+        <name>debug</name>
+        <sys_class_name>syntax_editor_macro</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-09-23 10:38:59</sys_created_on>
+        <sys_id>5ea56bf583b0925039c8ac80ceaad3cd</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>debug</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>syntax_editor_macro_5ea56bf583b0925039c8ac80ceaad3cd</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-09-23 10:38:59</sys_updated_on>
+        <text>gs.error("JW Debug: ");</text>
+    </syntax_editor_macro>
+</record_update>

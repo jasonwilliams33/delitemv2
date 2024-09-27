@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_variable_attribute">
+    <sys_sg_variable_attribute action="DELETE">
+        <name>FieldName</name>
+        <sys_class_name>sys_sg_variable_attribute</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-09-20 15:05:58</sys_created_on>
+        <sys_id>1016c5858330da1039c8ac80ceaad3f6</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>FieldName</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_sg_variable_attribute_1016c5858330da1039c8ac80ceaad3f6</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-09-20 15:05:58</sys_updated_on>
+        <value>name</value>
+        <variable display_value="New variable">9816c5858330da1039c8ac80ceaad3f2</variable>
+    </sys_sg_variable_attribute>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Delitem">ac22a5c32f771110758993acf699b6da</application>
+        <file_path/>
+        <instance_id>e0277b491b1af95c19254089bd4bcb9f</instance_id>
+        <instance_name>dev201900</instance_name>
+        <name>sys_sg_variable_attribute_1016c5858330da1039c8ac80ceaad3f6</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_variable_attribute"><sys_sg_variable_attribute action="INSERT_OR_UPDATE"><name>FieldName</name><sys_class_name>sys_sg_variable_attribute</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2024-09-20 15:05:58</sys_created_on><sys_id>1016c5858330da1039c8ac80ceaad3f6</sys_id><sys_mod_count>0</sys_mod_count><sys_name>FieldName</sys_name><sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package><sys_policy/><sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope><sys_update_name>sys_sg_variable_attribute_1016c5858330da1039c8ac80ceaad3f6</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2024-09-20 15:05:58</sys_updated_on><value>name</value><variable display_value="New variable">9816c5858330da1039c8ac80ceaad3f2</variable></sys_sg_variable_attribute></record_update>]]></payload>
+        <payload_hash>-292249200</payload_hash>
+        <record_name>FieldName</record_name>
+        <reverted_from/>
+        <source>a87a07078310121039c8ac80ceaad316</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-09-20 15:05:58</sys_created_on>
+        <sys_id>d816c5858330da1039c8ac80ceaad3f8</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>1920ff7eb590000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-09-20 15:05:58</sys_updated_on>
+        <type>Variable Attribute</type>
+        <update_guid>dc16c585ee30da108b7eeb50fcc64cf7</update_guid>
+        <update_guid_history>dc16c585ee30da108b7eeb50fcc64cf7:-292249200</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-09-24 10:21:40</sys_created_on>
+        <sys_db_object display_value="" name="sys_sg_variable_attribute">sys_sg_variable_attribute</sys_db_object>
+        <sys_id>99bd1eb42f8f4e6090bfe180396c5ae4</sys_id>
+        <sys_metadata>1016c5858330da1039c8ac80ceaad3f6</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>FieldName</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_scope_delete display_value="">21fda69da1294409862944902732aaa1</sys_scope_delete>
+        <sys_update_name>sys_sg_variable_attribute_1016c5858330da1039c8ac80ceaad3f6</sys_update_name>
+        <sys_update_version display_value="sys_sg_variable_attribute_1016c5858330da1039c8ac80ceaad3f6">d816c5858330da1039c8ac80ceaad3f8</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-09-24 10:21:40</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

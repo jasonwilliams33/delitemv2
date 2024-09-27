@@ -6,7 +6,7 @@
         <description/>
         <disable_offline>false</disable_offline>
         <field_name/>
-        <icon display_value="Cart Solid">ce4dba5497a361108c1bf911f053afeb</icon>
+        <icon display_value="Expected Delivery Icon">f7ddec5783b81e5039c8ac80ceaad3a5</icon>
         <label>Add Expected Delivery</label>
         <location>quick_action</location>
         <name>Add Expected Delivery</name>
@@ -17,14 +17,14 @@
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-06-16 20:10:36</sys_created_on>
         <sys_id>ce4dba5497a361108c1bf911f053afee</sys_id>
-        <sys_mod_count>0</sys_mod_count>
+        <sys_mod_count>3</sys_mod_count>
         <sys_name>Add Expected Delivery</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sys_sg_button_instance_ce4dba5497a361108c1bf911f053afee</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-06-16 20:10:36</sys_updated_on>
+        <sys_updated_on>2024-09-27 13:18:59</sys_updated_on>
         <table/>
     </sys_sg_button_instance>
     <sys_translated_text action="delete_multiple" query="documentkey=ce4dba5497a361108c1bf911f053afee"/>

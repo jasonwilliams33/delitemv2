@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_view_template_slot">
+    <sys_sg_view_template_slot action="INSERT_OR_UPDATE">
+        <name>text_02</name>
+        <sys_class_name>sys_sg_view_template_slot</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-09-24 10:45:56</sys_created_on>
+        <sys_id>4ee0b8d683f8165039c8ac80ceaad354</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>text_02</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_sg_view_template_slot_4ee0b8d683f8165039c8ac80ceaad354</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-09-24 10:45:56</sys_updated_on>
+        <type>text</type>
+        <view_template display_value="New Delivery Template">3de0b41683f8165039c8ac80ceaad3c1</view_template>
+    </sys_sg_view_template_slot>
+</record_update>

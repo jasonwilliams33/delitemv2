@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_view_template_slot">
+    <sys_sg_view_template_slot action="DELETE">
+        <name>image_01</name>
+        <sys_class_name>sys_sg_view_template_slot</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-09-24 10:45:56</sys_created_on>
+        <sys_id>5ee0b8d683f8165039c8ac80ceaad373</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>image_01</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_sg_view_template_slot_5ee0b8d683f8165039c8ac80ceaad373</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-09-24 10:45:56</sys_updated_on>
+        <type>image</type>
+        <view_template display_value="New Delivery Template">3de0b41683f8165039c8ac80ceaad3c1</view_template>
+    </sys_sg_view_template_slot>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Delitem">ac22a5c32f771110758993acf699b6da</application>
+        <file_path/>
+        <instance_id>e0277b491b1af95c19254089bd4bcb9f</instance_id>
+        <instance_name>dev201900</instance_name>
+        <name>sys_sg_view_template_slot_5ee0b8d683f8165039c8ac80ceaad373</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_view_template_slot"><sys_sg_view_template_slot action="INSERT_OR_UPDATE"><name>image_01</name><sys_class_name>sys_sg_view_template_slot</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2024-09-24 10:45:56</sys_created_on><sys_id>5ee0b8d683f8165039c8ac80ceaad373</sys_id><sys_mod_count>0</sys_mod_count><sys_name>image_01</sys_name><sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package><sys_policy/><sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope><sys_update_name>sys_sg_view_template_slot_5ee0b8d683f8165039c8ac80ceaad373</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2024-09-24 10:45:56</sys_updated_on><type>image</type><view_template display_value="New Delivery Template">3de0b41683f8165039c8ac80ceaad3c1</view_template></sys_sg_view_template_slot></record_update>]]></payload>
+        <payload_hash>329128569</payload_hash>
+        <record_name>image_01</record_name>
+        <reverted_from/>
+        <source>a87a07078310121039c8ac80ceaad316</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-09-24 10:45:56</sys_created_on>
+        <sys_id>9ee0b8d683f8165039c8ac80ceaad375</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>19223a3486b0000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-09-24 10:45:56</sys_updated_on>
+        <type>Card template element</type>
+        <update_guid>92e0b8d67df81650ddb444d9b9174275</update_guid>
+        <update_guid_history>92e0b8d67df81650ddb444d9b9174275:329128569</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-09-24 11:02:11</sys_created_on>
+        <sys_db_object display_value="" name="sys_sg_view_template_slot">sys_sg_view_template_slot</sys_db_object>
+        <sys_id>4d142ead7d9a40d2adb39b6102607c44</sys_id>
+        <sys_metadata>5ee0b8d683f8165039c8ac80ceaad373</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>image_01</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_scope_delete display_value="">21fda69da1294409862944902732aaa1</sys_scope_delete>
+        <sys_update_name>sys_sg_view_template_slot_5ee0b8d683f8165039c8ac80ceaad373</sys_update_name>
+        <sys_update_version display_value="sys_sg_view_template_slot_5ee0b8d683f8165039c8ac80ceaad373">9ee0b8d683f8165039c8ac80ceaad375</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-09-24 11:02:11</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

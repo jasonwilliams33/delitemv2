@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_scope_privilege">
+    <sys_scope_privilege action="DELETE">
+        <operation>read</operation>
+        <source_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</source_scope>
+        <status>allowed</status>
+        <sys_class_name>sys_scope_privilege</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-09-24 12:09:44</sys_created_on>
+        <sys_id>39140dde83f8165039c8ac80ceaad334</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>cmdb_ci</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_scope_privilege_39140dde83f8165039c8ac80ceaad334</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-09-24 12:09:44</sys_updated_on>
+        <target_name>cmdb_ci</target_name>
+        <target_scope display_value="Global">global</target_scope>
+        <target_type>sys_db_object</target_type>
+    </sys_scope_privilege>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Delitem">ac22a5c32f771110758993acf699b6da</application>
+        <file_path/>
+        <instance_id>e0277b491b1af95c19254089bd4bcb9f</instance_id>
+        <instance_name>dev201900</instance_name>
+        <name>sys_scope_privilege_39140dde83f8165039c8ac80ceaad334</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_scope_privilege"><sys_scope_privilege action="INSERT_OR_UPDATE"><operation>read</operation><source_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</source_scope><status>allowed</status><sys_class_name>sys_scope_privilege</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2024-09-24 12:09:44</sys_created_on><sys_id>39140dde83f8165039c8ac80ceaad334</sys_id><sys_mod_count>0</sys_mod_count><sys_name>cmdb_ci</sys_name><sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package><sys_policy/><sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope><sys_update_name>sys_scope_privilege_39140dde83f8165039c8ac80ceaad334</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2024-09-24 12:09:44</sys_updated_on><target_name>cmdb_ci</target_name><target_scope display_value="Global">global</target_scope><target_type>sys_db_object</target_type></sys_scope_privilege></record_update>]]></payload>
+        <payload_hash>840305777</payload_hash>
+        <record_name>cmdb_ci</record_name>
+        <reverted_from/>
+        <source>a87a07078310121039c8ac80ceaad316</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-09-24 12:09:44</sys_created_on>
+        <sys_id>7d14019e837c165039c8ac80ceaad311</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>19223f0031b0000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-09-24 12:09:44</sys_updated_on>
+        <type>Cross scope privilege</type>
+        <update_guid>7d14019efa7c1650b342fe827e90b810</update_guid>
+        <update_guid_history>7d14019efa7c1650b342fe827e90b810:840305777</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-09-24 12:10:53</sys_created_on>
+        <sys_db_object display_value="" name="sys_scope_privilege">sys_scope_privilege</sys_db_object>
+        <sys_id>8fc816db342d4cb48d4d2a1e2291eb24</sys_id>
+        <sys_metadata>39140dde83f8165039c8ac80ceaad334</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>cmdb_ci</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_scope_delete display_value="">21fda69da1294409862944902732aaa1</sys_scope_delete>
+        <sys_update_name>sys_scope_privilege_39140dde83f8165039c8ac80ceaad334</sys_update_name>
+        <sys_update_version display_value="sys_scope_privilege_39140dde83f8165039c8ac80ceaad334">7d14019e837c165039c8ac80ceaad311</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-09-24 12:10:53</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

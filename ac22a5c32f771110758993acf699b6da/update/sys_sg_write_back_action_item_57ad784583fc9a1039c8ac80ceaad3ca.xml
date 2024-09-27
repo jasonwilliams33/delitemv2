@@ -3,32 +3,19 @@
         <description/>
         <execution_script><![CDATA[(function WriteBackAction(parm_input, parm_variable, actionResult) {
 
-// var newString= String(parm_input['new_collection_location']).valueOf();
- gs.error("JW Debug, parm_input 2: " + parm_input['new_collection_location'].toString());
-// 	gs.error("JW Debug, parm_variable: " + parm_variable['New_variable']);
+    var multipleDeliveryObj = {};
+    multipleDeliveryObj.recipient = {};
 
-	gs.error("JW Debug, parm_input: " + JSON.stringify(parm_input['new_collection_location']));
-    //gs.error("JW Debug, parm_input 2: " + JSON.parse(parm_input['new_collection_location']));
-    //gs.error("JW Debug, parm_input 3: " + parm_input['new_collection_location']).split(",");
-    
-    // var gr = new GlideRecord("incident");
-    // gr.get(parm_variable['sys_id']);
-    // var shortDesc = parm_input['shortDescInput'];
-    // gr.setValue("short_description", shortDesc);
-    // gr.update();
-    //   // in this example "signatureInput" is the name of a sys_sg_input of type signature
-    //   // SignatureType will return either "Image" or "Text"
-    // var signatureType = parm_input['signatureInput']["SignatureType"];
-    //   // SignatureValue will return a String containing the base64 respresentation of the image in the case of a drawn signature
-    //   // or a String with the name of the user if they typed their name
-    // var signatureValue = parm_input['signatureInput']["SignatureValue"];
-    // var table = "incident";
-    // var documentId = parm_variable['sys_id'];
-    // var signatureHandler = new sn_mobile.MobileSignatureHandler();
-    // if (signatureType == "Image")
-    //     signatureHandler.insertSignatureImage(table, documentId, signatureValue);
-    // else if (signatureType == "Text")
-    //     signatureHandler.insertTypedSignature(table, documentId, signatureValue);
+    var recipientStr = "";
+
+    multipleDeliveryObj.collection_location = parm_input['new_collection_location'];
+
+    recipientStr = parm_input['new_recipients'].map(String).join(',');
+
+    multipleDeliveryObj.recipient.value = recipientStr;
+
+    var createMultipleDeliveries = new x_187394_delitem.DelitemUtils().addMultipleDeliveryItem(multipleDeliveryObj);
+
 })(parm_input, parm_variable, actionResult);]]></execution_script>
         <name>Add New Deliveries action item</name>
         <parameter_screen display_value="Add New Deliveries input form screen">1bad784583fc9a1039c8ac80ceaad3c5</parameter_screen>
@@ -37,14 +24,14 @@
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2024-09-20 14:29:19</sys_created_on>
         <sys_id>57ad784583fc9a1039c8ac80ceaad3ca</sys_id>
-        <sys_mod_count>34</sys_mod_count>
+        <sys_mod_count>44</sys_mod_count>
         <sys_name>Add New Deliveries action item</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sys_sg_write_back_action_item_57ad784583fc9a1039c8ac80ceaad3ca</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2024-09-20 16:23:05</sys_updated_on>
+        <sys_updated_on>2024-09-24 09:06:29</sys_updated_on>
         <table>x_187394_delitem_delivery_item</table>
         <template>recipient=^EQ</template>
         <type>script</type>
