@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_input_attribute">
+    <sys_sg_input_attribute action="INSERT_OR_UPDATE">
+        <input display_value="Outstanding Deliveries">6915d5a5830d9e9039c8ac80ceaad3aa</input>
+        <name>TargetTable</name>
+        <sys_class_name>sys_sg_input_attribute</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-10-04 15:44:58</sys_created_on>
+        <sys_id>184559e5830d9e9039c8ac80ceaad320</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>TargetTable</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_sg_input_attribute_184559e5830d9e9039c8ac80ceaad320</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-10-04 15:44:58</sys_updated_on>
+        <value>x_187394_delitem_delivery</value>
+    </sys_sg_input_attribute>
+</record_update>
