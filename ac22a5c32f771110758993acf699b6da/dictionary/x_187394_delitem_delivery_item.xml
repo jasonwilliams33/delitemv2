@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
     <element db_object_id="9e44ed472f771110758993acf699b638" label="Delivery Item" max_length="40" name="x_187394_delitem_delivery_item" type="collection">
-        <element attributes="edge_encryption_enabled=true" choice="1" label="Collection Location" mandatory="true" max_length="40" name="collection_location" type="choice">
-            <choice>
-                <element inactive_on_update="false" label="Reception Desk" sequence="10" value="reception_desk"/>
-                <element inactive_on_update="false" label="Storage Cupboard" sequence="20" value="storage_cupboard"/>
-                <element inactive_on_update="false" label="Post Room" sequence="30" value="post_room"/>
-            </choice>
-        </element>
-        <element attributes="edge_encryption_enabled=true" label="Date Collected" max_length="40" name="date_collected" type="glide_date_time"/>
-        <element label="Date Expected" max_length="40" name="date_expected" type="glide_date"/>
-        <element attributes="edge_encryption_enabled=true" label="Date Received" max_length="40" name="date_received" type="glide_date_time"/>
         <element attributes="encode_utf8=false" label="Delivery" max_length="32" name="delivery" reference="x_187394_delitem_delivery" type="reference"/>
-        <element attributes="edge_encryption_enabled=true" label="Notes" max_length="1000" name="notes" type="string"/>
-        <element attributes="edge_encryption_enabled=true" default="javascript:global.getNextObjNumberPadded();" label="Number" max_length="40" name="number" type="string"/>
-        <element label="Recipient" mandatory="true" max_length="32" name="recipient" reference="sys_user" reference_qual="active=true^EQ" reference_qual_condition="active=true^EQ" type="reference"/>
-        <element label="Recipient Signature" max_length="40" name="recipient_signature" type="user_image"/>
-        <element attributes="edge_encryption_enabled=true" label="Sender" max_length="120" name="sender" type="string"/>
         <element attributes="edge_encryption_enabled=true" choice="3" default="1" label="State" max_length="40" name="state" type="choice">
             <choice>
                 <element inactive_on_update="false" label="New" sequence="1" value="1"/>
-                <element inactive_on_update="false" label="Expected" sequence="2" value="2"/>
+                <element inactive_on_update="false" label="Cancelled" sequence="5" value="6"/>
                 <element inactive_on_update="false" label="Awaiting Collection" sequence="3" value="3"/>
                 <element inactive_on_update="false" label="Collected" sequence="4" value="4"/>
-                <element inactive_on_update="false" label="Cancelled" sequence="5" value="6"/>
+                <element inactive_on_update="false" label="Expected" sequence="2" value="2"/>
             </choice>
         </element>
+        <element attributes="edge_encryption_enabled=true" label="Notes" max_length="1000" name="notes" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Date Collected" max_length="40" name="date_collected" type="glide_date_time"/>
+        <element label="Date Expected" max_length="40" name="date_expected" type="glide_date"/>
+        <element label="Recipient Signature" max_length="40" name="recipient_signature" type="user_image"/>
+        <element attributes="edge_encryption_enabled=true" default="javascript:global.getNextObjNumberPadded();" label="Number" max_length="40" name="number" type="string"/>
+        <element attributes="edge_encryption_enabled=true" choice="1" label="Collection Location" mandatory="true" max_length="40" name="collection_location" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Storage Cupboard" sequence="20" value="storage_cupboard"/>
+                <element inactive_on_update="false" label="Post Room" sequence="30" value="post_room"/>
+                <element inactive_on_update="false" label="Reception Desk" sequence="10" value="reception_desk"/>
+            </choice>
+        </element>
+        <element attributes="edge_encryption_enabled=true" label="Date Received" max_length="40" name="date_received" type="glide_date_time"/>
+        <element attributes="edge_encryption_enabled=true" label="Sender" max_length="120" name="sender" type="string"/>
+        <element label="Recipient" mandatory="true" max_length="32" name="recipient" reference="sys_user" reference_qual="active=true^EQ" reference_qual_condition="active=true^EQ" type="reference"/>
         <index name="index">
             <element name="delivery"/>
         </index>

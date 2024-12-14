@@ -12,13 +12,13 @@
         <sys_class_name>ua_table_licensing_config</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2024-09-02 13:37:13</sys_created_on>
-        <sys_id>b02504138318121039c8ac80ceaad347</sys_id>
+        <sys_id>e6cc642bc3e51210b845bd73e40131eb</sys_id>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>x_187394_delitem_st_collection_location</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
-        <sys_update_name>ua_table_licensing_config_b02504138318121039c8ac80ceaad347</sys_update_name>
+        <sys_update_name>ua_table_licensing_config_e6cc642bc3e51210b845bd73e40131eb</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
         <sys_updated_on>2024-09-02 13:37:13</sys_updated_on>
     </ua_table_licensing_config>

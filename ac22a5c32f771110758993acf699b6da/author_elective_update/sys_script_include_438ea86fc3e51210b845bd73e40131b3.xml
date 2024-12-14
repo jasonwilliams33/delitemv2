@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="DELETE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_187394_delitem.DebugUtils</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <mobile_callable>false</mobile_callable>
+        <name>DebugUtils</name>
+        <sandbox_callable>false</sandbox_callable>
+        <script><![CDATA[var DebugUtils = Class.create();
+DebugUtils.prototype = {
+    
+	initialize: function() {
+		this.DEBUG = gs.getProperty('cc.debug_utils.debug', 'false') == 'true';
+        this.DEBUG_PREFIX = '>>>DEBUG: DebugUtils';
+    },
+
+	/**SNDOC
+      @name debug
+      @description Writes a given debug message to the log
+	  @param {string} [timestamp] - The time in miliseconds when the method is called
+      @param {string} [source] - The script/artifact from where the method is called
+	  @param {string} [message] - The message to write to the log
+	  @param {string} [debugMethod] - The type of log message (info, error, warn, debug, log)
+	  @param {boolean} [debugOverride] - Allows you to write the message to the log even if logging is disabled
+      @returns {boolean} Whether the message was written to the logs or not
+    */
+    debug: function(timestamp, source, message, debugMethod, debugOverride) {
+        if (!this.DEBUG && !debugOverride) {
+            return false;
+        }
+
+        var debugMethods = ['info', 'error', 'warn', 'debug'];
+        debugMethod = (debugMethods.indexOf(debugMethod) != -1) ? debugMethod : 'info';
+
+        gs[debugMethod](this.DEBUG_PREFIX + ' - Timestamp: ' + timestamp + ' - ' + source + '\n\n' + message);
+
+        return true;
+    },
+
+    type: 'DebugUtils'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-11-04 14:42:03</sys_created_on>
+        <sys_id>438ea86fc3e51210b845bd73e40131b3</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>DebugUtils</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_script_include_438ea86fc3e51210b845bd73e40131b3</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-11-04 14:42:03</sys_updated_on>
+    </sys_script_include>
+    <sys_es_latest_script action="DELETE">
+        <id>438ea86fc3e51210b845bd73e40131b3</id>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-11-04 14:42:03</sys_created_on>
+        <sys_id>2820b4efc3e51210b845bd73e4013196</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-11-04 14:42:03</sys_updated_on>
+        <table>sys_script_include</table>
+        <use_es_latest>true</use_es_latest>
+    </sys_es_latest_script>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Delitem">ac22a5c32f771110758993acf699b6da</application>
+        <file_path/>
+        <instance_id>c71518fb1b91c25832182f8dee4bcb8e</instance_id>
+        <instance_name>dev258692</instance_name>
+        <name>sys_script_include_438ea86fc3e51210b845bd73e40131b3</name>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_script_include"&gt;&lt;sys_script_include action="INSERT_OR_UPDATE"&gt;&lt;access&gt;package_private&lt;/access&gt;&lt;active&gt;true&lt;/active&gt;&lt;api_name&gt;x_187394_delitem.DebugUtils&lt;/api_name&gt;&lt;caller_access/&gt;&lt;client_callable&gt;false&lt;/client_callable&gt;&lt;description/&gt;&lt;mobile_callable&gt;false&lt;/mobile_callable&gt;&lt;name&gt;DebugUtils&lt;/name&gt;&lt;sandbox_callable&gt;false&lt;/sandbox_callable&gt;&lt;script&gt;&lt;![CDATA[var DebugUtils = Class.create();
+DebugUtils.prototype = {
+    
+	initialize: function() {
+		this.DEBUG = gs.getProperty('cc.debug_utils.debug', 'false') == 'true';
+        this.DEBUG_PREFIX = '&gt;&gt;&gt;DEBUG: DebugUtils';
+    },
+
+	/**SNDOC
+      @name debug
+      @description Writes a given debug message to the log
+	  @param {string} [timestamp] - The time in miliseconds when the method is called
+      @param {string} [source] - The script/artifact from where the method is called
+	  @param {string} [message] - The message to write to the log
+	  @param {string} [debugMethod] - The type of log message (info, error, warn, debug, log)
+	  @param {boolean} [debugOverride] - Allows you to write the message to the log even if logging is disabled
+      @returns {boolean} Whether the message was written to the logs or not
+    */
+    debug: function(timestamp, source, message, debugMethod, debugOverride) {
+        if (!this.DEBUG &amp;&amp; !debugOverride) {
+            return false;
+        }
+
+        var debugMethods = ['info', 'error', 'warn', 'debug'];
+        debugMethod = (debugMethods.indexOf(debugMethod) != -1) ? debugMethod : 'info';
+
+        gs[debugMethod](this.DEBUG_PREFIX + ' - Timestamp: ' + timestamp + ' - ' + source + '\n\n' + message);
+
+        return true;
+    },
+
+    type: 'DebugUtils'
+};]]&gt;&lt;/script&gt;&lt;sys_class_name&gt;sys_script_include&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2024-11-04 14:42:03&lt;/sys_created_on&gt;&lt;sys_id&gt;438ea86fc3e51210b845bd73e40131b3&lt;/sys_id&gt;&lt;sys_mod_count&gt;0&lt;/sys_mod_count&gt;&lt;sys_name&gt;DebugUtils&lt;/sys_name&gt;&lt;sys_package display_value="Delitem" source="x_187394_delitem"&gt;ac22a5c32f771110758993acf699b6da&lt;/sys_package&gt;&lt;sys_policy&gt;read&lt;/sys_policy&gt;&lt;sys_scope display_value="Delitem"&gt;ac22a5c32f771110758993acf699b6da&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_script_include_438ea86fc3e51210b845bd73e40131b3&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2024-11-04 14:42:03&lt;/sys_updated_on&gt;&lt;/sys_script_include&gt;&lt;sys_es_latest_script action="INSERT_OR_UPDATE"&gt;&lt;id&gt;438ea86fc3e51210b845bd73e40131b3&lt;/id&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2024-11-04 14:42:03&lt;/sys_created_on&gt;&lt;sys_id&gt;2820b4efc3e51210b845bd73e4013196&lt;/sys_id&gt;&lt;sys_mod_count&gt;0&lt;/sys_mod_count&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2024-11-04 14:42:03&lt;/sys_updated_on&gt;&lt;table&gt;sys_script_include&lt;/table&gt;&lt;use_es_latest&gt;true&lt;/use_es_latest&gt;&lt;/sys_es_latest_script&gt;&lt;/record_update&gt;</payload>
+        <payload_hash>1698346698</payload_hash>
+        <record_name>DebugUtils</record_name>
+        <reverted_from/>
+        <source>57ece8abc3a51210b845bd73e4013166</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-11-04 14:42:03</sys_created_on>
+        <sys_id>7020f86fc3e51210b845bd73e40131da</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>192f7a031fd0000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-11-04 14:42:03</sys_updated_on>
+        <type>Script Include</type>
+        <update_guid>3420f86f31e51210718f13a1ff9197d9</update_guid>
+        <update_guid_history>3420f86f31e51210718f13a1ff9197d9:1698346698</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-11-04 14:55:42</sys_created_on>
+        <sys_db_object display_value="" name="sys_script_include">sys_script_include</sys_db_object>
+        <sys_id>381d2f687e304ceab0291e905e91b204</sys_id>
+        <sys_metadata>438ea86fc3e51210b845bd73e40131b3</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>DebugUtils</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_parent/>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_scope_delete display_value="">21fda69da1294409862944902732aaa1</sys_scope_delete>
+        <sys_update_name>sys_script_include_438ea86fc3e51210b845bd73e40131b3</sys_update_name>
+        <sys_update_version display_value="sys_script_include_438ea86fc3e51210b845bd73e40131b3">7020f86fc3e51210b845bd73e40131da</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-11-04 14:55:42</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

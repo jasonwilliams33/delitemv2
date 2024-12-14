@@ -63,6 +63,8 @@
 
 			}).then(function(rsp) {
 
+				c.modalInstance.close();
+				
 			})
 			
 		}
@@ -507,9 +509,12 @@ $text-primary: #181a1f !default;
 	}
 
 	if(input && input.action == "updateDeliveryItem") {
+		
 		try {
+			
 			var grsDeliveryItem = new GlideRecordSecure(data.delieveryItemTable);
-			if(grsDeliveryItem.get(input.deliveryItem.deliveryItemSysId)){
+			
+			if(grsDeliveryItem.get(input.deliveryItem.deliveryItemSysId)) {
 
 				grsDeliveryItem.setValue('state',input.deliveryItem.delivery.state.value);
 				//grsDeliveryItem.setValue('collection_location',input.deliveryItem.delivery.collectionLocation);
@@ -518,6 +523,7 @@ $text-primary: #181a1f !default;
 					grsDeliveryItem.setValue('delivery','');
 					grsDeliveryItem.collection_location = '';
 					grsDeliveryItem.setValue('date_expected',input.deliveryItem.delivery.date_expected.value);
+					grsDeliveryItem.setValue('sender',input.deliveryItem.delivery.sender);
 					
 				} else {
 					
@@ -529,7 +535,9 @@ $text-primary: #181a1f !default;
 				grsDeliveryItem.setValue('notes',input.deliveryItem.delivery.notes);
 				
 				grsDeliveryItem.update();
+
 				gs.error("JW Debug, obj :" + JSON.stringify(input));
+				
 			}
 
 		} catch(err) {
@@ -546,14 +554,14 @@ $text-primary: #181a1f !default;
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-12-23 15:06:04</sys_created_on>
         <sys_id>7a5960082f0ce110758993acf699b611</sys_id>
-        <sys_mod_count>201</sys_mod_count>
+        <sys_mod_count>208</sys_mod_count>
         <sys_name>Delitem</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_7a5960082f0ce110758993acf699b611</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2024-08-30 12:54:06</sys_updated_on>
+        <sys_updated_on>2024-12-13 22:50:09</sys_updated_on>
         <template><![CDATA[<div class="panel panel-primary b">
   <div class="panel-heading">
     Delitem

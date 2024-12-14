@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_ui_rule_action">
     <sys_sg_ui_rule_action action="INSERT_OR_UPDATE">
+        <client_script/>
         <operation display_value="Set Visibility">7e75bedc5b031010da168d8fa881c710</operation>
         <order>10</order>
         <sys_class_name>sys_sg_ui_rule_action</sys_class_name>

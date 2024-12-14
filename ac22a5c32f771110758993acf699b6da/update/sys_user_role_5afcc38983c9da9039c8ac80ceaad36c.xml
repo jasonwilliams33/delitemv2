@@ -4,10 +4,10 @@
         <can_delegate>true</can_delegate>
         <description>This Role is intended for general Users of the application</description>
         <elevated_privilege>false</elevated_privilege>
+        <encryption_context/>
         <grantable>true</grantable>
         <includes_roles/>
         <name>x_187394_delitem.users</name>
-        <requires_subscription>-1</requires_subscription>
         <scoped_admin>false</scoped_admin>
         <suffix>users</suffix>
         <sys_class_name>sys_user_role</sys_class_name>
