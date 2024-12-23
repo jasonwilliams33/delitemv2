@@ -7,12 +7,13 @@
 	var c = this;
 
 	console.log(c);
+	//alert(c.data.options.delivery.collection_location.value);
 
 	//$scope.$on("field.change", function(evt, parms) { alert("test")});
 
-	c.data.recipient = { 
+	c.data.recipient = {
 
-		displayValue: c.data.recipientDisplay,
+		displayValue: c.data.options.delivery.recipient.display_value,//c.data.recipientDisplay,
 		value: c.data.recipientFilter,
 		name: 'Recipient'
 
@@ -24,7 +25,7 @@
 
 	c.data.selectedState = {
 
-		value: "3"//c.data.options.delivery.state.value
+		value: c.data.options.delivery.state.value		
 
 	}
 
@@ -34,17 +35,18 @@
 
 	}
 
-	if(c.data.options.delivery.state.value != "2") {
+	//if(c.data.options.delivery.state.value != "2") {
 		//alert(c.data.options.delivery.collection_location.value);
 
-		c.data.selectedCollectionLocation = {
+		/*c.data.selectedCollectionLocation = {
 
 			value: "storage_cupboard"
 
-		}
+		}*/
 		//c.data.selectedCollectionLocation = c.data.options.delivery.collection_location.value;
+		c.data.collectionLocation = c.data.options.delivery.collection_location.value;
 
-	}
+	//}
 
 	c.data.missingFields = '';
 	c.missingFieldsError = '';
@@ -98,7 +100,7 @@
 
 		if(c.data.selectedState.value != 2) {
 
-			if(c.data.selectedCollectionLocation == undefined || c.data.selectedCollectionLocation == '') {
+			if(c.data.collectionLocation == undefined || c.data.collectionLocation == '') {
 
 				c.data.missingFields += 'Collection Location,';
 
@@ -139,7 +141,7 @@
 		deliveryItemObj.recipient = c.data.recipient;
 		deliveryItemObj.state = c.data.selectedState;
 		deliveryItemObj.sender = c.data.sender;
-		deliveryItemObj.collectionLocation = c.data.selectedCollectionLocation;
+		deliveryItemObj.collectionLocation = c.data.collectionLocation;
 		deliveryItemObj.notes = c.data.notes;
 		deliveryItemObj.date_expected = c.data.dateExpected;
 
@@ -227,18 +229,23 @@ textarea {
 	data.stateChoicesArr = [];
 	var stateChoicesObj = {};
 
-	var stateQuery = "name=" + data.delieveryItemTable + "^element=state^value!=1";
+	var stateQuery = "name=" + data.delieveryItemTable + "^element=state";
 
 	switch(data.options.delivery.state.value) {
 
-		case "2":
+		case "1":
 			
 			stateQuery += "^value!=3^value!=4";
+			break;
+		
+		case "2":
+			
+			stateQuery += "value!=1^value!=3^value!=4";
 			break;
 
 		case "3":
 			
-			stateQuery += "^value!=2^value!=4";
+			stateQuery += "value!=1^value!=2^value!=4";
 			break;  
 
 	}
@@ -263,7 +270,21 @@ textarea {
 	}
 
 	var collectionLocationsStr = gs.getProperty("x_187394_delitem.collection.locations");
-	data.collectionLocationsArr = collectionLocationsStr.split(",");
+	//data.collectionLocationsArr = collectionLocationsStr.split(",");
+	data.collectionLocationsArr = [];
+	var collectionLocationsObj = {};
+	
+	var collectionLocationGRS = new GlideRecordSecure('sys_choice');
+	collectionLocationGRS.addEncodedQuery("name=" + DelItemConstants.DELIVERY_ITEM_TABLE +  "^element=collection_location");
+	collectionLocationGRS.query();
+	while (collectionLocationGRS.next()) {
+
+		collectionLocationsObj = {};
+		collectionLocationsObj.display = collectionLocationGRS.label.toString();
+		collectionLocationsObj.value = collectionLocationGRS.value.toString();
+		data.collectionLocationsArr.push(collectionLocationsObj);
+
+	}
 
 
 })();]]></script>
@@ -272,14 +293,14 @@ textarea {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-12-08 17:27:06</sys_created_on>
         <sys_id>1d166be897c775108c1bf911f053af5c</sys_id>
-        <sys_mod_count>317</sys_mod_count>
+        <sys_mod_count>344</sys_mod_count>
         <sys_name>Edit Delivery Item</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_1d166be897c775108c1bf911f053af5c</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2024-12-14 00:11:40</sys_updated_on>
+        <sys_updated_on>2024-12-23 23:28:43</sys_updated_on>
         <template><![CDATA[<div class="panel panel-default">
   <div class= panel-heading>
     <span>
@@ -298,7 +319,7 @@ textarea {
     <form>
       <div class="form-row">
         <div class="form-group col-md-6"><span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory"></span>
-          <label for="application">State</label>
+          <label for="stateSelect">State</label>
           <select name="stateSelect" id="stateSelect"
                   ng-options="option.label for option in data.stateChoicesArr track by option.value"
                   ng-model="data.selectedState"
@@ -331,11 +352,16 @@ textarea {
                   ng-show="c.data.selectedState.value != 2"
                   >
             </span>
-            <label for="application">Collection Location</label>
-            <select name="collectionLocationSelect" id="collectionLocationSelect"
-                    ng-options="option for option in data.collectionLocationsArr"
-                    ng-model="c.data.selectedCollectionLocation"
-                    class="form-control"></select>
+            <label for="collectionLocationSelect">Collection Location</label>
+            <!--<select name="collectionLocationSelect" id="collectionLocationSelect"
+                    ng-options="option for option in data.collectionLocationsArr track by option.value"
+                    ng-model="data.selectedCollectionLocation"
+                    class="form-control"></select>-->
+            <sn-choice-list sn-model="c.data.collectionLocation" 
+                         sn-options="c.data.choiceListOption" 
+                         sn-value-field="value" 
+                         sn-text-field="display" 
+                         sn-items="c.data.collectionLocationsArr"></sn-choice-list>
 
           </div>
           <div class="form-group col-md-6"

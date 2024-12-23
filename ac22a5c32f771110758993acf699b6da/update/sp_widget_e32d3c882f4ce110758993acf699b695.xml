@@ -454,11 +454,11 @@
 	}
 
 	c.received = function() {
-
+console.log(c.data.collectionLocation);
 		c.server.get({
 
 			action: "itemReceived",
-			collectionLocation: c.data.collectionLocation.value,
+			collectionLocation: c.data.collectionLocation,
 			notes: c.data.notes,
 			item: c.data.deliveryItemSysId						
 
@@ -752,12 +752,12 @@ textarea {
 			newDeliveryGRSObj = {};
 			newDeliveryGRSObj.date_received = { "fieldName" : "Date Received" , "value" : newDeliveryGRS.date_received.toString() , "display" : true };
 			newDeliveryGRSObj.date_expected = { "fieldName" : "Date Expected" , "value" : newDeliveryGRS.date_expected.toString() , "display" : true };
-			newDeliveryGRSObj.recipient = { "fieldName" : "Recipient" , "value" : newDeliveryGRS.recipient.getDisplayValue() , "display" : true };
+			newDeliveryGRSObj.recipient = { "fieldName" : "Recipient" , "display_value" : newDeliveryGRS.recipient.getDisplayValue() , "display" : true };
 			newDeliveryGRSObj.recipient_first_name = newDeliveryGRS.recipient.first_name.toString();
 			newDeliveryGRSObj.sender = { "fieldName" : "Sender" , "value" : newDeliveryGRS.sender.toString() || "N/A", "display" : true };
-			newDeliveryGRSObj.collection_location = { "fieldName" : "Collection Location" , "value" : newDeliveryGRS.collection_location.getDisplayValue() || "N/A", "display" : true };
+			newDeliveryGRSObj.collection_location = { "fieldName" : "Collection Location", "value" : newDeliveryGRS.collection_location.toString() , "display_value" : newDeliveryGRS.collection_location.getDisplayValue() || "N/A", "display" : true };
 			newDeliveryGRSObj.notes = { "fieldName" : "Notes" , "value" : newDeliveryGRS.notes.toString() || "N/A" , "display" : true };
-			newDeliveryGRSObj.state = { "fieldName" : "State" , "value" : newDeliveryGRS.state.getDisplayValue() , "display" : true };
+			newDeliveryGRSObj.state = { "fieldName" : "State" , "value" : newDeliveryGRS.state.toString(), "display_value" : newDeliveryGRS.state.getDisplayValue() , "display" : true };
 			newDeliveryGRSObj.sys_id = newDeliveryGRS.getUniqueValue();
 			data.newDeliveryGRSArr.push(newDeliveryGRSObj);			
 
@@ -881,14 +881,14 @@ textarea {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-12-23 16:32:41</sys_created_on>
         <sys_id>e32d3c882f4ce110758993acf699b695</sys_id>
-        <sys_mod_count>243</sys_mod_count>
+        <sys_mod_count>263</sys_mod_count>
         <sys_name>New Delivery</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_e32d3c882f4ce110758993acf699b695</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2024-09-03 13:51:09</sys_updated_on>
+        <sys_updated_on>2024-12-23 23:30:02</sys_updated_on>
         <template><![CDATA[<div class="containerQRCode">
   <div class="qrcode" id="qrcode">
     <canvas id="canvas" width="200" height="200"></canvas>
@@ -917,18 +917,18 @@ textarea {
       </thead>
       <tbody>
         <tr ng-repeat="delivery in c.data.newDeliveryGRSArr">
-          <td class="itemData">{{delivery.recipient.value}}</td>
+          <td class="itemData">{{delivery.recipient.display_value}}</td>
           <td class="itemData"
               ng-show="delivery.state.value != 'Expected'">{{delivery.date_received.value}}</td>
           <td class="itemData"
               ng-show="delivery.state.value == 'Expected'">{{delivery.date_expected.value}}</td>
           <td class="itemData">{{delivery.sender.value}}</td>
-          <td class="itemData">{{delivery.collection_location.value}}</td>
+          <td class="itemData">{{delivery.collection_location.display_value}}</td>
           <td class="itemData">{{delivery.notes.value}}</td>
-          <td class="itemData">{{delivery.state.value}}</td>
+          <td class="itemData">{{delivery.state.display_value}}</td>
           <td class="itemData">
             <div class="btn-group"
-                 ng-show="delivery.state.value == 'Expected'"
+                 ng-show="delivery.state.display_value == 'Expected'"
                  ng-click="c.confirmCollectionLocation(delivery)">
               <button class="btn btn-sm btn-primary">
                 Received
@@ -1043,8 +1043,13 @@ textarea {
                           autofocus>
         </sn-record-picker>-->
         <span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory" ng-class="{'mandatory-filled': collectionLocation.displayValue != undefined}"></span>
-        <label for="formGroupExampleInput">Collection Location</label> 
-         <sn-choice-list sn-model="c.data.collectionLocation" sn-options="c.data.choiceListOption" sn-value-field="value" sn-text-field="display" sn-items="c.data.collectionLocationsArr"></sn-choice-list>
+        <label for="collectionLocationChoice">Collection Location</label> 
+         <sn-choice-list sn-model="c.data.collectionLocation" 
+                         sn-options="c.data.choiceListOption" 
+                         sn-value-field="value" 
+                         sn-text-field="display" 
+                         sn-items="c.data.collectionLocationsArr"
+                         placeholder="test"></sn-choice-list>
         </div>
       
       <div class="form-group" ng-if="!c.data.multipleItems">
@@ -1083,15 +1088,12 @@ textarea {
     </div>
     <div class="form-group">
       <span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory" ng-class="{'mandatory-filled': recipient.displayValue != undefined}"></span>
-        <label for="formGroupExampleInput">Collection Location</label>
-        <sn-record-picker field="c.data.collectionLocation"
-                          table="'x_187394_delitem_st_collection_location'" 
-                          display-field="'collection_location'" 
-                          value-field="'sys_id'" 
-                          search-fields="'collection_location'" 
-                          page-size="100"
-                          autofocus>
-        </sn-record-picker>
+         <label for="collectionLocationChoice">Collection Location</label> 
+         <sn-choice-list sn-model="c.data.collectionLocation" 
+                         sn-options="c.data.choiceListOption" 
+                         sn-value-field="value" 
+                         sn-text-field="display" 
+                         sn-items="c.data.collectionLocationsArr"></sn-choice-list>
       <!--<span style="padding-right: .25em" title="Mandatory" class="fa fa-asterisk mandatory" ng-class="{'mandatory-filled': collectionLocation.displayValue != undefined}"></span>
       <label for="formGroupExampleInput">Collection Location</label> 
       <select class="form-control" ng-model="c.data.collectionLocation" ng-options="item for item in c.data.collectionLocationsArr"></select>-->
