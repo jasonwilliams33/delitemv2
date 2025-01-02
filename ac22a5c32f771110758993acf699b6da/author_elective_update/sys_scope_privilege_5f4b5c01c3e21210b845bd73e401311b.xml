@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_scope_privilege">
+    <sys_scope_privilege action="DELETE">
+        <operation>execute</operation>
+        <source_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</source_scope>
+        <status>allowed</status>
+        <sys_class_name>sys_scope_privilege</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-12-16 11:49:00</sys_created_on>
+        <sys_id>5f4b5c01c3e21210b845bd73e401311b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>testScriptIncludeUtils</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_scope_privilege_5f4b5c01c3e21210b845bd73e401311b</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-12-16 11:49:00</sys_updated_on>
+        <target_name>testScriptIncludeUtils</target_name>
+        <target_scope display_value="Global">global</target_scope>
+        <target_type>sys_script_include</target_type>
+    </sys_scope_privilege>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Delitem">ac22a5c32f771110758993acf699b6da</application>
+        <file_path/>
+        <instance_id>c71518fb1b91c25832182f8dee4bcb8e</instance_id>
+        <instance_name>dev258692</instance_name>
+        <name>sys_scope_privilege_5f4b5c01c3e21210b845bd73e401311b</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_scope_privilege"><sys_scope_privilege action="INSERT_OR_UPDATE"><operation>execute</operation><source_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</source_scope><status>allowed</status><sys_class_name>sys_scope_privilege</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2024-12-16 11:49:00</sys_created_on><sys_id>5f4b5c01c3e21210b845bd73e401311b</sys_id><sys_mod_count>0</sys_mod_count><sys_name>testScriptIncludeUtils</sys_name><sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package><sys_policy/><sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope><sys_update_name>sys_scope_privilege_5f4b5c01c3e21210b845bd73e401311b</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2024-12-16 11:49:00</sys_updated_on><target_name>testScriptIncludeUtils</target_name><target_scope display_value="Global">global</target_scope><target_type>sys_script_include</target_type></sys_scope_privilege></record_update>]]></payload>
+        <payload_hash>-1024680464</payload_hash>
+        <record_name>testScriptIncludeUtils</record_name>
+        <reverted_from/>
+        <source>615f3c6e348112104f343065f8c7492d</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-12-16 11:49:00</sys_created_on>
+        <sys_id>1b4b5c01c3e21210b845bd73e401311f</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>193cf4cda3b0000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-12-16 11:49:00</sys_updated_on>
+        <type>Cross scope privilege</type>
+        <update_guid>1b4b5c015ee2121054b237c2e8f1fb1e</update_guid>
+        <update_guid_history>1b4b5c015ee2121054b237c2e8f1fb1e:-1024680464</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2025-01-02 22:36:16</sys_created_on>
+        <sys_db_object display_value="" name="sys_scope_privilege">sys_scope_privilege</sys_db_object>
+        <sys_id>03a709cd6e55489e8027993611b1e309</sys_id>
+        <sys_metadata>5f4b5c01c3e21210b845bd73e401311b</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>testScriptIncludeUtils</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_scope_delete display_value="">21fda69da1294409862944902732aaa1</sys_scope_delete>
+        <sys_update_name>sys_scope_privilege_5f4b5c01c3e21210b845bd73e401311b</sys_update_name>
+        <sys_update_version display_value="sys_scope_privilege_5f4b5c01c3e21210b845bd73e401311b">1b4b5c01c3e21210b845bd73e401311f</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2025-01-02 22:36:16</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>
