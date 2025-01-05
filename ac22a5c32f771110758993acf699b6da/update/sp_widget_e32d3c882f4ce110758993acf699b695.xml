@@ -781,7 +781,10 @@ textarea {
 	}
 
 	data.delieveryItemTable = DelItemConstants.DELIVERY_ITEM_TABLE;
-	data.collectionLocations = gs.getProperty("x_187394_delitem.collection.locations");
+	
+	data.collectionLocationsArr = new x_187394_delitem.DelitemDataUtils().retrieveCollectionLocations();
+	
+	/*data.collectionLocations = gs.getProperty("x_187394_delitem.collection.locations");
 	//data.collectionLocationsArr = data.collectionLocations.split(",");
 	data.collectionLocationsArr = [];
 	var collectionLocationsObj = {};
@@ -796,7 +799,7 @@ textarea {
 		collectionLocationsObj.value = collectionLocationGRS.value.toString();
 		data.collectionLocationsArr.push(collectionLocationsObj);
 
-	}
+	}*/
 	
 	  data.choiceListOption = {};
 
@@ -881,14 +884,14 @@ textarea {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-12-23 16:32:41</sys_created_on>
         <sys_id>e32d3c882f4ce110758993acf699b695</sys_id>
-        <sys_mod_count>263</sys_mod_count>
+        <sys_mod_count>266</sys_mod_count>
         <sys_name>New Delivery</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_e32d3c882f4ce110758993acf699b695</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2024-12-23 23:30:02</sys_updated_on>
+        <sys_updated_on>2025-01-05 21:49:41</sys_updated_on>
         <template><![CDATA[<div class="containerQRCode">
   <div class="qrcode" id="qrcode">
     <canvas id="canvas" width="200" height="200"></canvas>
@@ -1049,7 +1052,7 @@ textarea {
                          sn-value-field="value" 
                          sn-text-field="display" 
                          sn-items="c.data.collectionLocationsArr"
-                         placeholder="test"></sn-choice-list>
+                         placeholder="Add Collection Location"></sn-choice-list>
         </div>
       
       <div class="form-group" ng-if="!c.data.multipleItems">

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_187394_delitem.DelitemDataUtils</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <mobile_callable>false</mobile_callable>
+        <name>DelitemDataUtils</name>
+        <sandbox_callable>false</sandbox_callable>
+        <script><![CDATA[var DelitemDataUtils = Class.create();
+DelitemDataUtils.prototype = {
+    initialize: function() {},
+
+    retrieveCollectionLocations: function() {
+
+        try {
+
+            var collectionLocationsArr = [];
+            var collectionLocationsObj = {};
+
+            var collectionLocationGRS = new GlideRecordSecure('sys_choice');
+            collectionLocationGRS.addEncodedQuery("name=" + DelItemConstants.DELIVERY_ITEM_TABLE + "^element=collection_location");
+            collectionLocationGRS.query();
+            while (collectionLocationGRS.next()) {
+
+                collectionLocationsObj = {};
+                collectionLocationsObj.display = collectionLocationGRS.label.toString();
+                collectionLocationsObj.value = collectionLocationGRS.value.toString();
+                collectionLocationsArr.push(collectionLocationsObj);
+
+            }
+
+			return collectionLocationsArr;
+
+        } catch (err) {
+
+            gs.error('[' + gs.getCurrentScopeName() + ']' + ': DelitemDataUtils: retrieveCollectionLocations - Caught error: \n' + err);
+
+        }
+
+    },
+
+    type: 'DelitemDataUtils'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2025-01-05 21:32:34</sys_created_on>
+        <sys_id>72791927c3b21210b845bd73e40131a7</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>DelitemDataUtils</sys_name>
+        <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
+        <sys_update_name>sys_script_include_72791927c3b21210b845bd73e40131a7</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2025-01-05 21:32:34</sys_updated_on>
+    </sys_script_include>
+    <sys_es_latest_script action="INSERT_OR_UPDATE">
+        <id>72791927c3b21210b845bd73e40131a7</id>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2025-01-05 21:32:34</sys_created_on>
+        <sys_id>eea02de7c3f61210b845bd73e40131fd</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2025-01-05 21:32:34</sys_updated_on>
+        <table>sys_script_include</table>
+        <use_es_latest>true</use_es_latest>
+    </sys_es_latest_script>
+</record_update>

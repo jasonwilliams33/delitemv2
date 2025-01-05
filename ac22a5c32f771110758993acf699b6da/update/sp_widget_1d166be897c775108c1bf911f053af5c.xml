@@ -261,10 +261,10 @@ textarea {
 
 	}
 
-	var collectionLocationsStr = gs.getProperty("x_187394_delitem.collection.locations");
+	//var collectionLocationsStr = gs.getProperty("x_187394_delitem.collection.locations");
 	//data.collectionLocationsArr = collectionLocationsStr.split(",");
-	data.collectionLocationsArr = [];
-	var collectionLocationsObj = {};
+	data.collectionLocationsArr = new x_187394_delitem.DelitemDataUtils().retrieveCollectionLocations();
+	/*var collectionLocationsObj = {};
 	
 	var collectionLocationGRS = new GlideRecordSecure('sys_choice');
 	collectionLocationGRS.addEncodedQuery("name=" + DelItemConstants.DELIVERY_ITEM_TABLE +  "^element=collection_location");
@@ -276,7 +276,7 @@ textarea {
 		collectionLocationsObj.value = collectionLocationGRS.value.toString();
 		data.collectionLocationsArr.push(collectionLocationsObj);
 
-	}
+	}*/
 	
 })();]]></script>
         <servicenow>false</servicenow>
@@ -284,14 +284,14 @@ textarea {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-12-08 17:27:06</sys_created_on>
         <sys_id>1d166be897c775108c1bf911f053af5c</sys_id>
-        <sys_mod_count>352</sys_mod_count>
+        <sys_mod_count>354</sys_mod_count>
         <sys_name>Edit Delivery Item</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_1d166be897c775108c1bf911f053af5c</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2025-01-05 16:01:54</sys_updated_on>
+        <sys_updated_on>2025-01-05 21:37:33</sys_updated_on>
         <template><![CDATA[<div class="panel panel-default">
   <div class= panel-heading>
     <span>
