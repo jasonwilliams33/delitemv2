@@ -5,7 +5,7 @@
 	/* widget controller */
 
 	var c = this;
-	
+	console.log(c.data);
 	c.data.recipient = {
 
 		displayValue: c.data.options.delivery.recipient.display_value,//c.data.recipientDisplay,
@@ -30,7 +30,7 @@
 
 	}
 
-	//if(c.data.options.delivery.state.value != "2") {
+	if(c.data.options.delivery.state.value != "2") {
 		//alert(c.data.options.delivery.collection_location.value);
 
 		/*c.data.selectedCollectionLocation = {
@@ -41,7 +41,7 @@
 		//c.data.selectedCollectionLocation = c.data.options.delivery.collection_location.value;
 		c.data.collectionLocation = c.data.options.delivery.collection_location.value;
 
-	//}
+	}
 
 	c.data.missingFields = '';
 	c.missingFieldsError = '';
@@ -148,7 +148,7 @@
 
 		}
 
-		console.log(deliveryObj);
+		//console.log(deliveryObj);
 
 		delitemModalPubSub.publish(deliveryObj);
 
@@ -284,14 +284,14 @@ textarea {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-12-08 17:27:06</sys_created_on>
         <sys_id>1d166be897c775108c1bf911f053af5c</sys_id>
-        <sys_mod_count>354</sys_mod_count>
+        <sys_mod_count>364</sys_mod_count>
         <sys_name>Edit Delivery Item</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_1d166be897c775108c1bf911f053af5c</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2025-01-05 21:37:33</sys_updated_on>
+        <sys_updated_on>2025-01-08 21:55:34</sys_updated_on>
         <template><![CDATA[<div class="panel panel-default">
   <div class= panel-heading>
     <span>

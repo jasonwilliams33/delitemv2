@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[api.controller=function($scope,$uibModal,spUtil,delitemModalPubSub) {
+        <client_script><![CDATA[api.controller=function($scope,$uibModal,$uibModalStack,spUtil,delitemModalPubSub) {
 	/* widget controller */
 	var c = this;
 	//console.log(c.data);
@@ -16,8 +16,8 @@
 	}
 
 	delitemModalPubSub.subscribe($scope, function($event, data) {//Subscription to Angular Provider to retrieve data from Modal and update relevant variables
-		
-		if(data.closeModal) {			
+		//console.log(data);
+		if(data.closeModal) {		
 			
 			c.modalInstance.close();
 			
@@ -34,7 +34,7 @@
 		} else if(data.modalAction == "collectDelivery") {
 			
 //alert("Collect");
-			console.log(data);
+			//console.log(data);
 			c.openModal("delitem_delivery_summary","Outstanding Deliveries",data);
 
 		} else if(data.modalAction === "signatureAccepted") {
@@ -63,7 +63,8 @@
 
 			}).then(function(rsp) {
 
-				c.modalInstance.close();
+				//c.modalInstance.close();
+				$uibModalStack.dismissAll();
 				
 			})
 			
@@ -205,7 +206,7 @@
 	}
 
 	c.openModal = function(widget,title,modalObj) {
-		console.log(modalObj);
+	//	console.log(modalObj);
 		/***
 	 	* Open Modal using supplied parameters
 	 	***/
@@ -550,14 +551,14 @@ $text-primary: #181a1f !default;
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-12-23 15:06:04</sys_created_on>
         <sys_id>7a5960082f0ce110758993acf699b611</sys_id>
-        <sys_mod_count>215</sys_mod_count>
+        <sys_mod_count>221</sys_mod_count>
         <sys_name>Delitem</sys_name>
         <sys_package display_value="Delitem" source="x_187394_delitem">ac22a5c32f771110758993acf699b6da</sys_package>
         <sys_policy/>
         <sys_scope display_value="Delitem">ac22a5c32f771110758993acf699b6da</sys_scope>
         <sys_update_name>sp_widget_7a5960082f0ce110758993acf699b611</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2025-01-05 16:27:22</sys_updated_on>
+        <sys_updated_on>2025-01-08 21:16:31</sys_updated_on>
         <template><![CDATA[<div class="panel panel-primary b">
   <div class="panel-heading">
     Delitem
